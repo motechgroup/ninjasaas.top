@@ -11,6 +11,7 @@ use App\Models\ProductCategory;
 use App\Models\Setting;
 use App\Models\BlogPost;
 use App\Models\DocumentationArticle;
+use App\Models\DocumentationCategory;
 use App\Enums\ServiceRequestStatus;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
@@ -181,9 +182,87 @@ class AdminController extends Controller
         $blogPostsCount = BlogPost::count();
         $docArticlesCount = DocumentationArticle::count();
         
-        $blogPosts = BlogPost::latest()->take(5)->get();
-        $docArticles = DocumentationArticle::with('category.product')->latest()->take(5)->get();
+        $blogPosts = BlogPost::latest()->get();
+        $docArticles = DocumentationArticle::with('category.product')->latest()->get();
+        $docCategories = DocumentationCategory::with('product')->get();
 
-        return view('admin.cms', compact('blogPostsCount', 'docArticlesCount', 'blogPosts', 'docArticles'));
+        return view('admin.cms', compact('blogPostsCount', 'docArticlesCount', 'blogPosts', 'docArticles', 'docCategories'));
+    }
+
+    public function storeBlogPost(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:blog_posts,slug|max:255',
+            'summary' => 'required|string',
+            'content' => 'required|string',
+            'is_published' => 'required|boolean',
+        ]);
+
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+
+        BlogPost::create($data);
+
+        return redirect()->back()->with('success', 'Blog post created successfully.');
+    }
+
+    public function updateBlogPost(Request $request, BlogPost $blogPost)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:blog_posts,slug,' . $blogPost->id . '|max:255',
+            'summary' => 'required|string',
+            'content' => 'required|string',
+            'is_published' => 'required|boolean',
+        ]);
+
+        $blogPost->update($request->all());
+
+        return redirect()->back()->with('success', 'Blog post updated successfully.');
+    }
+
+    public function destroyBlogPost(BlogPost $blogPost)
+    {
+        $blogPost->delete();
+        return redirect()->back()->with('success', 'Blog post deleted successfully.');
+    }
+
+    public function storeDocArticle(Request $request)
+    {
+        $request->validate([
+            'documentation_category_id' => 'required|exists:documentation_categories,id',
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:documentation_articles,slug|max:255',
+            'content' => 'required|string',
+            'sort_order' => 'required|integer',
+            'is_published' => 'required|boolean',
+        ]);
+
+        DocumentationArticle::create($request->all());
+
+        return redirect()->back()->with('success', 'Doc article created successfully.');
+    }
+
+    public function updateDocArticle(Request $request, DocumentationArticle $docArticle)
+    {
+        $request->validate([
+            'documentation_category_id' => 'required|exists:documentation_categories,id',
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|unique:documentation_articles,slug,' . $docArticle->id . '|max:255',
+            'content' => 'required|string',
+            'sort_order' => 'required|integer',
+            'is_published' => 'required|boolean',
+        ]);
+
+        $docArticle->update($request->all());
+
+        return redirect()->back()->with('success', 'Doc article updated successfully.');
+    }
+
+    public function destroyDocArticle(DocumentationArticle $docArticle)
+    {
+        $docArticle->delete();
+        return redirect()->back()->with('success', 'Doc article deleted successfully.');
     }
 }

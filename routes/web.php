@@ -74,6 +74,16 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
     // CMS Management (Super Admin + Content Manager)
     Route::middleware(['role:Super Admin|Content Manager'])->group(function () {
         Route::get('/cms', [AdminController::class, 'cms'])->name('cms');
+        
+        // Blog CRUD
+        Route::post('/cms/blog', [AdminController::class, 'storeBlogPost'])->name('cms.blog.store');
+        Route::patch('/cms/blog/{blogPost}', [AdminController::class, 'updateBlogPost'])->name('cms.blog.update');
+        Route::delete('/cms/blog/{blogPost}', [AdminController::class, 'destroyBlogPost'])->name('cms.blog.destroy');
+        
+        // Docs CRUD
+        Route::post('/cms/docs', [AdminController::class, 'storeDocArticle'])->name('cms.docs.store');
+        Route::patch('/cms/docs/{docArticle}', [AdminController::class, 'updateDocArticle'])->name('cms.docs.update');
+        Route::delete('/cms/docs/{docArticle}', [AdminController::class, 'destroyDocArticle'])->name('cms.docs.destroy');
     });
 });
 
