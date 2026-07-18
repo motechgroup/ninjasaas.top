@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DeployController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 | Public Routes
 |--------------------------------------------------------------------------
 */
+Route::get('/deploy/run', [DeployController::class, 'handle'])->name('deploy.run');
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/products', [PublicController::class, 'products'])->name('products.index');
 Route::get('/products/{slug}', [PublicController::class, 'productShow'])->name('products.show');

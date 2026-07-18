@@ -55,38 +55,29 @@ This guide walks you through deploying the SaaSNinja Software Platform to a cPan
 
 ---
 
-## Step 4: Run Migrations and Seeding
-Since you are on shared hosting, you can run artisan commands via **cPanel Terminal** (if active) or using a **Cron Job**:
+## Step 4: Run Migrations, Seeding, and Symlinks Programmatically
+Since shared hosting environments block terminal commands and SSH access, we have built a secure web-based console to trigger Laravel setup actions directly from your browser.
 
-### Option A: Using cPanel Terminal (Recommended)
-Log in via SSH or open the cPanel Terminal and run:
-```bash
-# Install production dependencies
-composer install --no-dev --optimize-autoloader
-
-# Run database migrations
-php artisan migrate --force
-
-# Seed initial admin & system configurations
-php artisan db:seed --force
-
-# Link storage folder
-php artisan storage:link
-```
-
-### Option B: Using a Cron Job (Fallback)
-If you don't have SSH access, create a temporary cron job in cPanel to run once:
-```bash
-cd /home/your_cpanel_username/public_html && php artisan migrate --force && php artisan db:seed --force && php artisan storage:link
-```
-*Remember to delete the cron job after it runs successfully.*
+1. In your `.env` file, configure a unique, secure deployment key:
+   ```env
+   DEPLOY_SECRET=YourSuperSecretKey123!
+   ```
+2. Navigate to your browser and run these URLs to finalize configuration (replace `YourSuperSecretKey123!` with your actual token):
+   * **Run Migrations**: 
+     `https://saasninja.top/deploy/run?key=YourSuperSecretKey123!&action=migrate`
+   * **Seed Demo/Admin Accounts**: 
+     `https://saasninja.top/deploy/run?key=YourSuperSecretKey123!&action=seed`
+   * **Create Public Storage Symlink**: 
+     `https://saasninja.top/deploy/run?key=YourSuperSecretKey123!&action=storage`
+   * **Clear Cache**: 
+     `https://saasninja.top/deploy/run?key=YourSuperSecretKey123!&action=clear`
 
 ---
 
 ## Step 5: Configure Cron Scheduler (For Support Tickets Escalation)
 To keep the system checking for Envato support expirations and service requests, add a recurring cron job in cPanel running **Every Minute**:
 ```bash
-* * * * * cd /home/your_cpanel_username/public_html && php artisan schedule:run >> /dev/null 2>&1
+* * * * * php -d register_argc_argv=On /home/your_cpanel_username/public_html/artisan schedule:run >> /dev/null 2>&1
 ```
 
 ---
