@@ -3,7 +3,13 @@
     <!-- Left Pane: Ticket List (4 cols) -->
     <div class="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 rounded-2xl flex flex-col overflow-hidden h-full">
         <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20 space-y-2.5">
-            <h3 class="font-outfit font-bold text-slate-900 dark:text-white">All Helpdesk Tickets</h3>
+            <div class="flex items-center justify-between">
+                <h3 class="font-outfit font-bold text-slate-900 dark:text-white">All Helpdesk Tickets</h3>
+                <button wire:click="startCreation" class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-primary text-white text-[10px] font-bold rounded-lg hover:opacity-90 shadow-sm transition-all">
+                    <span class="material-symbols-outlined text-[14px]">add_circle</span>
+                    New Ticket
+                </button>
+            </div>
             <select wire:model.live="filterStatus" class="block w-full rounded-lg border-slate-200 dark:border-slate-805 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5 focus:ring-primary focus:border-primary">
                 <option value="all">All Statuses</option>
                 <option value="open">Open</option>
@@ -42,7 +48,95 @@
     <!-- Right Pane: Ticket Work Area (8 cols) -->
     <div class="lg:col-span-8 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 rounded-2xl overflow-hidden h-full flex flex-col">
         
-        @if ($selectedTicket)
+        @if ($isCreating)
+            <!-- Ticket Creation Form -->
+            <div class="p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20 flex items-center justify-between">
+                <h3 class="font-outfit font-bold text-slate-900 dark:text-white text-base">Open Support Ticket on Behalf of Client</h3>
+                <button wire:click="cancelCreation" class="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white">Cancel</button>
+            </div>
+
+            <form wire:submit.prevent="createTicket" class="p-6 space-y-4 overflow-y-auto flex-grow">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Select Client -->
+                    <div>
+                        <label for="createUserId" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Select Client User</label>
+                        <select id="createUserId" wire:model.live="createUserId" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            <option value="">-- Select Client --</option>
+                            @foreach ($users as $u)
+                                <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
+                            @endforeach
+                        </select>
+                        @error('createUserId') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Select Product Purchase (Loaded dynamically based on selected user) -->
+                    <div>
+                        <label for="createPurchaseId" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Select Verified Purchase (Optional)</label>
+                        <select id="createPurchaseId" wire:model.defer="createPurchaseId" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary" {{ empty($userPurchases) ? 'disabled' : '' }}>
+                            <option value="">-- Select Purchase (None/General) --</option>
+                            @foreach ($userPurchases as $p)
+                                <option value="{{ $p->id }}">{{ $p->item->name }} ({{ $p->purchase_code }})</option>
+                            @endforeach
+                        </select>
+                        @error('createPurchaseId') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                        @if(empty($userPurchases) && $createUserId)
+                            <span class="text-[10px] text-slate-400 mt-1 block">This client has no linked Envato purchases.</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Category -->
+                    <div>
+                        <label for="createCategory" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Category</label>
+                        <select id="createCategory" wire:model.defer="createCategory" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            <option value="Bug">Bug / Issue</option>
+                            <option value="Installation">Installation Assistance</option>
+                            <option value="Customization">Customization Request</option>
+                            <option value="General">General Inquiry</option>
+                        </select>
+                        @error('createCategory') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Priority -->
+                    <div>
+                        <label for="createPriority" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Priority</label>
+                        <select id="createPriority" wire:model.defer="createPriority" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                        @error('createPriority') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <!-- Subject -->
+                <div>
+                    <label for="createSubject" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Subject</label>
+                    <input type="text" id="createSubject" wire:model.defer="createSubject" placeholder="Summarize the client request"
+                           class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                    @error('createSubject') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                </div>
+
+                <!-- Message Description -->
+                <div>
+                    <label for="createMessage" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Initial Message Body</label>
+                    <textarea id="createMessage" wire:model.defer="createMessage" rows="5" placeholder="Explain the support ticket query..."
+                              class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary"></textarea>
+                    @error('createMessage') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <button type="submit" wire:loading.attr="disabled"
+                            class="inline-flex items-center justify-center px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-lg shadow-md hover:opacity-90 transition-all">
+                        <span wire:loading.remove>Open Ticket</span>
+                        <span wire:loading>Submitting...</span>
+                    </button>
+                </div>
+            </form>
+
+        @elseif ($selectedTicket)
             <!-- Ticket Work Header -->
             <div class="p-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>

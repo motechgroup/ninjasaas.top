@@ -6,6 +6,7 @@ use App\Models\SupportTicket;
 use App\Models\TicketReply;
 use App\Models\User;
 use App\Models\MediaFile;
+use App\Models\EnvatoPurchase;
 use App\Enums\TicketStatus;
 use App\Enums\Priority;
 use Livewire\Component;
@@ -19,6 +20,15 @@ class TicketManager extends Component
     public ?int $selectedTicketId = null;
     public string $filterStatus = 'all'; // Status filter: all, open, answered, pending, closed
     
+    // Creation Form (on behalf of customer)
+    public bool $isCreating = false;
+    public ?int $createUserId = null;
+    public ?int $createPurchaseId = null;
+    public string $createSubject = '';
+    public string $createCategory = 'Bug';
+    public string $createPriority = 'medium';
+    public string $createMessage = '';
+
     // Chat Form
     public string $replyMessage = '';
     public bool $isInternal = false; // Internal admin note toggle
@@ -32,6 +42,7 @@ class TicketManager extends Component
     public function selectTicket(int $id)
     {
         $this->selectedTicketId = $id;
+        $this->isCreating = false;
         $ticket = SupportTicket::findOrFail($id);
         
         $this->assignedTo = $ticket->assigned_to;
@@ -41,6 +52,57 @@ class TicketManager extends Component
         $this->replyMessage = '';
         $this->isInternal = false;
         $this->chatAttachments = [];
+    }
+
+    public function startCreation()
+    {
+        $this->isCreating = true;
+        $this->selectedTicketId = null;
+        $this->createUserId = null;
+        $this->createPurchaseId = null;
+        $this->createSubject = '';
+        $this->createCategory = 'Bug';
+        $this->createPriority = 'medium';
+        $this->createMessage = '';
+    }
+
+    public function cancelCreation()
+    {
+        $this->isCreating = false;
+    }
+
+    public function createTicket()
+    {
+        $this->validate([
+            'createUserId' => 'required|exists:users,id',
+            'createPurchaseId' => 'nullable|exists:envato_purchases,id',
+            'createSubject' => 'required|string|max:255',
+            'createCategory' => 'required|string',
+            'createPriority' => 'required|in:low,medium,high,urgent',
+            'createMessage' => 'required|string|min:10',
+        ]);
+
+        $ticket = SupportTicket::create([
+            'user_id' => $this->createUserId,
+            'envato_purchase_id' => $this->createPurchaseId,
+            'subject' => $this->createSubject,
+            'category' => $this->createCategory,
+            'priority' => $this->createPriority,
+            'status' => TicketStatus::OPEN,
+            'assigned_to' => auth()->id(), // Auto assign to the creating staff
+        ]);
+
+        TicketReply::create([
+            'support_ticket_id' => $ticket->id,
+            'user_id' => auth()->id(),
+            'message' => $this->createMessage,
+            'is_internal' => false,
+        ]);
+
+        $this->selectedTicketId = $ticket->id;
+        $this->isCreating = false;
+        
+        session()->flash('success', 'Ticket created on behalf of client successfully.');
     }
 
     public function updateTicketSettings()
@@ -121,10 +183,19 @@ class TicketManager extends Component
         // Support staff members list for assignment
         $staff = User::role(['Super Admin', 'Support Staff'])->get();
 
+        // Client list for creating ticket on their behalf
+        $users = User::orderBy('name')->get();
+        $userPurchases = [];
+        if ($this->createUserId) {
+            $userPurchases = EnvatoPurchase::where('user_id', $this->createUserId)->with('item')->get();
+        }
+
         return view('livewire.admin.ticket-manager', [
             'tickets' => $tickets,
             'selectedTicket' => $selectedTicket,
             'staff' => $staff,
+            'users' => $users,
+            'userPurchases' => $userPurchases,
         ]);
     }
 }
