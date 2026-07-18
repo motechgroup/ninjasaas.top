@@ -85,45 +85,45 @@
     </main>
 
     <!-- Footer (Shared Component) -->
-    <footer class="w-full py-xl bg-surface-container-low border-t border-outline-variant opacity-80 hover:opacity-100 transition-opacity">
-        <div class="max-w-7xl mx-auto px-margin-page">
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-gutter mb-xl">
-                <div class="col-span-2">
-                    <span class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-2">
+    <footer class="w-full py-16 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 text-slate-650 dark:text-slate-450">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-12">
+                <div class="col-span-2 space-y-3">
+                    <span class="font-outfit font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary text-[24px]">terminal</span>
                         SaaSNinja
                     </span>
-                    <p class="mt-md font-body-sm text-body-sm text-on-surface-variant max-w-xs leading-relaxed">
+                    <p class="text-xs sm:text-sm text-slate-500 max-w-xs leading-relaxed">
                         Delivering world-class digital tools and premium Envato components for digital-first enterprises since 2018.
                     </p>
                 </div>
                 <div>
-                    <h4 class="font-label-md text-label-md text-on-surface mb-md">Products</h4>
-                    <ul class="space-y-xs font-body-sm text-body-sm text-on-surface-variant">
+                    <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Products</h4>
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('products.index') }}">Product Catalog</a></li>
                         <li><a class="hover:text-primary transition-colors" href="#">LexCore Engine</a></li>
                         <li><a class="hover:text-primary transition-colors" href="#">SaaSNinja CRM</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-label-md text-label-md text-on-surface mb-md">Services</h4>
-                    <ul class="space-y-xs font-body-sm text-body-sm text-on-surface-variant">
+                    <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Services</h4>
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">Server Installation</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">Custom Development</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('docs.index') }}">API Integrations</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-label-md text-label-md text-on-surface mb-md">Resources</h4>
-                    <ul class="space-y-xs font-body-sm text-body-sm text-on-surface-variant">
+                    <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Resources</h4>
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('docs.index') }}">Help Guides</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Tech Blog</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('contact') }}">Contact Sales</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-label-md text-label-md text-on-surface mb-md">Trust</h4>
-                    <ul class="space-y-xs font-body-sm text-body-sm text-on-surface-variant">
+                    <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Trust</h4>
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
                         <li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
                         <li><a class="hover:text-primary transition-colors" href="#">Cookie Policy</a></li>
@@ -131,13 +131,13 @@
                 </div>
             </div>
             
-            <div class="flex flex-col md:flex-row justify-between items-center pt-md border-t border-outline-variant gap-sm">
-                <p class="font-body-sm text-body-sm text-on-surface-variant">{{ \App\Models\Setting::get('site_footer_copyright', '© ' . date('Y') . ' SaaSNinja Software. All rights reserved. Sold exclusively on Envato Market.') }}</p>
-                <div class="flex gap-md font-body-sm text-body-sm">
-                    <a class="text-on-surface-variant hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors underline" href="#">Terms of Service</a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors underline" href="#">Cookie Policy</a>
-                    <a class="text-on-surface-variant hover:text-primary transition-colors underline" href="#">Sitemap</a>
+            <div class="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-slate-200 dark:border-slate-800 gap-4 text-xs sm:text-sm text-slate-400">
+                <p>{{ \App\Models\Setting::get('site_footer_copyright', '© ' . date('Y') . ' SaaSNinja Software. All rights reserved. Sold exclusively on Envato Market.') }}</p>
+                <div class="flex flex-wrap gap-4">
+                    <a class="hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
+                    <a class="hover:text-primary transition-colors underline" href="#">Terms of Service</a>
+                    <a class="hover:text-primary transition-colors underline" href="#">Cookie Policy</a>
+                    <a class="hover:text-primary transition-colors underline" href="#">Sitemap</a>
                 </div>
             </div>
         </div>
