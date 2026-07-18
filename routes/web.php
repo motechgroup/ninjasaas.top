@@ -64,6 +64,9 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
         Route::get('/tickets', [AdminController::class, 'tickets'])->name('tickets');
         Route::get('/purchases', [AdminController::class, 'purchases'])->name('purchases');
         Route::get('/products', [AdminController::class, 'products'])->name('products');
+        Route::post('/products', [AdminController::class, 'storeProduct'])->name('products.store');
+        Route::patch('/products/{product}', [AdminController::class, 'updateProduct'])->name('products.update');
+        Route::delete('/products/{product}', [AdminController::class, 'destroyProduct'])->name('products.destroy');
         Route::get('/services', [AdminController::class, 'services'])->name('services');
         Route::patch('/services/{serviceRequest}', [AdminController::class, 'updateServiceRequest'])->name('services.update');
     });

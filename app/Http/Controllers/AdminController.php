@@ -7,6 +7,7 @@ use App\Models\EnvatoPurchase;
 use App\Models\SupportTicket;
 use App\Models\ServiceRequest;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Setting;
 use App\Models\BlogPost;
 use App\Models\DocumentationArticle;
@@ -123,7 +124,56 @@ class AdminController extends Controller
     public function products()
     {
         $products = Product::with(['category'])->get();
-        return view('admin.products', compact('products'));
+        $categories = ProductCategory::all();
+        return view('admin.products', compact('products', 'categories'));
+    }
+
+    public function storeProduct(Request $request)
+    {
+        $request->validate([
+            'product_category_id' => 'required|exists:product_categories,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:products,slug|max:255',
+            'short_description' => 'required|string',
+            'description' => 'required|string',
+            'demo_url' => 'nullable|url',
+            'buy_url' => 'nullable|url',
+            'docs_url' => 'nullable|string',
+            'version' => 'required|string|max:50',
+            'envato_item_id' => 'nullable|string|max:100',
+            'is_active' => 'required|boolean',
+        ]);
+
+        Product::create($request->all());
+
+        return redirect()->back()->with('success', 'Product added to catalog successfully.');
+    }
+
+    public function updateProduct(Request $request, Product $product)
+    {
+        $request->validate([
+            'product_category_id' => 'required|exists:product_categories,id',
+            'name' => 'required|string|max:255',
+            'slug' => 'required|string|unique:products,slug,' . $product->id . '|max:255',
+            'short_description' => 'required|string',
+            'description' => 'required|string',
+            'demo_url' => 'nullable|url',
+            'buy_url' => 'nullable|url',
+            'docs_url' => 'nullable|string',
+            'version' => 'required|string|max:50',
+            'envato_item_id' => 'nullable|string|max:100',
+            'is_active' => 'required|boolean',
+        ]);
+
+        $product->update($request->all());
+
+        return redirect()->back()->with('success', 'Product updated successfully.');
+    }
+
+    public function destroyProduct(Product $product)
+    {
+        $product->delete();
+        return redirect()->back()->with('success', 'Product deleted successfully.');
     }
 
     public function cms()
