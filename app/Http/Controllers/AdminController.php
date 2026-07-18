@@ -40,8 +40,15 @@ class AdminController extends Controller
 
     public function users()
     {
-        $users = User::with('roles')->paginate(15);
-        return view('admin.users', compact('users'));
+        $staff = User::whereHas('roles', function($q) {
+            $q->whereIn('name', ['Super Admin', 'Support Staff', 'Content Manager']);
+        })->with('roles')->get();
+
+        $customers = User::whereDoesntHave('roles', function($q) {
+            $q->whereIn('name', ['Super Admin', 'Support Staff', 'Content Manager']);
+        })->withCount('purchases')->latest()->paginate(15);
+
+        return view('admin.users', compact('staff', 'customers'));
     }
 
     public function updateUserRole(Request $request, User $user)
