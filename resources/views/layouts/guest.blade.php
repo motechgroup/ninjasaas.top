@@ -11,9 +11,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Dynamic Theme Overrides -->
+    <style>
+        :root {
+            --color-primary: {{ \App\Models\Setting::get('theme_primary_color', '#004ac6') }};
+            --color-secondary: {{ \App\Models\Setting::get('theme_secondary_color', '#515f74') }};
+            --color-background: {{ \App\Models\Setting::get('theme_background_color', '#f7f9fb') }};
+            --color-surface-container: {{ \App\Models\Setting::get('theme_surface_color', '#eceef0') }};
+        }
+    </style>
+    <link rel="icon" type="image/x-icon" href="{{ \App\Models\Setting::get('site_favicon', '/favicon.ico') }}">
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-300">
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
