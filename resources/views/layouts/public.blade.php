@@ -34,8 +34,8 @@
 
     <!-- TopNavBar (Shared Component) -->
     <header class="w-full sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant shadow-sm transition-all duration-200 ease-in-out">
-        <div class="max-w-7xl mx-auto px-margin-page flex items-center justify-between h-16">
-            <div class="flex items-center gap-md">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+            <div class="flex items-center gap-4">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 group">
                     @if(\App\Models\Setting::get('site_logo'))
                         <img src="{{ \App\Models\Setting::get('site_logo') }}" alt="Logo" class="h-8 w-auto">
@@ -47,33 +47,33 @@
                     <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-900">{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}</span>
                 </a>
                 
-                <nav class="hidden md:flex items-center gap-md ml-xl">
-                    <a class="font-body-md text-body-md transition-colors px-xs py-base rounded-lg {{ request()->routeIs('home') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' }}" href="{{ route('home') }}">Home</a>
-                    <a class="font-body-md text-body-md transition-colors px-xs py-base rounded-lg {{ request()->routeIs('products.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' }}" href="{{ route('products.index') }}">Products</a>
-                    <a class="font-body-md text-body-md transition-colors px-xs py-base rounded-lg {{ request()->routeIs('services.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' }}" href="{{ route('services.index') }}">Services</a>
-                    <a class="font-body-md text-body-md transition-colors px-xs py-base rounded-lg {{ request()->routeIs('docs.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' }}" href="{{ route('docs.index') }}">Help Guides</a>
-                    <a class="font-body-md text-body-md transition-colors px-xs py-base rounded-lg {{ request()->routeIs('blog.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' }}" href="{{ route('blog.index') }}">Tech Blog</a>
-                    <a class="font-body-md text-body-md transition-colors px-xs py-base rounded-lg {{ request()->routeIs('contact') ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-secondary-container hover:text-primary' }}" href="{{ route('contact') }}">Contact</a>
+                <nav class="hidden md:flex items-center gap-6 ml-8">
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('home') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('home') }}">Home</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('products.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('products.index') }}">Products</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('services.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('services.index') }}">Services</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('docs.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('docs.index') }}">Help Guides</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('blog.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('blog.index') }}">Tech Blog</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('contact') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('contact') }}">Contact</a>
                 </nav>
             </div>
 
-            <div class="flex items-center gap-md">
+            <div class="flex items-center gap-6">
                 <!-- Search Button -->
-                <button class="flex items-center text-on-surface-variant hover:text-primary transition-colors">
+                <button class="flex items-center text-slate-500 hover:text-primary transition-colors">
                     <span class="material-symbols-outlined text-[24px]">search</span>
                 </button>
 
                 @auth
-                    <a href="{{ route('dashboard') }}" class="font-label-md text-label-md text-on-secondary-container hover:text-primary transition-colors px-xs">Portal Dashboard</a>
+                    <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Portal Dashboard</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
-                        <button type="submit" class="text-xs text-outline hover:text-error font-semibold">Logout</button>
+                        <button type="submit" class="text-xs text-slate-400 hover:text-red-655 font-semibold">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="font-label-md text-label-md text-on-secondary-container hover:text-primary transition-colors px-xs">Log In</a>
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Log In</a>
                 @endauth
                 
-                <a href="{{ route('portal.tickets') }}" class="bg-primary text-on-primary px-md py-2 rounded-lg font-label-md text-label-md hover:bg-surface-tint transition-all active:scale-95 shadow-sm">
+                <a href="{{ route('portal.tickets') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
                     Get Support
                 </a>
             </div>
