@@ -33,8 +33,17 @@ class DeployController extends Controller
                     $output .= "Seeding output:\n" . Artisan::output();
                     break;
                 case 'storage':
-                    Artisan::call('storage:link');
-                    $output .= "Storage link output:\n" . Artisan::output();
+                    $target = storage_path('app/public');
+                    $link = public_path('storage');
+                    if (file_exists($link)) {
+                        $output .= "Storage link/directory already exists at '{$link}'.\n";
+                    } else {
+                        if (symlink($target, $link)) {
+                            $output .= "Storage symlink created successfully via native PHP.\n";
+                        } else {
+                            $output .= "Failed to create storage symlink.\n";
+                        }
+                    }
                     break;
                 case 'clear':
                     Artisan::call('config:clear');
