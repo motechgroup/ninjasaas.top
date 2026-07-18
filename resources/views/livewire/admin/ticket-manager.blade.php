@@ -2,8 +2,15 @@
     
     <!-- Left Pane: Ticket List (4 cols) -->
     <div class="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 rounded-2xl flex flex-col overflow-hidden h-full">
-        <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20">
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20 space-y-2.5">
             <h3 class="font-outfit font-bold text-slate-900 dark:text-white">All Helpdesk Tickets</h3>
+            <select wire:model.live="filterStatus" class="block w-full rounded-lg border-slate-200 dark:border-slate-805 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5 focus:ring-primary focus:border-primary">
+                <option value="all">All Statuses</option>
+                <option value="open">Open</option>
+                <option value="answered">Answered</option>
+                <option value="pending">Pending</option>
+                <option value="closed">Closed</option>
+            </select>
         </div>
 
         <!-- List Items -->

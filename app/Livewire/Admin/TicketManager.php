@@ -17,6 +17,7 @@ class TicketManager extends Component
     use WithFileUploads;
 
     public ?int $selectedTicketId = null;
+    public string $filterStatus = 'all'; // Status filter: all, open, answered, pending, closed
     
     // Chat Form
     public string $replyMessage = '';
@@ -101,9 +102,14 @@ class TicketManager extends Component
     public function render()
     {
         // Admin gets access to all tickets, ordered by latest updates
-        $tickets = SupportTicket::with(['user', 'purchase.item'])
-            ->orderByDesc('updated_at')
-            ->get();
+        $query = SupportTicket::with(['user', 'purchase.item'])
+            ->orderByDesc('updated_at');
+
+        if ($this->filterStatus !== 'all') {
+            $query->where('status', $this->filterStatus);
+        }
+
+        $tickets = $query->get();
 
         $selectedTicket = null;
         if ($this->selectedTicketId) {
