@@ -124,9 +124,9 @@
                 <div>
                     <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Trust</h4>
                     <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
-                        <li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">Cookie Policy</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('privacy') }}">Privacy Policy</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('terms') }}">Terms of Service</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('refunds') }}">Refund Policy</a></li>
                     </ul>
                 </div>
             </div>
@@ -134,9 +134,9 @@
             <div class="flex flex-col md:flex-row justify-between items-center pt-6 border-t border-slate-200 dark:border-slate-800 gap-4 text-xs sm:text-sm text-slate-400">
                 <p>{{ \App\Models\Setting::get('site_footer_copyright', '© ' . date('Y') . ' SaaSNinja Software. All rights reserved. Sold exclusively on Envato Market.') }}</p>
                 <div class="flex flex-wrap gap-4">
-                    <a class="hover:text-primary transition-colors underline" href="#">Privacy Policy</a>
-                    <a class="hover:text-primary transition-colors underline" href="#">Terms of Service</a>
-                    <a class="hover:text-primary transition-colors underline" href="#">Cookie Policy</a>
+                    <a class="hover:text-primary transition-colors underline" href="{{ route('privacy') }}">Privacy Policy</a>
+                    <a class="hover:text-primary transition-colors underline" href="{{ route('terms') }}">Terms of Service</a>
+                    <a class="hover:text-primary transition-colors underline" href="{{ route('refunds') }}">Refund Policy</a>
                     <a class="hover:text-primary transition-colors underline" href="#">Sitemap</a>
                 </div>
             </div>

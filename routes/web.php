@@ -23,6 +23,9 @@ Route::get('/blog', [PublicController::class, 'blog'])->name('blog.index');
 Route::get('/blog/{slug}', [PublicController::class, 'blogShow'])->name('blog.show');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::post('/contact', [PublicController::class, 'contactSubmit'])->name('contact.submit');
+Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
+Route::get('/refunds', [PublicController::class, 'refunds'])->name('refunds');
 
 /*
 |--------------------------------------------------------------------------

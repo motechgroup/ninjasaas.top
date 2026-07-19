@@ -102,4 +102,19 @@ class PublicController extends Controller
         // In a production app, we would fire a notification/email here
         return redirect()->back()->with('success', 'Your message has been sent successfully. We will get back to you shortly.');
     }
+
+    public function privacy()
+    {
+        return view('privacy');
+    }
+
+    public function terms()
+    {
+        return view('terms');
+    }
+
+    public function refunds()
+    {
+        return view('refunds');
+    }
 }
