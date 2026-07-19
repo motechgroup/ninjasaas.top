@@ -49,6 +49,7 @@
                 
                 <nav class="hidden md:flex items-center gap-6 ml-8">
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('home') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('home') }}">Home</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('about') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('about') }}">About</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('products.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('products.index') }}">Products</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('services.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('services.index') }}">Services</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('docs.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('docs.index') }}">Help Guides</a>
@@ -94,7 +95,7 @@
                         SaaSNinja
                     </span>
                     <p class="text-xs sm:text-sm text-slate-500 max-w-xs leading-relaxed">
-                        Delivering world-class digital tools and premium Envato components for digital-first enterprises since 2018.
+                        An ambitious, forward-looking software company built on clean architecture, security-first design, and long-term maintainability. Founded in 2028.
                     </p>
                 </div>
                 <div>
@@ -116,6 +117,7 @@
                 <div>
                     <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Resources</h4>
                     <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('about') }}">About Us</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('docs.index') }}">Help Guides</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Tech Blog</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('contact') }}">Contact Sales</a></li>

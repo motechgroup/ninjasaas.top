@@ -27,6 +27,7 @@ Route::get('/blog/tag/{slug}', [PublicController::class, 'blogTag'])->name('blog
 Route::get('/blog/author/{id}', [PublicController::class, 'blogAuthor'])->name('blog.author');
 Route::post('/blog/comment/{post}', [PublicController::class, 'storeComment'])->name('blog.comment.store');
 Route::post('/newsletter/subscribe', [PublicController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::post('/contact', [PublicController::class, 'contactSubmit'])->name('contact.submit');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');

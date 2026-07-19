@@ -282,6 +282,11 @@ class PublicController extends Controller
         return redirect()->back()->with('success', 'Your message has been sent successfully. We will get back to you shortly.');
     }
 
+    public function about()
+    {
+        return view('about');
+    }
+
     public function privacy()
     {
         return view('privacy');
