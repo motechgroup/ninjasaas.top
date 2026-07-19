@@ -29,6 +29,10 @@ class User extends Authenticatable
         'envato_token',
         'envato_refresh_token',
         'envato_token_expires_at',
+        'bio',
+        'profile_image',
+        'twitter_handle',
+        'github_handle',
     ];
 
     /**

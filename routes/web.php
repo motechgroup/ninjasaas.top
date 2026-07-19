@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\PortalController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BlogAdminController;
 use App\Http\Controllers\DeployController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,11 +22,18 @@ Route::get('/docs', [PublicController::class, 'docs'])->name('docs.index');
 Route::get('/docs/{product_slug}/{category_slug}/{article_slug}', [PublicController::class, 'docShow'])->name('docs.show');
 Route::get('/blog', [PublicController::class, 'blog'])->name('blog.index');
 Route::get('/blog/{slug}', [PublicController::class, 'blogShow'])->name('blog.show');
+Route::get('/blog/category/{slug}', [PublicController::class, 'blogCategory'])->name('blogCategory');
+Route::get('/blog/tag/{slug}', [PublicController::class, 'blogTag'])->name('blogTag');
+Route::get('/blog/author/{id}', [PublicController::class, 'blogAuthor'])->name('blog.author');
+Route::post('/blog/comment/{post}', [PublicController::class, 'storeComment'])->name('blog.comment.store');
+Route::post('/newsletter/subscribe', [PublicController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
 Route::post('/contact', [PublicController::class, 'contactSubmit'])->name('contact.submit');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
 Route::get('/refunds', [PublicController::class, 'refunds'])->name('refunds');
+Route::get('/sitemap.xml', [PublicController::class, 'sitemap'])->name('sitemap');
+Route::get('/feed', [PublicController::class, 'rssFeed'])->name('rss.feed');
 
 /*
 |--------------------------------------------------------------------------
@@ -88,6 +96,28 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
         Route::patch('/cms/blog/{blogPost}', [AdminController::class, 'updateBlogPost'])->name('cms.blog.update');
         Route::delete('/cms/blog/{blogPost}', [AdminController::class, 'destroyBlogPost'])->name('cms.blog.destroy');
         
+        // Advanced Blog CMS Routes
+        Route::get('/blog', [BlogAdminController::class, 'index'])->name('blog.index');
+        Route::get('/blog/create', [BlogAdminController::class, 'create'])->name('blog.create');
+        Route::post('/blog', [BlogAdminController::class, 'store'])->name('blog.store');
+        Route::get('/blog/{post}/edit', [BlogAdminController::class, 'edit'])->name('blog.edit');
+        Route::put('/blog/{post}', [BlogAdminController::class, 'update'])->name('blog.update');
+        Route::delete('/blog/{post}', [BlogAdminController::class, 'destroy'])->name('blog.destroy');
+        
+        Route::post('/blog/category', [BlogAdminController::class, 'storeCategory'])->name('blog.category.store');
+        Route::delete('/blog/category/{category}', [BlogAdminController::class, 'destroyCategory'])->name('blog.category.destroy');
+        
+        Route::post('/blog/tag', [BlogAdminController::class, 'storeTag'])->name('blog.tag.store');
+        Route::delete('/blog/tag/{tag}', [BlogAdminController::class, 'destroyTag'])->name('blog.tag.destroy');
+        
+        Route::post('/blog/comment/{comment}/approve', [BlogAdminController::class, 'approveComment'])->name('blog.comment.approve');
+        Route::delete('/blog/comment/{comment}', [BlogAdminController::class, 'destroyComment'])->name('blog.comment.destroy');
+        
+        Route::delete('/blog/subscriber/{subscriber}', [BlogAdminController::class, 'destroySubscriber'])->name('blog.subscriber.destroy');
+        
+        Route::post('/blog/media', [BlogAdminController::class, 'uploadMedia'])->name('blog.media.upload');
+        Route::delete('/blog/media/{media}', [BlogAdminController::class, 'destroyMedia'])->name('blog.media.destroy');
+
         // Docs CRUD
         Route::post('/cms/docs', [AdminController::class, 'storeDocArticle'])->name('cms.docs.store');
         Route::patch('/cms/docs/{docArticle}', [AdminController::class, 'updateDocArticle'])->name('cms.docs.update');
