@@ -4,7 +4,7 @@
     </x-slot>
 
     <!-- Tabbed Settings Layout -->
-    <div x-data="{ activeTab: 'branding' }" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div x-data="{ activeTab: localStorage.getItem('active_settings_tab') || 'branding' }" x-init="$watch('activeTab', value => localStorage.setItem('active_settings_tab', value))" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         <!-- Left Sidebar Navigation Tabs -->
         <div class="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 rounded-2xl p-4 shadow-sm space-y-1">
