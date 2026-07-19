@@ -3,6 +3,9 @@
 @section('title', 'About SaaSNinja - Ambitious, Forward-Looking Software Development')
 @section('meta_description', 'Learn about SaaSNinja, a modern software company founded in 2028 dedicated to crafting reliable, scalable, and innovative technology solutions.')
 
+<!-- Devicon Font CDN -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+
 @section('content')
     <!-- Hero Section -->
     <section class="relative bg-slate-50 dark:bg-slate-950 py-20 border-b border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -131,9 +134,32 @@
                     </p>
                 </div>
                 <div class="lg:col-span-7 flex flex-wrap gap-3">
-                    @foreach(['Laravel', 'PHP', 'JavaScript', 'TypeScript', 'Livewire', 'Tailwind CSS', 'React', 'Vue', 'Flutter', 'MySQL', 'PostgreSQL', 'REST APIs', 'Cloud Infrastructure', 'Artificial Intelligence'] as $tech)
-                        <span class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-750 dark:text-indigo-400 text-xs font-bold border border-indigo-100/60 dark:border-indigo-900/30">
-                            {{ $tech }}
+                    @php
+                        $techs = [
+                            ['name' => 'Laravel', 'icon' => 'devicon-laravel-original colored'],
+                            ['name' => 'PHP', 'icon' => 'devicon-php-plain colored'],
+                            ['name' => 'JavaScript', 'icon' => 'devicon-javascript-plain colored'],
+                            ['name' => 'TypeScript', 'icon' => 'devicon-typescript-plain colored'],
+                            ['name' => 'Livewire', 'icon' => 'material-symbols-outlined text-[16px] text-blue-500', 'is_material' => true, 'symbol' => 'bolt'],
+                            ['name' => 'Tailwind CSS', 'icon' => 'devicon-tailwindcss-original colored'],
+                            ['name' => 'React', 'icon' => 'devicon-react-original colored'],
+                            ['name' => 'Vue', 'icon' => 'devicon-vuejs-plain colored'],
+                            ['name' => 'Flutter', 'icon' => 'devicon-flutter-plain colored'],
+                            ['name' => 'MySQL', 'icon' => 'devicon-mysql-plain colored'],
+                            ['name' => 'PostgreSQL', 'icon' => 'devicon-postgresql-plain colored'],
+                            ['name' => 'REST APIs', 'icon' => 'material-symbols-outlined text-[16px] text-indigo-500', 'is_material' => true, 'symbol' => 'api'],
+                            ['name' => 'Cloud Infrastructure', 'icon' => 'material-symbols-outlined text-[16px] text-sky-500', 'is_material' => true, 'symbol' => 'cloud'],
+                            ['name' => 'Artificial Intelligence', 'icon' => 'material-symbols-outlined text-[16px] text-purple-500', 'is_material' => true, 'symbol' => 'psychology'],
+                        ];
+                    @endphp
+                    @foreach($techs as $tech)
+                        <span class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-200 text-xs font-bold border border-slate-200/60 dark:border-slate-850 group hover:scale-[1.03] hover:border-indigo-200/50 hover:bg-slate-50 dark:hover:bg-slate-900 transition-all duration-300 shadow-sm">
+                            @if(isset($tech['is_material']) && $tech['is_material'])
+                                <span class="{{ $tech['icon'] }}">{{ $tech['symbol'] }}</span>
+                            @else
+                                <i class="{{ $tech['icon'] }} text-[16px] filter dark:brightness-110"></i>
+                            @endif
+                            {{ $tech['name'] }}
                         </span>
                     @endforeach
                 </div>
