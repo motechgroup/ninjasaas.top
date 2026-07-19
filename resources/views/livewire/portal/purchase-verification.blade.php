@@ -122,12 +122,12 @@
                                 <td class="px-6 py-4">
                                     @if ($purchase->hasActiveSupport())
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-455 border border-emerald-500/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            <span class="flex-shrink-0 block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                             Active (expires {{ $purchase->support_expiry->format('Y-m-d') }})
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-600 dark:text-rose-455 border border-rose-500/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                            <span class="flex-shrink-0 block w-2 h-2 rounded-full bg-rose-500"></span>
                                             Expired ({{ $purchase->support_expiry ? $purchase->support_expiry->format('Y-m-d') : 'No expiry' }})
                                         </span>
                                     @endif
@@ -177,12 +177,12 @@
                                 <td class="px-6 py-4">
                                     @if ($lic->hasActiveSupport())
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-455 border border-emerald-500/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            <span class="flex-shrink-0 block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                                             Active (expires {{ $lic->support_expires_at->format('Y-m-d') }})
                                         </span>
                                     @else
                                         <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-600 dark:text-rose-455 border border-rose-500/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                                            <span class="flex-shrink-0 block w-2 h-2 rounded-full bg-rose-500"></span>
                                             Expired ({{ $lic->support_expires_at ? $lic->support_expires_at->format('Y-m-d') : 'No expiry' }})
                                         </span>
                                     @endif
