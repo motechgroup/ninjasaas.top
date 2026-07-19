@@ -26,6 +26,28 @@ class AdminController extends Controller
         $ticketsCount = SupportTicket::where('status', '!=', 'closed')->count();
         $requestsCount = ServiceRequest::where('status', ServiceRequestStatus::PENDING)->count();
 
+        // Calculate Total Revenue
+        $totalEnvatoRevenue = 0;
+        foreach (EnvatoPurchase::where('is_active', true)->get() as $p) {
+            $totalEnvatoRevenue += 39.00;
+        }
+
+        $totalDirectRevenue = 0;
+        $directChannel = SalesChannel::where('slug', 'saasninja')->first();
+        foreach (\App\Models\License::where('is_active', true)->with('product')->get() as $l) {
+            $price = 49.00;
+            if ($directChannel && $l->product) {
+                $mapping = $l->product->salesChannels()->where('sales_channel_id', $directChannel->id)->first();
+                if ($mapping && $mapping->pivot->price) {
+                    $price = (float) $mapping->pivot->price;
+                }
+            }
+            $totalDirectRevenue += $price;
+        }
+
+        $totalRevenue = $totalEnvatoRevenue + $totalDirectRevenue;
+        $totalRevenueFormatted = number_format($totalRevenue, 2);
+
         $recentRequests = ServiceRequest::with(['user', 'service'])->latest()->take(5)->get();
         
         // Retrieve Spatie Activity Logs
@@ -159,7 +181,8 @@ class AdminController extends Controller
             'activityLogs',
             'recentTransactions',
             'chartLabelsJson',
-            'chartDatasetsJson'
+            'chartDatasetsJson',
+            'totalRevenueFormatted'
         ));
     }
 

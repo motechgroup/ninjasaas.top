@@ -4,7 +4,7 @@
     </x-slot>
 
     <!-- Metrics Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <!-- Total Users -->
         <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 p-6 rounded-2xl shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 flex items-center gap-4 group">
             <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/30 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
@@ -26,6 +26,18 @@
                 <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verified Sales</span>
                 <span class="text-2xl font-outfit font-extrabold text-slate-950 dark:text-white">{{ $purchasesCount }}</span>
                 <span class="block text-[10px] text-green-500 font-semibold mt-1">▲ +24% this quarter</span>
+            </div>
+        </div>
+
+        <!-- Estimated Revenue -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 p-6 rounded-2xl shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300 flex items-center gap-4 group">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M12 16V5" /></svg>
+            </div>
+            <div class="flex-grow">
+                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Revenue</span>
+                <span class="text-2xl font-outfit font-extrabold text-slate-950 dark:text-white">${{ $totalRevenueFormatted }}</span>
+                <span class="block text-[10px] text-emerald-500 font-semibold mt-1">▲ Combined channels</span>
             </div>
         </div>
 
