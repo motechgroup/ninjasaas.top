@@ -95,6 +95,18 @@
                                     {{ $req->admin_notes }}
                                 </div>
                             @endif
+
+                            @if ($req->status->value === 'quoted')
+                                <div class="flex justify-end pt-1">
+                                    <form action="{{ route('portal.services.pay', $req->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
+                                            <span class="material-symbols-outlined text-[16px]">credit_card</span>
+                                            Pay Quote with Stripe (${{ number_format($req->quote_price, 2) }})
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 @endif

@@ -36,6 +36,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/portal/tickets', [PortalController::class, 'tickets'])->name('portal.tickets');
     Route::get('/portal/services', [PortalController::class, 'services'])->name('portal.services');
     Route::post('/portal/services', [PortalController::class, 'submitServiceRequest'])->name('portal.services.submit');
+    Route::post('/portal/services/{serviceRequest}/pay', [PortalController::class, 'payServiceRequest'])->name('portal.services.pay');
+    Route::get('/portal/services/{serviceRequest}/payment-success', [PortalController::class, 'paymentSuccess'])->name('portal.services.payment-success');
+    Route::get('/portal/services/{serviceRequest}/payment-cancel', [PortalController::class, 'paymentCancel'])->name('portal.services.payment-cancel');
 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -55,6 +58,8 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
     Route::middleware(['role:Super Admin'])->group(function () {
         Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
         Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
+        Route::post('/settings/test-smtp', [AdminController::class, 'testSmtp'])->name('settings.test-smtp');
+        Route::patch('/settings/templates/{emailTemplate}', [AdminController::class, 'updateEmailTemplate'])->name('settings.templates.update');
         Route::get('/users', [AdminController::class, 'users'])->name('users');
         Route::patch('/users/{user}/role', [AdminController::class, 'updateUserRole'])->name('users.update');
     });

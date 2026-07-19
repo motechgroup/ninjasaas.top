@@ -28,6 +28,10 @@
                 <span class="material-symbols-outlined text-[18px]">mail</span>
                 SMTP Email
             </button>
+            <button @click="activeTab = 'templates'" :class="activeTab === 'templates' ? 'bg-primary text-white font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-xs font-semibold transition-all">
+                <span class="material-symbols-outlined text-[18px]">drafts</span>
+                Email Templates
+            </button>
             <button @click="activeTab = 'footer'" :class="activeTab === 'footer' ? 'bg-primary text-white font-bold' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left text-xs font-semibold transition-all">
                 <span class="material-symbols-outlined text-[18px]">view_column</span>
                 Contact & Footer
@@ -231,6 +235,38 @@
                     </div>
                 </div>
 
+                <!-- Tab: Email Templates -->
+                <div x-show="activeTab === 'templates'" class="space-y-6" style="display: none;">
+                    <div>
+                        <h3 class="font-outfit font-bold text-slate-950 dark:text-white text-base">System Email Templates</h3>
+                        <p class="text-xs text-slate-500 mt-1">Configure layout HTML markup and standard variables (e.g. {name}, {ticket_id}, {reply_message}, {site_url}) for automated messages.</p>
+                    </div>
+                    <div class="space-y-6">
+                        @foreach ($emailTemplates as $tpl)
+                            <div class="bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-xl p-6 space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-slate-900 dark:text-white">{{ $tpl->name }}</h4>
+                                        <p class="text-[10px] text-slate-400 font-mono mt-0.5">Template Key: {{ $tpl->key }}</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-500 mb-1">Subject Line</label>
+                                        <input type="text" name="templates[{{ $tpl->id }}][subject]" value="{{ $tpl->subject }}"
+                                               class="block w-full rounded-lg border-slate-200 dark:border-slate-805 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-2 px-3 focus:ring-primary focus:border-primary">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-500 mb-1">HTML Body</label>
+                                        <textarea name="templates[{{ $tpl->id }}][body]" rows="6"
+                                                  class="block w-full rounded-lg border-slate-200 dark:border-slate-805 dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-mono py-2 px-3 focus:ring-primary focus:border-primary">{{ $tpl->body }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
                 <!-- Tab 6: Contact & Footer -->
                 <div x-show="activeTab === 'footer'" class="space-y-6" style="display: none;">
                     <div>
@@ -279,6 +315,21 @@
                 <div class="pt-6 border-t border-slate-200 dark:border-slate-800 flex justify-end">
                     <button type="submit" class="inline-flex items-center justify-center px-6 py-2.5 bg-primary hover:opacity-90 text-white text-sm font-semibold rounded-lg shadow-md transition-all">
                         Save Configuration Updates
+                    </button>
+                </div>
+            </form>
+
+            <!-- SMTP Test Form (displayed only when activeTab is smtp) -->
+            <form x-show="activeTab === 'smtp'" action="{{ route('admin.settings.test-smtp') }}" method="POST" class="p-8 border-t border-slate-200 dark:border-slate-800 space-y-4 bg-slate-50/50 dark:bg-slate-950/20" style="display: none;">
+                @csrf
+                <div>
+                    <h4 class="font-outfit font-bold text-slate-900 dark:text-white text-sm">Verify SMTP Connectivity</h4>
+                    <p class="text-xs text-slate-500 mt-1">Send a trial email using the saved configuration to verify your SMTP mailer connection works.</p>
+                </div>
+                <div class="flex gap-4 items-center max-w-md">
+                    <input type="email" name="test_email" required placeholder="destination@example.com" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-2 px-3 focus:ring-primary focus:border-primary">
+                    <button type="submit" class="bg-indigo-650 text-white px-5 py-2.5 rounded-lg text-xs font-bold hover:opacity-90 shadow-sm transition-all whitespace-nowrap">
+                        Send Test Mail
                     </button>
                 </div>
             </form>

@@ -74,18 +74,62 @@ class AdminController extends Controller
     public function settings()
     {
         $settings = Setting::all();
-        return view('admin.settings', compact('settings'));
+        $emailTemplates = \App\Models\EmailTemplate::all();
+        return view('admin.settings', compact('settings', 'emailTemplates'));
     }
 
     public function updateSettings(Request $request)
     {
-        $data = $request->except('_token');
+        if ($request->has('templates')) {
+            $templatesData = $request->input('templates');
+            foreach ($templatesData as $id => $tplData) {
+                $template = \App\Models\EmailTemplate::find($id);
+                if ($template) {
+                    $template->update([
+                        'subject' => $tplData['subject'],
+                        'body' => $tplData['body'],
+                    ]);
+                }
+            }
+        }
+
+        $data = $request->except(['_token', 'templates']);
         
         foreach ($data as $key => $value) {
             Setting::set($key, $value);
         }
 
         return redirect()->back()->with('success', 'Global system settings updated.');
+    }
+
+    public function testSmtp(Request $request)
+    {
+        $request->validate([
+            'test_email' => 'required|email',
+        ]);
+
+        try {
+            \Illuminate\Support\Facades\Mail::raw('This is a confirm test email confirming that SaaSNinja SMTP settings are active and connected successfully.', function ($message) use ($request) {
+                $message->to($request->input('test_email'))
+                    ->subject('SaaSNinja SMTP Connection Success');
+            });
+
+            return redirect()->back()->with('success', 'Test email dispatched successfully! Verify your inbox.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'SMTP connection failed: ' . $e->getMessage());
+        }
+    }
+
+    public function updateEmailTemplate(Request $request, \App\Models\EmailTemplate $emailTemplate)
+    {
+        $request->validate([
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
+        $emailTemplate->update($request->only('subject', 'body'));
+
+        return redirect()->back()->with('success', 'Email template updated successfully.');
     }
 
     public function purchases()
