@@ -52,4 +52,11 @@ class Product extends Model
     {
         return $this->hasMany(DocumentationCategory::class);
     }
+
+    public function salesChannels()
+    {
+        return $this->belongsToMany(SalesChannel::class, 'product_sales_channels')
+            ->withPivot(['purchase_url', 'status', 'priority', 'price', 'external_product_id'])
+            ->withTimestamps();
+    }
 }

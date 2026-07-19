@@ -37,7 +37,7 @@ class PublicController extends Controller
     {
         $product = Product::where('slug', $slug)
             ->where('is_active', true)
-            ->with(['features', 'screenshots', 'versions.changelogs'])
+            ->with(['features', 'screenshots', 'versions.changelogs', 'salesChannels'])
             ->firstOrFail();
             
         return view('products.show', compact('product'));

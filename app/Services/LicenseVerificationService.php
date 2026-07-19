@@ -2,23 +2,21 @@
 
 namespace App\Services;
 
-use App\Models\EnvatoItem;
-use App\Models\EnvatoPurchase;
+use App\Services\Licensing\LicenseManager;
 use App\Models\LicenseVerification;
-use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class LicenseVerificationService
 {
-    protected EnvatoService $envatoService;
+    protected LicenseManager $licenseManager;
 
-    public function __construct(EnvatoService $envatoService)
+    public function __construct(LicenseManager $licenseManager)
     {
-        $this->envatoService = $envatoService;
+        $this->licenseManager = $licenseManager;
     }
 
     /**
-     * Verifies a license key (purchase code) locally or via Envato API.
+     * Verifies a license key (purchase code or direct key) locally or via the resolved provider.
      * Logs the attempt in the database.
      */
     public function verifyLicense(
@@ -28,63 +26,28 @@ class LicenseVerificationService
         ?string $ipAddress = null
     ): array {
         $purchaseCode = trim($purchaseCode);
-        $isValid = false;
-        $errorMessage = null;
-        $purchase = null;
 
-        // 1. Look up in our local database first
-        $purchase = EnvatoPurchase::where('purchase_code', $purchaseCode)->first();
+        // Resolve driver dynamically
+        $driver = $this->licenseManager->driver($purchaseCode);
 
-        // 2. If not found locally, query Envato directly
-        if (!$purchase) {
-            $envatoResult = $this->envatoService->verifyPurchase($purchaseCode);
+        // Run verification
+        $result = $driver->verify($purchaseCode, $productId);
 
-            if ($envatoResult['success']) {
-                // Ensure EnvatoItem exists in our database
-                $envatoItem = EnvatoItem::firstOrCreate(
-                    ['item_id' => $envatoResult['item_id']],
-                    [
-                        'name' => $envatoResult['item_name'],
-                        'url' => 'https://codecanyon.net/item/' . $envatoResult['item_id']
-                    ]
-                );
+        $isValid = $result['valid'];
+        $errorMessage = $result['error'] ?? null;
 
-                // Create local purchase record
-                $purchase = EnvatoPurchase::create([
-                    'envato_item_id' => $envatoItem->id,
-                    'purchase_code' => $purchaseCode,
-                    'envato_username' => $envatoResult['buyer'],
-                    'purchase_date' => $envatoResult['purchase_date'],
-                    'support_expiry' => $envatoResult['support_expiry'],
-                    'license_type' => $envatoResult['license_type'],
-                    'is_active' => true,
-                ]);
+        // Log the verification in database
+        $legacyPurchaseId = $result['legacy_purchase_id'] ?? null;
+        $licenseId = $result['license_id'] ?? null;
 
-                $isValid = true;
-            } else {
-                $errorMessage = $envatoResult['error'] ?? 'Invalid purchase code.';
-            }
-        } else {
-            // 3. Local purchase found, validate status
-            if (!$purchase->is_active) {
-                $errorMessage = 'This license has been deactivated by the author.';
-            } else {
-                $isValid = true;
-            }
+        // Save activation record if domain was passed and verification is valid
+        if ($isValid && $domain) {
+            $driver->activate($purchaseCode, $domain, $ipAddress);
         }
 
-        // 4. Validate product ID matching if provided
-        if ($isValid && $purchase && $productId) {
-            $item = $purchase->item;
-            if ($item && $item->item_id !== $productId) {
-                $isValid = false;
-                $errorMessage = "License matches product '{$item->name}' (ID: {$item->item_id}) but not requested product (ID: {$productId}).";
-            }
-        }
-
-        // 5. Create verification log in database
         LicenseVerification::create([
-            'envato_purchase_id' => $purchase ? $purchase->id : null,
+            'envato_purchase_id' => $legacyPurchaseId,
+            'license_id' => $licenseId,
             'purchase_code' => $purchaseCode,
             'product_id' => $productId,
             'domain' => $domain,
@@ -93,18 +56,18 @@ class LicenseVerificationService
             'error_message' => $errorMessage,
         ]);
 
-        if ($isValid && $purchase) {
+        if ($isValid) {
             return [
                 'valid' => true,
                 'license_status' => 'active',
-                'license_type' => $purchase->license_type,
-                'buyer' => $purchase->envato_username,
-                'purchase_date' => $purchase->purchase_date->toIso8601String(),
-                'support_expiry' => $purchase->support_expiry ? $purchase->support_expiry->toIso8601String() : null,
-                'support_active' => $purchase->hasActiveSupport(),
+                'license_type' => $result['license_type'] ?? 'Regular License',
+                'buyer' => $result['buyer'] ?? 'Client',
+                'purchase_date' => $result['purchase_date'] ? Carbon::parse($result['purchase_date'])->toIso8601String() : null,
+                'support_expiry' => $result['support_expiry'] ? Carbon::parse($result['support_expiry'])->toIso8601String() : null,
+                'support_active' => $result['support_expiry'] ? Carbon::parse($result['support_expiry'])->isFuture() : false,
                 'product' => [
-                    'id' => $purchase->item->item_id,
-                    'name' => $purchase->item->name,
+                    'id' => $productId,
+                    'name' => $result['item_name'] ?? ($productId ? 'SaaSNinja Product' : 'Product'),
                 ]
             ];
         }

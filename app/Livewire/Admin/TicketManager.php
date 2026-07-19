@@ -7,11 +7,11 @@ use App\Models\TicketReply;
 use App\Models\User;
 use App\Models\MediaFile;
 use App\Models\EnvatoPurchase;
+use App\Models\License;
 use App\Enums\TicketStatus;
 use App\Enums\Priority;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
 
 class TicketManager extends Component
 {
@@ -23,7 +23,7 @@ class TicketManager extends Component
     // Creation Form (on behalf of customer)
     public bool $isCreating = false;
     public ?int $createUserId = null;
-    public ?int $createPurchaseId = null;
+    public ?string $createPurchaseId = null; // Stored as string e.g. "envato_1" or "direct_1"
     public string $createSubject = '';
     public string $createCategory = 'Bug';
     public string $createPriority = 'medium';
@@ -75,16 +75,31 @@ class TicketManager extends Component
     {
         $this->validate([
             'createUserId' => 'required|exists:users,id',
-            'createPurchaseId' => 'nullable|exists:envato_purchases,id',
+            'createPurchaseId' => 'nullable|string',
             'createSubject' => 'required|string|max:255',
             'createCategory' => 'required|string',
             'createPriority' => 'required|in:low,medium,high,urgent',
             'createMessage' => 'required|string|min:10',
         ]);
 
+        $purchaseIdValue = $this->createPurchaseId;
+        $envatoPurchaseId = null;
+        $licenseId = null;
+
+        if ($purchaseIdValue) {
+            if (str_starts_with($purchaseIdValue, 'envato_')) {
+                $envatoPurchaseId = (int) str_replace('envato_', '', $purchaseIdValue);
+            } elseif (str_starts_with($purchaseIdValue, 'direct_')) {
+                $licenseId = (int) str_replace('direct_', '', $purchaseIdValue);
+            } else {
+                $envatoPurchaseId = (int) $purchaseIdValue;
+            }
+        }
+
         $ticket = SupportTicket::create([
             'user_id' => $this->createUserId,
-            'envato_purchase_id' => $this->createPurchaseId,
+            'envato_purchase_id' => $envatoPurchaseId,
+            'license_id' => $licenseId,
             'subject' => $this->createSubject,
             'category' => $this->createCategory,
             'priority' => $this->createPriority,
@@ -164,7 +179,7 @@ class TicketManager extends Component
     public function render()
     {
         // Admin gets access to all tickets, ordered by latest updates
-        $query = SupportTicket::with(['user', 'purchase.item'])
+        $query = SupportTicket::with(['user', 'purchase.item', 'license.product'])
             ->orderByDesc('updated_at');
 
         if ($this->filterStatus !== 'all') {
@@ -176,7 +191,7 @@ class TicketManager extends Component
         $selectedTicket = null;
         if ($this->selectedTicketId) {
             $selectedTicket = SupportTicket::where('id', $this->selectedTicketId)
-                ->with(['replies.user', 'replies.mediaFiles', 'purchase.item', 'user'])
+                ->with(['replies.user', 'replies.mediaFiles', 'purchase.item', 'license.product', 'user'])
                 ->first();
         }
 
@@ -185,9 +200,23 @@ class TicketManager extends Component
 
         // Client list for creating ticket on their behalf
         $users = User::orderBy('name')->get();
-        $userPurchases = [];
+        $userPurchaseOptions = [];
         if ($this->createUserId) {
-            $userPurchases = EnvatoPurchase::where('user_id', $this->createUserId)->with('item')->get();
+            $purchases = EnvatoPurchase::where('user_id', $this->createUserId)->with('item')->get();
+            $licenses = License::where('user_id', $this->createUserId)->with('product')->get();
+
+            foreach ($purchases as $p) {
+                $userPurchaseOptions[] = [
+                    'value' => 'envato_' . $p->id,
+                    'label' => $p->item->name . ' (Envato - ' . $p->purchase_code . ')',
+                ];
+            }
+            foreach ($licenses as $l) {
+                $userPurchaseOptions[] = [
+                    'value' => 'direct_' . $l->id,
+                    'label' => $l->product->name . ' (Direct - ' . $l->license_key . ')',
+                ];
+            }
         }
 
         return view('livewire.admin.ticket-manager', [
@@ -195,7 +224,7 @@ class TicketManager extends Component
             'selectedTicket' => $selectedTicket,
             'staff' => $staff,
             'users' => $users,
-            'userPurchases' => $userPurchases,
+            'userPurchaseOptions' => $userPurchaseOptions,
         ]);
     }
 }

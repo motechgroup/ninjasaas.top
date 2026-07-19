@@ -5,12 +5,12 @@ namespace App\Livewire\Portal;
 use App\Models\SupportTicket;
 use App\Models\TicketReply;
 use App\Models\EnvatoPurchase;
+use App\Models\License;
 use App\Models\MediaFile;
 use App\Enums\TicketStatus;
 use App\Enums\Priority;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Storage;
 
 class TicketManager extends Component
 {
@@ -23,7 +23,7 @@ class TicketManager extends Component
     // Creation Form
     public string $subject = '';
     public string $category = 'Bug';
-    public ?int $purchaseId = null;
+    public ?string $purchaseId = null; // Stored as string e.g. "envato_1" or "direct_1"
     public string $priority = 'medium';
     public string $createMessage = '';
     public $attachments = []; // For new ticket attachments
@@ -70,15 +70,58 @@ class TicketManager extends Component
         $this->validate([
             'subject' => 'required|string|max:255',
             'category' => 'required|string',
-            'purchaseId' => 'required|exists:envato_purchases,id',
+            'purchaseId' => 'required|string',
             'priority' => 'required|in:low,medium,high,urgent',
             'createMessage' => 'required|string|min:10',
             'attachments.*' => 'nullable|file|max:5120', // 5MB max
         ]);
 
+        $purchaseIdValue = $this->purchaseId;
+        $type = 'envato';
+        $id = null;
+
+        if (str_starts_with($purchaseIdValue, 'envato_')) {
+            $type = 'envato';
+            $id = (int) str_replace('envato_', '', $purchaseIdValue);
+        } elseif (str_starts_with($purchaseIdValue, 'direct_')) {
+            $type = 'direct';
+            $id = (int) str_replace('direct_', '', $purchaseIdValue);
+        } else {
+            $type = 'envato';
+            $id = (int) $purchaseIdValue;
+        }
+
+        $envatoPurchaseId = null;
+        $licenseId = null;
+
+        if ($type === 'envato') {
+            $purchase = EnvatoPurchase::where('id', $id)->where('user_id', auth()->id())->first();
+            if (!$purchase) {
+                $this->addError('purchaseId', 'Invalid purchase code selected.');
+                return;
+            }
+            if (!$purchase->hasActiveSupport()) {
+                $this->addError('purchaseId', 'Your support for this Envato product has expired.');
+                return;
+            }
+            $envatoPurchaseId = $purchase->id;
+        } else {
+            $license = License::where('id', $id)->where('user_id', auth()->id())->first();
+            if (!$license) {
+                $this->addError('purchaseId', 'Invalid license key selected.');
+                return;
+            }
+            if (!$license->hasActiveSupport()) {
+                $this->addError('purchaseId', 'Your support for this license has expired.');
+                return;
+            }
+            $licenseId = $license->id;
+        }
+
         $ticket = SupportTicket::create([
             'user_id' => auth()->id(),
-            'envato_purchase_id' => $this->purchaseId,
+            'envato_purchase_id' => $envatoPurchaseId,
+            'license_id' => $licenseId,
             'subject' => $this->subject,
             'category' => $this->category,
             'priority' => $this->priority,
@@ -176,17 +219,37 @@ class TicketManager extends Component
             ->with('item')
             ->get();
 
+        $licenses = License::where('user_id', auth()->id())
+            ->with('product')
+            ->get();
+
+        $purchaseOptions = [];
+        foreach ($purchases as $p) {
+            $purchaseOptions[] = [
+                'value' => 'envato_' . $p->id,
+                'label' => $p->item->name . ' (Envato - ' . ($p->hasActiveSupport() ? 'Support Active' : 'Support Expired') . ')',
+                'has_support' => $p->hasActiveSupport(),
+            ];
+        }
+        foreach ($licenses as $l) {
+            $purchaseOptions[] = [
+                'value' => 'direct_' . $l->id,
+                'label' => $l->product->name . ' (Direct - ' . ($l->hasActiveSupport() ? 'Support Active' : 'Support Expired') . ')',
+                'has_support' => $l->hasActiveSupport(),
+            ];
+        }
+
         $selectedTicket = null;
         if ($this->selectedTicketId) {
             $selectedTicket = SupportTicket::where('id', $this->selectedTicketId)
                 ->where('user_id', auth()->id())
-                ->with(['replies.user', 'replies.mediaFiles', 'purchase.item'])
+                ->with(['replies.user', 'replies.mediaFiles', 'purchase.item', 'license.product'])
                 ->first();
         }
 
         return view('livewire.portal.ticket-manager', [
             'tickets' => $tickets,
-            'purchases' => $purchases,
+            'purchaseOptions' => $purchaseOptions,
             'selectedTicket' => $selectedTicket,
         ]);
     }

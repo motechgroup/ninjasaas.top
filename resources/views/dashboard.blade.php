@@ -50,18 +50,39 @@
             </div>
             
             <div class="p-6">
-                @if($recentPurchases->isEmpty())
+                @if($recentPurchases->isEmpty() && $recentLicenses->isEmpty())
                     <p class="text-slate-500 text-sm text-center py-6">No purchases linked to this account yet.</p>
                 @else
                     <ul class="space-y-4">
                         @foreach($recentPurchases as $p)
                             <li class="flex items-center justify-between p-3 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
                                 <div>
-                                    <span class="block text-sm font-bold text-slate-900 dark:text-white">{{ $p->item->name }}</span>
+                                    <div class="flex items-center gap-2">
+                                        <span class="block text-sm font-bold text-slate-900 dark:text-white">{{ $p->item->name }}</span>
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400">Envato</span>
+                                    </div>
                                     <span class="block text-xs text-slate-400 font-mono mt-0.5">Code: {{ $p->purchase_code }}</span>
                                 </div>
                                 <div class="text-right">
                                     @if($p->hasActiveSupport())
+                                        <x-badge color="green">Support Active</x-badge>
+                                    @else
+                                        <x-badge color="red">Support Expired</x-badge>
+                                    @endif
+                                </div>
+                            </li>
+                        @endforeach
+                        @foreach($recentLicenses as $l)
+                            <li class="flex items-center justify-between p-3 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="block text-sm font-bold text-slate-900 dark:text-white">{{ $l->product->name }}</span>
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400">Direct</span>
+                                    </div>
+                                    <span class="block text-xs text-slate-400 font-mono mt-0.5">Key: {{ $l->license_key }}</span>
+                                </div>
+                                <div class="text-right">
+                                    @if($l->hasActiveSupport())
                                         <x-badge color="green">Support Active</x-badge>
                                     @else
                                         <x-badge color="red">Support Expired</x-badge>

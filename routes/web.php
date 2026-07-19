@@ -85,6 +85,14 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
         Route::delete('/products/{product}', [AdminController::class, 'destroyProduct'])->name('products.destroy');
         Route::get('/services', [AdminController::class, 'services'])->name('services');
         Route::patch('/services/{serviceRequest}', [AdminController::class, 'updateServiceRequest'])->name('services.update');
+
+        // Licensing & Channel Administration
+        Route::get('/licensing', [\App\Http\Controllers\LicenseAdminController::class, 'index'])->name('licensing.index');
+        Route::post('/licensing/channel', [\App\Http\Controllers\LicenseAdminController::class, 'storeChannel'])->name('licensing.channel.store');
+        Route::post('/licensing/provider', [\App\Http\Controllers\LicenseAdminController::class, 'storeProvider'])->name('licensing.provider.store');
+        Route::post('/licensing/assign', [\App\Http\Controllers\LicenseAdminController::class, 'assignProductChannel'])->name('licensing.assign');
+        Route::post('/licensing/generate', [\App\Http\Controllers\LicenseAdminController::class, 'generateLicenseKey'])->name('licensing.generate');
+        Route::post('/licensing/{license}/toggle', [\App\Http\Controllers\LicenseAdminController::class, 'toggleLicense'])->name('licensing.toggle');
     });
 
     // CMS Management (Super Admin + Content Manager)

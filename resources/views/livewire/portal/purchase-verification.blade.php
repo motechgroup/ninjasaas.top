@@ -44,12 +44,12 @@
             <p class="text-xs text-slate-500 mt-1">Products currently linked to your SaaSNinja account.</p>
         </div>
 
-        @if ($linkedPurchases->isEmpty())
+        @if ($linkedPurchases->isEmpty() && $linkedLicenses->isEmpty())
             <div class="p-8 text-center text-slate-500">
                 <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p class="text-sm">You haven't linked any purchase codes yet.</p>
+                <p class="text-sm">You haven't linked any purchase codes or license keys yet.</p>
             </div>
         @else
             <div class="overflow-x-auto">
@@ -57,7 +57,8 @@
                     <thead>
                         <tr class="bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-500 uppercase border-b border-slate-200 dark:border-slate-800">
                             <th class="px-6 py-3.5">Product</th>
-                            <th class="px-6 py-3.5">Purchase Code</th>
+                            <th class="px-6 py-3.5">Source</th>
+                            <th class="px-6 py-3.5">License Key / Purchase Code</th>
                             <th class="px-6 py-3.5">License Type</th>
                             <th class="px-6 py-3.5">Support Status</th>
                             <th class="px-6 py-3.5">Purchased Date</th>
@@ -68,6 +69,9 @@
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                                 <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">
                                     {{ $purchase->item->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400">Envato</span>
                                 </td>
                                 <td class="px-6 py-4">
                                     <code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{{ $purchase->purchase_code }}</code>
@@ -84,6 +88,33 @@
                                 </td>
                                 <td class="px-6 py-4 text-slate-500 text-xs">
                                     {{ $purchase->purchase_date->format('Y-m-d') }}
+                                </td>
+                            </tr>
+                        @endforeach
+
+                        @foreach ($linkedLicenses as $lic)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                                <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                                    {{ $lic->product->name }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400">Direct</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{{ $lic->license_key }}</code>
+                                </td>
+                                <td class="px-6 py-4 text-xs font-semibold">
+                                    Direct Sale
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if ($lic->hasActiveSupport())
+                                        <x-badge color="green">Active (expires {{ $lic->support_expires_at->format('Y-m-d') }})</x-badge>
+                                    @else
+                                        <x-badge color="red">Expired ({{ $lic->support_expires_at ? $lic->support_expires_at->format('Y-m-d') : 'No expiry' }})</x-badge>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-slate-500 text-xs">
+                                    {{ $lic->purchased_at->format('Y-m-d') }}
                                 </td>
                             </tr>
                         @endforeach

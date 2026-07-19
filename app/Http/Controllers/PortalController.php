@@ -19,14 +19,18 @@ class PortalController extends Controller
         }
 
         $userId = auth()->id();
-        $purchasesCount = EnvatoPurchase::where('user_id', $userId)->count();
+        $envatoCount = EnvatoPurchase::where('user_id', $userId)->count();
+        $licenseCount = \App\Models\License::where('user_id', $userId)->count();
+        $purchasesCount = $envatoCount + $licenseCount;
+
         $ticketsCount = SupportTicket::where('user_id', $userId)->where('status', '!=', 'closed')->count();
         $requestsCount = ServiceRequest::where('user_id', $userId)->count();
 
         $recentPurchases = EnvatoPurchase::where('user_id', $userId)->with('item')->latest()->take(3)->get();
+        $recentLicenses = \App\Models\License::where('user_id', $userId)->with('product')->latest()->take(3)->get();
         $recentTickets = SupportTicket::where('user_id', $userId)->latest()->take(3)->get();
 
-        return view('dashboard', compact('purchasesCount', 'ticketsCount', 'requestsCount', 'recentPurchases', 'recentTickets'));
+        return view('dashboard', compact('purchasesCount', 'ticketsCount', 'requestsCount', 'recentPurchases', 'recentLicenses', 'recentTickets'));
     }
 
     public function purchases()

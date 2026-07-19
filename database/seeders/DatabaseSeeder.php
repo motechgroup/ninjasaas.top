@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EmailTemplateSeeder::class,
             BlogSeeder::class,
+            SalesChannelAndLicensingSeeder::class,
         ]);
     }
 }

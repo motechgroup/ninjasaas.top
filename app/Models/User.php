@@ -66,6 +66,11 @@ class User extends Authenticatable
         return $this->hasMany(EnvatoPurchase::class);
     }
 
+    public function licenses()
+    {
+        return $this->hasMany(License::class);
+    }
+
     public function tickets()
     {
         return $this->hasMany(SupportTicket::class);

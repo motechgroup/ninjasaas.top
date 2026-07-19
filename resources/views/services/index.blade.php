@@ -54,57 +54,125 @@
         </div>
     </section>
 
-    <!-- Enterprise Consulting Section (Bento Style) -->
+    <!-- Expanded Enterprise Services Section (Bento Style) -->
     <section class="bg-slate-50 dark:bg-slate-950 py-16 border-t border-b border-slate-200 dark:border-slate-800">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-12">
-                <h2 class="font-outfit font-bold text-3xl text-slate-900 dark:text-white">Enterprise Consulting</h2>
-                <p class="text-slate-500 mt-2 max-w-2xl mx-auto">Strategic guidance to align your technology roadmap with core business objectives and operational goals.</p>
+                <h2 class="font-outfit font-bold text-3xl text-slate-900 dark:text-white">Our Complete Services Portfolio</h2>
+                <p class="text-slate-500 mt-2 max-w-2xl mx-auto">Strategic implementation, custom engineering, and management services to cover every aspect of your enterprise software roadmap.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Bento Item 1 -->
-                <div class="md:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <span class="material-symbols-outlined text-primary mb-4 text-4xl">strategy</span>
-                        <h3 class="font-outfit font-bold text-xl text-slate-900 dark:text-white mb-2">Digital Roadmap Planning</h3>
-                        <p class="text-slate-500 text-sm">A comprehensive 3-5 year technical strategy tailored to your industry's evolving landscape.</p>
-                    </div>
-                    <div class="mt-8 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                        <span class="text-xs font-bold text-slate-400">Advanced Strategic Framework</span>
-                        <span class="material-symbols-outlined text-slate-400">arrow_forward</span>
-                    </div>
-                </div>
-                
-                <!-- Bento Item 2 -->
-                <div class="bg-gradient-to-br from-indigo-650 to-violet-600 text-white p-6 rounded-2xl flex flex-col justify-between shadow-lg">
-                    <div>
-                        <span class="material-symbols-outlined mb-4 text-4xl text-white/90" style="font-variation-settings: 'FILL' 1;">security</span>
-                        <h3 class="font-outfit font-bold text-xl text-white mb-2">Security Auditing</h3>
-                        <p class="text-sm text-indigo-50/90 leading-relaxed">Deep-dive vulnerability assessments and enterprise compliance alignment (SOC2, GDPR).</p>
-                    </div>
-                    <a href="{{ route('contact') }}" class="mt-8 w-full py-2 bg-white text-indigo-650 hover:bg-indigo-50 transition-colors rounded-xl font-bold text-xs text-center shadow">Book Audit</a>
-                </div>
-                
-                <!-- Bento Item 3 -->
+                <!-- Custom Software Development -->
                 <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">cloud_sync</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Cloud Migration</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Seamlessly moving infrastructure to AWS, Azure, or GCP with zero downtime.</p>
+                    <span class="material-symbols-outlined text-primary text-4xl">code</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Custom Software Development</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">High-performance custom software engineering tailored to your business needs.</p>
                 </div>
                 
-                <!-- Bento Item 4 -->
+                <!-- Website Development -->
                 <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">analytics</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Big Data Strategy</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Harnessing corporate data for actionable insights and predictive modeling.</p>
+                    <span class="material-symbols-outlined text-primary text-4xl">web</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Website Development</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Stunning, high-conversion responsive corporate websites and landing experiences.</p>
                 </div>
                 
-                <!-- Bento Item 5 -->
+                <!-- Mobile App Development -->
                 <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">groups</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Agile Training</h3>
-                    <p class="text-slate-500 text-xs leading-relaxed">Upskilling your internal dev teams with modern DevOps methodologies.</p>
+                    <span class="material-symbols-outlined text-primary text-4xl">stay_primary_portrait</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Mobile App Development</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Native and cross-platform mobile apps for iOS and Android environments.</p>
+                </div>
+                
+                <!-- UI/UX Design -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">palette</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">UI/UX Design</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">User-centric designs, interactive wireframes, and modern branding systems.</p>
+                </div>
+
+                <!-- API Development -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">api</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">API Development</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Secure, document-first REST and GraphQL API gateways and microservices.</p>
+                </div>
+
+                <!-- System Integration -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">hub</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">System Integration</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Connecting disparate platforms, payment gateways, and CRM/ERP databases.</p>
+                </div>
+
+                <!-- Cloud Deployment -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">cloud</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Cloud Deployment</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Deploying containerized apps to AWS, DigitalOcean, Hetzner, or Google Cloud.</p>
+                </div>
+
+                <!-- Hosting -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">dns</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Hosting</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">High-availability VPS, Dedicated server, or Managed Shared hosting configurations.</p>
+                </div>
+
+                <!-- Maintenance -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">build</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Maintenance</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Regular package upgrades, server monitoring, bug fixes, and security patches.</p>
+                </div>
+
+                <!-- Technical Support -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">support_agent</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Technical Support</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">24/7 dedicated support desk SLA guarantees for enterprise applications.</p>
+                </div>
+
+                <!-- Software Consulting -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">chat</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Software Consulting</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Aligning your engineering tools and architecture with operational goals.</p>
+                </div>
+
+                <!-- Business Automation -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">smart_toy</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Business Automation</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Automating manual workflows, billing, invoicing, and reporting systems.</p>
+                </div>
+
+                <!-- Installation Services -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">download_for_offline</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Installation Services</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Professional installation of Envato templates and SaaS apps on your servers.</p>
+                </div>
+
+                <!-- Customization -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">edit_note</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Customization</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Modifying existing products to match your visual layout and logic rules.</p>
+                </div>
+
+                <!-- Migration -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">move_up</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Migration</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Transitioning database engines, filesystems, and hostings seamlessly.</p>
+                </div>
+
+                <!-- Training -->
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
+                    <span class="material-symbols-outlined text-primary text-4xl">school</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Training</h3>
+                    <p class="text-slate-500 text-xs leading-relaxed">Upskilling dev and admin teams to operate SaaSNinja software products.</p>
                 </div>
             </div>
         </div>

@@ -52,13 +52,13 @@
                         <label for="purchaseId" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Verified Product</label>
                         <select id="purchaseId" wire:model.defer="purchaseId" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-indigo-500">
                             <option value="">-- Select Product --</option>
-                            @foreach ($purchases as $p)
-                                <option value="{{ $p->id }}">{{ $p->item->name }} ({{ $p->purchase_code }})</option>
+                            @foreach ($purchaseOptions as $option)
+                                <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
                             @endforeach
                         </select>
                         @error('purchaseId') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
-                        @if($purchases->isEmpty())
-                            <span class="text-xs text-indigo-500 mt-1.5 block">You must first <a href="{{ route('portal.purchases') }}" class="underline font-semibold">link a purchase code</a> to open a ticket.</span>
+                        @if(empty($purchaseOptions))
+                            <span class="text-xs text-indigo-500 mt-1.5 block">You must first <a href="{{ route('portal.purchases') }}" class="underline font-semibold">link a purchase code or license key</a> to open a ticket.</span>
                         @endif
                     </div>
 
@@ -125,7 +125,15 @@
                     <div class="flex items-center gap-2 text-xs text-slate-500 font-semibold mb-1">
                         <span>Ticket #{{ $selectedTicket->id }}</span>
                         <span>&bull;</span>
-                        <span>Product: <strong class="text-slate-700 dark:text-slate-300">{{ $selectedTicket->purchase->item->name }}</strong></span>
+                        <span>Product: <strong class="text-slate-700 dark:text-slate-300">
+                            @if ($selectedTicket->purchase)
+                                {{ $selectedTicket->purchase->item->name }}
+                            @elseif ($selectedTicket->license)
+                                {{ $selectedTicket->license->product->name }}
+                            @else
+                                General Support
+                            @endif
+                        </strong></span>
                     </div>
                     <h3 class="font-outfit font-extrabold text-lg text-slate-950 dark:text-white">{{ $selectedTicket->subject }}</h3>
                 </div>

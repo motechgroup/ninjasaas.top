@@ -39,6 +39,11 @@ class SupportTicket extends Model
         return $this->belongsTo(EnvatoPurchase::class, 'envato_purchase_id');
     }
 
+    public function license()
+    {
+        return $this->belongsTo(License::class, 'license_id');
+    }
+
     public function replies()
     {
         return $this->hasMany(TicketReply::class)->orderBy('created_at');

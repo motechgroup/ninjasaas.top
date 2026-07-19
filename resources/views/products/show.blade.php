@@ -8,22 +8,77 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="space-y-3 text-center md:text-left">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-xs font-bold uppercase tracking-wider text-indigo-400">
-                        {{ $product->category->name }}
+                    @php
+                        $activeChannels = $product->salesChannels->where('pivot.status', 'active')->sortBy('pivot.priority');
+                    @endphp
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-xs font-bold uppercase tracking-wider text-indigo-400">
+                            {{ $product->category->name }}
+                        </div>
+                        @if ($activeChannels->isNotEmpty())
+                            @foreach ($activeChannels as $chan)
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border {{ $chan->slug === 'envato' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-blue-500/20 text-blue-400 border-blue-500/30' }}">
+                                    Available on {{ $chan->name }}
+                                </span>
+                            @endforeach
+                        @else
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                                Available on Envato
+                            </span>
+                        @endif
                     </div>
                     <h1 class="font-outfit font-extrabold text-3xl sm:text-4xl tracking-tight leading-none">{{ $product->name }}</h1>
                     <p class="text-slate-400 text-sm max-w-xl font-medium">{{ $product->short_description }}</p>
                 </div>
                 
-                <div class="flex items-center gap-4">
+                <div class="flex flex-wrap items-center gap-4">
                     @if($product->demo_url)
                         <a href="{{ $product->demo_url }}" target="_blank" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 font-bold rounded-xl text-sm transition-all">
                             Live Demo
                         </a>
                     @endif
-                    <a href="{{ $product->buy_url ?? '#' }}" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all">
-                        Buy on CodeCanyon
-                    </a>
+
+                    @if ($activeChannels->isEmpty())
+                        <a href="{{ $product->buy_url ?? '#' }}" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all">
+                            Buy on Envato
+                        </a>
+                    @elseif ($activeChannels->count() === 1)
+                        @php $onlyChannel = $activeChannels->first(); @endphp
+                        @if ($onlyChannel->slug === 'envato')
+                            <a href="{{ $onlyChannel->pivot->purchase_url ?? $product->buy_url ?? '#' }}" target="_blank" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all">
+                                Buy on Envato
+                            </a>
+                        @else
+                            <a href="{{ $onlyChannel->pivot->purchase_url ?? route('contact') }}" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all">
+                                Buy Now
+                            </a>
+                        @endif
+                    @else
+                        <!-- Purchase Options: multiple channels exist -->
+                        <div class="relative" x-data="{ open: false }">
+                            <button @click="open = !open" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all inline-flex items-center gap-2">
+                                Purchase Options
+                                <svg class="w-4 h-4 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-56 rounded-xl bg-slate-800 border border-slate-700 shadow-xl overflow-hidden py-1 z-50" style="display: none;">
+                                @foreach ($activeChannels as $chan)
+                                    @if ($chan->slug === 'envato')
+                                        <a href="{{ $chan->pivot->purchase_url ?? $product->buy_url ?? '#' }}" target="_blank" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-slate-750 hover:text-white">
+                                            Buy on Envato
+                                        </a>
+                                    @elseif ($chan->slug === 'saasninja' || $chan->slug === 'saasninja-direct')
+                                        <a href="{{ $chan->pivot->purchase_url ?? route('contact') }}" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-slate-750 hover:text-white">
+                                            Buy from SaaSNinja
+                                        </a>
+                                    @else
+                                        <a href="{{ $chan->pivot->purchase_url ?? '#' }}" target="_blank" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-slate-750 hover:text-white">
+                                            Buy on {{ $chan->name }}
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

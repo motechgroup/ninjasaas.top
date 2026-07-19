@@ -72,15 +72,15 @@
                     <!-- Select Product Purchase (Loaded dynamically based on selected user) -->
                     <div>
                         <label for="createPurchaseId" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">Select Verified Purchase (Optional)</label>
-                        <select id="createPurchaseId" wire:model.defer="createPurchaseId" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary" {{ empty($userPurchases) ? 'disabled' : '' }}>
+                        <select id="createPurchaseId" wire:model.defer="createPurchaseId" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary" {{ empty($userPurchaseOptions) ? 'disabled' : '' }}>
                             <option value="">-- Select Purchase (None/General) --</option>
-                            @foreach ($userPurchases as $p)
-                                <option value="{{ $p->id }}">{{ $p->item->name }} ({{ $p->purchase_code }})</option>
+                            @foreach ($userPurchaseOptions as $option)
+                                <option value="{{ $option['value'] }}">{{ $option['label'] }}</option>
                             @endforeach
                         </select>
                         @error('createPurchaseId') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
-                        @if(empty($userPurchases) && $createUserId)
-                            <span class="text-[10px] text-slate-400 mt-1 block">This client has no linked Envato purchases.</span>
+                        @if(empty($userPurchaseOptions) && $createUserId)
+                            <span class="text-[10px] text-slate-400 mt-1 block">This client has no linked Envato purchases or Direct licenses.</span>
                         @endif
                     </div>
                 </div>
@@ -240,7 +240,7 @@
                         <div class="text-xs text-slate-500">{{ $selectedTicket->user->email }}</div>
                     </div>
 
-                    <!-- Envato Purchase Details -->
+                    <!-- Envato Purchase or Direct License Details -->
                     @if ($selectedTicket->purchase)
                         <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
                             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">Envato License</h4>
@@ -269,9 +269,37 @@
                                 </div>
                             </div>
                         </div>
+                    @elseif ($selectedTicket->license)
+                        <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2.5">Direct License</h4>
+                            <div class="space-y-2 text-xs">
+                                <div>
+                                    <span class="text-slate-400">Product:</span>
+                                    <div class="font-semibold text-slate-800 dark:text-slate-200 mt-0.5">{{ $selectedTicket->license->product->name }}</div>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400">License Key:</span>
+                                    <div class="font-mono bg-slate-100 dark:bg-slate-850 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200 truncate mt-0.5">{{ $selectedTicket->license->license_key }}</div>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400">License Source:</span>
+                                    <div class="font-semibold text-slate-850 dark:text-slate-200 mt-0.5">SaaSNinja Direct</div>
+                                </div>
+                                <div>
+                                    <span class="text-slate-400">Support Status:</span>
+                                    <div class="mt-1">
+                                        @if ($selectedTicket->license->hasActiveSupport())
+                                            <x-badge color="green">Active (ends {{ $selectedTicket->license->support_expires_at->format('Y-m-d') }})</x-badge>
+                                        @else
+                                            <x-badge color="red">Expired ({{ $selectedTicket->license->support_expires_at ? $selectedTicket->license->support_expires_at->format('Y-m-d') : 'No expiry' }})</x-badge>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @else
                         <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-red-500 font-semibold">
-                            No verified purchase linked to this support ticket.
+                            No verified purchase or license linked to this support ticket.
                         </div>
                     @endif
 
