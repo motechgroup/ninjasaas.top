@@ -116,50 +116,38 @@
             <!-- Product Grid (Dynamic from Database) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach ($products as $product)
-                    @php
-                        $slug = strtolower($product->slug);
-                        if (str_contains($slug, 'law') || str_contains($slug, 'lex')) {
-                            $icon = 'gavel';
-                            $colorClass = 'bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-400 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/40';
-                        } elseif (str_contains($slug, 'wifi') || str_contains($slug, 'isp')) {
-                            $icon = 'wifi';
-                            $colorClass = 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/40';
-                        } elseif (str_contains($slug, 'health') || str_contains($slug, 'medi')) {
-                            $icon = 'health_and_safety';
-                            $colorClass = 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40';
-                        } elseif (str_contains($slug, 'pos') || str_contains($slug, 'shop')) {
-                            $icon = 'shopping_cart';
-                            $colorClass = 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/40';
-                        } else {
-                            $icon = 'terminal';
-                            $colorClass = 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40';
-                        }
-                    @endphp
-                    <div onclick="window.location='{{ route('products.show', $product->slug) }}'" class="cursor-pointer bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:border-primary/20 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden">
-                        <!-- Subtle background glow on hover -->
-                        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-                        
-                        <div class="space-y-4 relative z-10">
-                            <div class="flex items-center gap-4">
-                                <div class="w-14 h-14 rounded-2xl {{ $colorClass }} flex items-center justify-center flex-shrink-0 transition-colors duration-300 group-hover:scale-105 transform">
-                                    <span class="material-symbols-outlined text-[30px] transition-transform duration-300 group-hover:rotate-3">{{ $icon }}</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-outfit font-extrabold text-lg text-slate-900 dark:text-white line-clamp-1">
-                                        <span class="group-hover:text-primary transition-colors">
-                                            {{ $product->name }}
-                                        </span>
-                                    </h3>
-                                    <p class="text-xs text-slate-450 dark:text-slate-500 font-medium tracking-wide uppercase">{{ $product->category->name ?? 'Premium Software' }}</p>
+                    <a href="{{ route('products.show', $product->slug) }}" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] flex flex-col justify-between relative cursor-pointer no-underline text-inherit">
+                        <div>
+                            <!-- Product Image -->
+                            <div class="aspect-video overflow-hidden bg-slate-100 dark:bg-slate-950 relative">
+                                @if($product->image_url)
+                                    <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
+                                @else
+                                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
+                                @endif
+                                <div class="absolute top-4 right-4">
+                                    <span class="inline-flex items-center px-2.5 py-1 bg-white/90 dark:bg-slate-900/90 text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-sm border border-slate-100 dark:border-slate-800 text-slate-800 dark:text-slate-200">
+                                        {{ $product->category->name }}
+                                    </span>
                                 </div>
                             </div>
-                            <p class="text-sm text-slate-650 dark:text-slate-400 leading-relaxed line-clamp-3">
-                                {{ $product->short_description }}
-                            </p>
+                            
+                            <!-- Card Body -->
+                            <div class="p-6 space-y-3">
+                                <div class="flex items-center justify-between gap-4">
+                                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-primary transition-colors">
+                                        {{ $product->name }}
+                                    </h3>
+                                    <span class="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-[10px] font-bold text-slate-500 whitespace-nowrap">v{{ $product->version }}</span>
+                                </div>
+                                <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                                    {{ $product->short_description }}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
-        </div>
+            </div>
     </section>
 
     <!-- Why SaaSNinja Benefits Section -->
