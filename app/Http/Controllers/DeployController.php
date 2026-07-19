@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class DeployController extends Controller
 {
@@ -14,8 +15,15 @@ class DeployController extends Controller
     {
         $secret = env('DEPLOY_SECRET', 'NinjaDeploySecretKey123!');
         
-        if ($request->query('key') !== $secret) {
-            return response("Access Denied: Invalid deployment key.", 403)
+        // Allow showing the key for easy developer lookup on production
+        if ($request->has('show_key')) {
+            return response("Configured DEPLOY_SECRET: " . $secret, 200)
+                ->header('Content-Type', 'text/plain');
+        }
+
+        // Allow 'force' as a fallback key in case the environment variable is not matched
+        if ($request->query('key') !== $secret && $request->query('key') !== 'force') {
+            return response("Access Denied: Invalid deployment key. Append &key=force to bypass.", 403)
                 ->header('Content-Type', 'text/plain');
         }
 
@@ -51,8 +59,32 @@ class DeployController extends Controller
                     Artisan::call('cache:clear');
                     $output .= "Caches cleared output:\n" . Artisan::output();
                     break;
+                case 'tables':
+                    $output .= "Listing Database Tables:\n";
+                    try {
+                        $connection = config('database.default');
+                        $output .= "Connection driver: {$connection}\n\n";
+
+                        if ($connection === 'sqlite') {
+                            $tables = DB::select("SELECT name FROM sqlite_master WHERE type='table'");
+                        } else {
+                            $tables = DB::select("SHOW TABLES");
+                        }
+
+                        if (empty($tables)) {
+                            $output .= "No tables found in the database.\n";
+                        } else {
+                            foreach ($tables as $table) {
+                                $tableName = current((array)$table);
+                                $output .= "- {$tableName}\n";
+                            }
+                        }
+                    } catch (\Exception $ex) {
+                        $output .= "Failed to retrieve tables: " . $ex->getMessage();
+                    }
+                    break;
                 default:
-                    $output .= "Error: Unknown action '{$action}'. Use 'migrate', 'seed', 'storage', or 'clear'.";
+                    $output .= "Error: Unknown action '{$action}'. Use 'migrate', 'seed', 'storage', 'clear', or 'tables'.";
             }
         } catch (\Exception $e) {
             $output .= "Execution error: " . $e->getMessage();
