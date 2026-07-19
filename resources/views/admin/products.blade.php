@@ -310,7 +310,7 @@
                                         <div class="flex items-center gap-2">
                                             <input type="checkbox" name="channels[{{ $chan->id }}][enabled]" value="1"
                                                    id="channel_enabled_{{ $chan->id }}"
-                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].enabled"
+                                                   x-model="productChannels[{{ $chan->id }}].enabled"
                                                    class="rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary">
                                             <label for="channel_enabled_{{ $chan->id }}" class="text-sm font-semibold text-slate-850 dark:text-slate-200 cursor-pointer">
                                                 Enable on {{ $chan->name }}
@@ -318,32 +318,32 @@
                                         </div>
                                     </div>
 
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-show="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].enabled" style="display: none;">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-show="productChannels[{{ $chan->id }}].enabled" style="display: none;">
                                         <div>
                                             <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Purchase URL</label>
                                             <input type="url" name="channels[{{ $chan->id }}][purchase_url]" 
-                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].purchase_url"
+                                                   x-model="productChannels[{{ $chan->id }}].purchase_url"
                                                    placeholder="https://..."
                                                    class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
                                         </div>
                                         <div>
                                             <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Price ($)</label>
                                             <input type="number" step="0.01" min="0" name="channels[{{ $chan->id }}][price]" 
-                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].price"
+                                                   x-model="productChannels[{{ $chan->id }}].price"
                                                    placeholder="59.00"
                                                    class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
                                         </div>
                                         <div>
                                             <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">External Product ID (Optional)</label>
                                             <input type="text" name="channels[{{ $chan->id }}][external_product_id]" 
-                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].external_product_id"
+                                                   x-model="productChannels[{{ $chan->id }}].external_product_id"
                                                    placeholder="e.g. CodeCanyon Item ID"
                                                    class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
                                         </div>
                                         <div>
                                             <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Priority Order</label>
                                             <input type="number" name="channels[{{ $chan->id }}][priority]" 
-                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].priority"
+                                                   x-model="productChannels[{{ $chan->id }}].priority"
                                                    placeholder="0"
                                                    class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
                                         </div>
