@@ -14,7 +14,7 @@ class PublicController extends Controller
 {
     public function home()
     {
-        $products = Product::where('is_active', true)->with('category')->take(3)->get();
+        $products = Product::where('is_active', true)->with('category')->take(4)->get();
         $recentPosts = BlogPost::where('is_published', true)->orderByDesc('published_at')->take(3)->get();
         
         return view('home', compact('products', 'recentPosts'));

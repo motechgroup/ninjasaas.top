@@ -113,130 +113,61 @@
                 </a>
             </div>
 
-            <!-- Product Grid (LexCore, ISPFlow, MediCore, FlexPOS) -->
+            <!-- Product Grid (Dynamic from Database) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Product 1: LexCore -->
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full group">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[28px]">gavel</span>
+                @foreach ($products as $product)
+                    @php
+                        $slug = strtolower($product->slug);
+                        if (str_contains($slug, 'law') || str_contains($slug, 'lex')) {
+                            $icon = 'gavel';
+                            $colorClass = 'bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400';
+                        } elseif (str_contains($slug, 'wifi') || str_contains($slug, 'isp')) {
+                            $icon = 'wifi';
+                            $colorClass = 'bg-teal-100 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400';
+                        } elseif (str_contains($slug, 'health') || str_contains($slug, 'medi')) {
+                            $icon = 'health_and_safety';
+                            $colorClass = 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400';
+                        } elseif (str_contains($slug, 'pos') || str_contains($slug, 'shop')) {
+                            $icon = 'shopping_cart';
+                            $colorClass = 'bg-orange-100 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400';
+                        } else {
+                            $icon = 'terminal';
+                            $colorClass = 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400';
+                        }
+                    @endphp
+                    <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full group">
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl {{ $colorClass }} flex items-center justify-center flex-shrink-0">
+                                    <span class="material-symbols-outlined text-[28px]">{{ $icon }}</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-outfit font-extrabold text-body-lg text-on-surface line-clamp-1">
+                                        <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary transition-colors">
+                                            {{ $product->name }}
+                                        </a>
+                                    </h3>
+                                    <p class="text-[11px] text-on-surface-variant truncate">{{ $product->category->name ?? 'Premium Software' }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="font-outfit font-extrabold text-body-lg text-on-surface">LexCore</h3>
-                                <p class="text-[11px] text-on-surface-variant">Law Firm Management System</p>
-                            </div>
+                            <p class="text-body-sm text-on-surface-variant leading-relaxed line-clamp-3">
+                                {{ $product->short_description }}
+                            </p>
                         </div>
-                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
-                            Complete solution for law firms to manage cases, clients, billing and more.
-                        </p>
-                    </div>
 
-                    <div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/60">
-                        <a href="#" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
-                            Live Demo <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-                        </a>
-                        <a href="{{ route('docs.index') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">
-                            Documentation
-                        </a>
-                        <a href="#" class="px-3 py-1.5 bg-primary text-on-primary font-label-md text-[11px] rounded-lg hover:opacity-95 transition-opacity">
-                            Buy on Envato
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Product 2: ISPFlow -->
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full group">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[28px]">wifi</span>
-                            </div>
-                            <div>
-                                <h3 class="font-outfit font-extrabold text-body-lg text-on-surface">ISPFlow</h3>
-                                <p class="text-[11px] text-on-surface-variant">ISP & Billing System</p>
-                            </div>
+                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/60">
+                            <a href="{{ $product->demo_url ?? '#' }}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
+                                Live Demo <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+                            </a>
+                            <a href="{{ $product->docs_url ?: route('docs.index') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">
+                                Documentation
+                            </a>
+                            <a href="{{ $product->buy_url ?? '#' }}" target="_blank" class="px-3 py-1.5 bg-primary text-on-primary font-label-md text-[11px] rounded-lg hover:opacity-95 transition-opacity">
+                                Buy on Envato
+                            </a>
                         </div>
-                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
-                            Powerful ISP management and billing solution for internet service providers.
-                        </p>
                     </div>
-
-                    <div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/60">
-                        <a href="#" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
-                            Live Demo <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-                        </a>
-                        <a href="{{ route('docs.index') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">
-                            Documentation
-                        </a>
-                        <a href="#" class="px-3 py-1.5 bg-primary text-on-primary font-label-md text-[11px] rounded-lg hover:opacity-95 transition-opacity">
-                            Buy on Envato
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Product 3: MediCore -->
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full group">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[28px]">health_and_safety</span>
-                            </div>
-                            <div>
-                                <h3 class="font-outfit font-extrabold text-body-lg text-on-surface">MediCore</h3>
-                                <p class="text-[11px] text-on-surface-variant">Hospital Management System</p>
-                            </div>
-                        </div>
-                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
-                            Advanced hospital management system for modern healthcare facilities.
-                        </p>
-                    </div>
-
-                    <div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/60">
-                        <a href="#" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
-                            Live Demo <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-                        </a>
-                        <a href="{{ route('docs.index') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">
-                            Documentation
-                        </a>
-                        <a href="#" class="px-3 py-1.5 bg-primary text-on-primary font-label-md text-[11px] rounded-lg hover:opacity-95 transition-opacity">
-                            Buy on Envato
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Product 4: FlexPOS -->
-                <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full group">
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-[28px]">shopping_cart</span>
-                            </div>
-                            <div>
-                                <h3 class="font-outfit font-extrabold text-body-lg text-on-surface">FlexPOS</h3>
-                                <p class="text-[11px] text-on-surface-variant">POS & Inventory System</p>
-                            </div>
-                        </div>
-                        <p class="text-body-sm text-on-surface-variant leading-relaxed">
-                            Smart POS and inventory management solution for retail businesses.
-                        </p>
-                    </div>
-
-                    <div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/60">
-                        <a href="#" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
-                            Live Demo <span class="material-symbols-outlined text-[12px]">open_in_new</span>
-                        </a>
-                        <a href="{{ route('docs.index') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">
-                            Documentation
-                        </a>
-                        <a href="#" class="px-3 py-1.5 bg-primary text-on-primary font-label-md text-[11px] rounded-lg hover:opacity-95 transition-opacity">
-                            Buy on Envato
-                        </a>
-                    </div>
-                </div>
-
-            </div>
+                @endforeach
         </div>
     </section>
 
