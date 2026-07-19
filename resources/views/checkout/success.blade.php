@@ -34,7 +34,7 @@
                         Download Package
                     </a>
                 @endif
-                <a href="{{ route('dashboard') }}" class="w-full sm:w-auto px-6 py-3 bg-indigo-650 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
+                <a href="{{ route('dashboard') }}" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
                     <span class="material-symbols-outlined">dashboard</span>
                     Go to Portal Dashboard
                 </a>

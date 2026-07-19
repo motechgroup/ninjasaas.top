@@ -53,12 +53,23 @@
                     </div>
                 </div>
 
+                <!-- Demo / Test Card Autofill Banner -->
+                <div class="p-4 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="space-y-0.5">
+                        <span class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide block">Test Credentials</span>
+                        <p class="text-xs text-slate-700 dark:text-slate-350">Use Stripe test card: <code class="bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded font-mono border border-slate-200 dark:border-slate-800">4242 4242 4242 4242</code></p>
+                    </div>
+                    <button type="button" onclick="autofillTestCard()" class="px-3.5 py-1.5 bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-xl transition-all flex-shrink-0">
+                        Autofill Card
+                    </button>
+                </div>
+
                 <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <div class="flex items-center gap-1.5 text-xs text-slate-500">
                         <span class="material-symbols-outlined text-[16px] text-green-600">lock</span>
                         SSL Encrypted Payment
                     </div>
-                    <button type="submit" class="px-6 py-3 bg-indigo-650 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-500/25 transition-all">
+                    <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-500/25 transition-all">
                         Pay ${{ number_format($price, 2) }}
                     </button>
                 </div>
@@ -113,4 +124,12 @@
 
     </div>
 </div>
+
+<script>
+function autofillTestCard() {
+    document.getElementById('card_number').value = '4242 4242 4242 4242';
+    document.getElementById('card_expiry').value = '12/28';
+    document.getElementById('card_cvc').value = '123';
+}
+</script>
 @endsection
