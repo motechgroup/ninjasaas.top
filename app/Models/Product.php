@@ -59,4 +59,16 @@ class Product extends Model
             ->withPivot(['purchase_url', 'status', 'priority', 'price', 'external_product_id'])
             ->withTimestamps();
     }
+
+    public function getLatestDownloadUrl()
+    {
+        $version = $this->versions()->whereNotNull('download_url')->orderByDesc('release_date')->first();
+        return $version ? $version->download_url : null;
+    }
+
+    public function getLatestVersionNumber()
+    {
+        $version = $this->versions()->orderByDesc('release_date')->first();
+        return $version ? $version->version : '1.0.0';
+    }
 }

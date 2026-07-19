@@ -45,4 +45,12 @@ class EnvatoPurchase extends Model
     {
         return $this->support_expiry && $this->support_expiry->isFuture();
     }
+
+    public function getProduct()
+    {
+        if (!$this->item) {
+            return null;
+        }
+        return Product::where('envato_item_id', $this->item->item_id)->first();
+    }
 }

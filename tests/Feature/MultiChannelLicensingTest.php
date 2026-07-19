@@ -176,4 +176,31 @@ class MultiChannelLicensingTest extends TestCase
             'price' => 79.00,
         ]);
     }
+
+    public function test_product_checkout_pages_and_process()
+    {
+        $user = User::factory()->create();
+        $product = Product::first();
+
+        $response = $this->actingAs($user)->get('/checkout/' . $product->slug);
+        $response->assertStatus(200);
+        $response->assertSee($product->name);
+
+        $response = $this->actingAs($user)->post('/checkout/' . $product->slug, [
+            'card_name' => $user->name,
+            'card_number' => '4111222233334444',
+            'card_expiry' => '12/28',
+            'card_cvc' => '123',
+        ]);
+
+        $response->assertStatus(302);
+        
+        $license = License::where('user_id', $user->id)->where('product_id', $product->id)->first();
+        $this->assertNotNull($license);
+        $this->assertTrue($license->is_active);
+
+        $response = $this->actingAs($user)->get('/checkout/success/' . $license->id);
+        $response->assertStatus(200);
+        $response->assertSee($license->license_key);
+    }
 }

@@ -62,6 +62,7 @@
                             <th class="px-6 py-3.5">License Type</th>
                             <th class="px-6 py-3.5">Support Status</th>
                             <th class="px-6 py-3.5">Purchased Date</th>
+                            <th class="px-6 py-3.5 text-right">Downloads</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-sm">
@@ -89,6 +90,17 @@
                                 <td class="px-6 py-4 text-slate-500 text-xs">
                                     {{ $purchase->purchase_date->format('Y-m-d') }}
                                 </td>
+                                <td class="px-6 py-4 text-right">
+                                    @php $prod = $purchase->getProduct(); @endphp
+                                    @if ($prod && $prod->getLatestDownloadUrl())
+                                        <a href="{{ $prod->getLatestDownloadUrl() }}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-500 text-white text-xs font-bold rounded-lg shadow-sm transition-all">
+                                            <span class="material-symbols-outlined text-[14px]">download</span>
+                                            Download (v{{ $prod->getLatestVersionNumber() }})
+                                        </a>
+                                    @else
+                                        <span class="text-xs text-slate-400">No Packages</span>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
 
@@ -115,6 +127,16 @@
                                 </td>
                                 <td class="px-6 py-4 text-slate-500 text-xs">
                                     {{ $lic->purchased_at->format('Y-m-d') }}
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    @if ($lic->product && $lic->product->getLatestDownloadUrl())
+                                        <a href="{{ $lic->product->getLatestDownloadUrl() }}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-500 text-white text-xs font-bold rounded-lg shadow-sm transition-all">
+                                            <span class="material-symbols-outlined text-[14px]">download</span>
+                                            Download (v{{ $lic->product->getLatestVersionNumber() }})
+                                        </a>
+                                    @else
+                                        <span class="text-xs text-slate-400">No Packages</span>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

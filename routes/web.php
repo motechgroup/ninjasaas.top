@@ -51,6 +51,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/portal/services/{serviceRequest}/payment-success', [PortalController::class, 'paymentSuccess'])->name('portal.services.payment-success');
     Route::get('/portal/services/{serviceRequest}/payment-cancel', [PortalController::class, 'paymentCancel'])->name('portal.services.payment-cancel');
 
+    // Direct Product Checkout Routes
+    Route::get('/checkout/{product:slug}', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');
+    Route::post('/checkout/{product:slug}', [\App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout/success/{license}', [\App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

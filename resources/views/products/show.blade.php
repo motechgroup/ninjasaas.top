@@ -49,7 +49,7 @@
                                 Buy on Envato
                             </a>
                         @else
-                            <a href="{{ $onlyChannel->pivot->purchase_url ?? route('contact') }}" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all">
+                            <a href="{{ $onlyChannel->pivot->purchase_url ?? route('checkout.show', $product->slug) }}" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-xl text-sm shadow-lg shadow-indigo-500/20 transition-all">
                                 Buy Now
                             </a>
                         @endif
@@ -67,7 +67,7 @@
                                             Buy on Envato
                                         </a>
                                     @elseif ($chan->slug === 'saasninja' || $chan->slug === 'saasninja-direct')
-                                        <a href="{{ $chan->pivot->purchase_url ?? route('contact') }}" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-slate-750 hover:text-white">
+                                        <a href="{{ $chan->pivot->purchase_url ?? route('checkout.show', $product->slug) }}" class="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-200 hover:bg-slate-750 hover:text-white">
                                             Buy from SaaSNinja
                                         </a>
                                     @else
