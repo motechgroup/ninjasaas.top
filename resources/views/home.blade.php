@@ -146,9 +146,9 @@
                                 </div>
                                 <div>
                                     <h3 class="font-outfit font-extrabold text-lg text-slate-900 dark:text-white line-clamp-1">
-                                        <a href="{{ route('products.show', $product->slug) }}" onclick="event.stopPropagation()" class="hover:text-primary transition-colors">
+                                        <span class="group-hover:text-primary transition-colors">
                                             {{ $product->name }}
-                                        </a>
+                                        </span>
                                     </h3>
                                     <p class="text-xs text-slate-450 dark:text-slate-500 font-medium tracking-wide uppercase">{{ $product->category->name ?? 'Premium Software' }}</p>
                                 </div>
@@ -156,19 +156,6 @@
                             <p class="text-sm text-slate-650 dark:text-slate-400 leading-relaxed line-clamp-3">
                                 {{ $product->short_description }}
                             </p>
-                        </div>
-
-                        <div class="flex items-center justify-between pt-4 mt-6 border-t border-slate-100 dark:border-slate-800/80 relative z-10">
-                            <a href="{{ $product->demo_url ?? '#' }}" onclick="event.stopPropagation()" target="_blank" class="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-0.5 group/link">
-                                Live Demo 
-                                <span class="material-symbols-outlined text-[14px] transform group-hover/link:translate-x-0.5 transition-transform">arrow_outward</span>
-                            </a>
-                            <a href="{{ $product->docs_url ?: route('docs.index') }}" onclick="event.stopPropagation()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-350 transition-colors">
-                                Documentation
-                            </a>
-                            <a href="{{ $product->buy_url ?? '#' }}" onclick="event.stopPropagation()" target="_blank" class="px-3.5 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl hover:bg-primary dark:hover:bg-primary hover:text-white dark:hover:text-white shadow-sm transition-all">
-                                Buy Item
-                            </a>
                         </div>
                     </div>
                 @endforeach
