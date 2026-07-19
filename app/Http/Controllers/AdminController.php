@@ -22,7 +22,7 @@ class AdminController extends Controller
     public function dashboard()
     {
         $usersCount = User::count();
-        $purchasesCount = EnvatoPurchase::count();
+        $purchasesCount = EnvatoPurchase::count() + \App\Models\License::count();
         $ticketsCount = SupportTicket::where('status', '!=', 'closed')->count();
         $requestsCount = ServiceRequest::where('status', ServiceRequestStatus::PENDING)->count();
 
@@ -31,13 +31,49 @@ class AdminController extends Controller
         // Retrieve Spatie Activity Logs
         $activityLogs = Activity::with('causer')->latest()->take(10)->get();
 
+        // Compile Recent Transactions
+        $recentEnvato = EnvatoPurchase::with(['user', 'item'])->latest()->take(5)->get()->map(function($p) {
+            return [
+                'type' => 'Envato',
+                'product_name' => $p->item->name ?? 'Unknown Item',
+                'buyer_name' => $p->user->name ?? 'Unknown User',
+                'buyer_email' => $p->user->email ?? '',
+                'license_key' => $p->purchase_code,
+                'price' => '39.00',
+                'date' => $p->purchase_date,
+            ];
+        });
+
+        $recentDirect = \App\Models\License::with(['user', 'product'])->latest()->take(5)->get()->map(function($l) {
+            $directChannel = SalesChannel::where('slug', 'saasninja')->first();
+            $price = 49.00;
+            if ($directChannel && $l->product) {
+                $mapping = $l->product->salesChannels()->where('sales_channel_id', $directChannel->id)->first();
+                if ($mapping && $mapping->pivot->price) {
+                    $price = (float) $mapping->pivot->price;
+                }
+            }
+            return [
+                'type' => 'Direct',
+                'product_name' => $l->product->name ?? 'Unknown Product',
+                'buyer_name' => $l->user->name ?? 'Unknown User',
+                'buyer_email' => $l->user->email ?? '',
+                'license_key' => $l->license_key,
+                'price' => number_format($price, 2),
+                'date' => $l->purchased_at,
+            ];
+        });
+
+        $recentTransactions = $recentEnvato->concat($recentDirect)->sortByDesc('date')->take(5);
+
         return view('admin.dashboard', compact(
             'usersCount', 
             'purchasesCount', 
             'ticketsCount', 
             'requestsCount', 
             'recentRequests', 
-            'activityLogs'
+            'activityLogs',
+            'recentTransactions'
         ));
     }
 

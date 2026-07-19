@@ -164,6 +164,61 @@
         </div>
     </div>
 
+    <!-- Recent Transactions & Purchases -->
+    <div class="mt-8 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 rounded-2xl shadow-sm overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20 flex items-center justify-between">
+            <h3 class="font-outfit font-bold text-slate-950 dark:text-white">Recent Purchases & Licensing Transactions</h3>
+            <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Live sales stream</span>
+        </div>
+        <div class="overflow-x-auto">
+            @if ($recentTransactions->isEmpty())
+                <p class="text-slate-500 text-sm text-center py-8">No recent transactions recorded.</p>
+            @else
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50/50 dark:bg-slate-950/40 text-xs font-semibold text-slate-500 uppercase border-b border-slate-200 dark:border-slate-800">
+                            <th class="px-6 py-3.5">Product / Item</th>
+                            <th class="px-6 py-3.5">Buyer</th>
+                            <th class="px-6 py-3.5">License Key / Purchase Code</th>
+                            <th class="px-6 py-3.5">Source Channel</th>
+                            <th class="px-6 py-3.5">Amount</th>
+                            <th class="px-6 py-3.5 text-right">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800/80 text-xs">
+                        @foreach ($recentTransactions as $tx)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
+                                <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                                    {{ $tx['product_name'] }}
+                                </td>
+                                <td class="px-6 py-4 text-slate-750 dark:text-slate-300">
+                                    <div class="font-bold">{{ $tx['buyer_name'] }}</div>
+                                    <div class="text-[10px] text-slate-400 mt-0.5">{{ $tx['buyer_email'] }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <code class="font-mono bg-slate-100 dark:bg-slate-850 px-2 py-0.5 rounded text-[11px]">{{ $tx['license_key'] }}</code>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if ($tx['type'] === 'Envato')
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-950/30 text-amber-800 dark:text-amber-400">Envato</span>
+                                    @else
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-100 dark:bg-blue-950/30 text-blue-800 dark:text-blue-400">Direct</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 font-bold text-slate-900 dark:text-white">
+                                    ${{ $tx['price'] }}
+                                </td>
+                                <td class="px-6 py-4 text-right text-slate-400">
+                                    {{ $tx['date']->format('Y-m-d H:i') }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+        </div>
+    </div>
+
     <!-- ChartJS Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
