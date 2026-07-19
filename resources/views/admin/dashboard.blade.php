@@ -228,22 +228,8 @@
             new Chart(salesCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-                    datasets: [{
-                        label: 'LexCore sales ($)',
-                        data: [1500, 2200, 1900, 2700, 3100, 2900, 4200],
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }, {
-                        label: 'CRM sales ($)',
-                        data: [800, 1100, 1600, 1400, 2200, 2600, 3200],
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        tension: 0.3,
-                        fill: true
-                    }]
+                    labels: {!! $chartLabelsJson !!},
+                    datasets: {!! $chartDatasetsJson !!}
                 },
                 options: {
                     responsive: true,
