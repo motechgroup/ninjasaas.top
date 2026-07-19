@@ -313,6 +313,7 @@ class AdminController extends Controller
             'is_active' => 'required|boolean',
             'image' => 'nullable|image|max:2048',
             'image_url' => 'nullable|string|max:1000',
+            'package' => 'nullable|file|mimes:zip|max:51200',
         ]);
 
         $data = $request->all();
@@ -323,6 +324,21 @@ class AdminController extends Controller
         }
 
         $product = Product::create($data);
+
+        if ($request->hasFile('package')) {
+            $file = $request->file('package');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/products'), $fileName);
+            $downloadUrl = '/uploads/products/' . $fileName;
+
+            $product->versions()->updateOrCreate(
+                ['version' => $product->version],
+                [
+                    'release_date' => now(),
+                    'download_url' => $downloadUrl
+                ]
+            );
+        }
 
         // Sync sales channels / marketplaces
         $channelsData = $request->input('channels', []);
@@ -359,6 +375,7 @@ class AdminController extends Controller
             'is_active' => 'required|boolean',
             'image' => 'nullable|image|max:2048',
             'image_url' => 'nullable|string|max:1000',
+            'package' => 'nullable|file|mimes:zip|max:51200',
         ]);
 
         $data = $request->all();
@@ -369,6 +386,21 @@ class AdminController extends Controller
         }
 
         $product->update($data);
+
+        if ($request->hasFile('package')) {
+            $file = $request->file('package');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/products'), $fileName);
+            $downloadUrl = '/uploads/products/' . $fileName;
+
+            $product->versions()->updateOrCreate(
+                ['version' => $product->version],
+                [
+                    'release_date' => now(),
+                    'download_url' => $downloadUrl
+                ]
+            );
+        }
 
         // Sync sales channels / marketplaces
         $channelsData = $request->input('channels', []);

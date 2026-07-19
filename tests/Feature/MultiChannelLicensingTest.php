@@ -203,4 +203,42 @@ class MultiChannelLicensingTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee($license->license_key);
     }
+
+    public function test_product_package_zip_upload()
+    {
+        $admin = User::first();
+        $admin->assignRole('Super Admin');
+
+        $product = Product::first();
+        
+        \Illuminate\Support\Facades\Storage::fake('public');
+        $file = \Illuminate\Http\Testing\File::create('new-package.zip', 100, 'application/zip');
+
+        $response = $this->actingAs($admin)->patch('/admin/products/' . $product->id, [
+            'product_category_id' => $product->product_category_id,
+            'name' => $product->name,
+            'slug' => $product->slug,
+            'short_description' => $product->short_description,
+            'description' => $product->description,
+            'version' => '1.5.0',
+            'is_active' => true,
+            'package' => $file,
+        ]);
+
+        $response->assertStatus(302);
+        
+        $this->assertDatabaseHas('product_versions', [
+            'product_id' => $product->id,
+            'version' => '1.5.0',
+        ]);
+
+        $version = $product->versions()->where('version', '1.5.0')->first();
+        $this->assertNotNull($version);
+        $this->assertNotNull($version->download_url);
+        
+        $localPath = public_path(str_replace('/uploads/', 'uploads/', $version->download_url));
+        if (file_exists($localPath)) {
+            unlink($localPath);
+        }
+    }
 }

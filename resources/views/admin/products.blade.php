@@ -276,6 +276,14 @@
                         <p class="text-[10px] text-slate-400 mt-1">Select a PNG, JPG, or WEBP image file to display on the homepage cards (Max 2MB).</p>
                     </div>
 
+                    <!-- Product Package ZIP (Direct Sale Download File) -->
+                    <div>
+                        <label for="package" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Product Package (ZIP File)</label>
+                        <input type="file" id="package" name="package" accept=".zip"
+                               class="block w-full rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-2.5 px-3 focus:ring-primary focus:border-primary">
+                        <p class="text-[10px] text-slate-400 mt-1">Upload the software release package (.zip) for direct sale buyers (Max 50MB).</p>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Demo URL -->
                         <div>
