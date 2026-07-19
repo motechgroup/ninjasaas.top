@@ -44,8 +44,11 @@
             <div class="lg:col-span-3">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     @forelse($products as $product)
-                        <div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md flex flex-col justify-between">
-                            <div>
+                        <div class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] flex flex-col justify-between relative cursor-pointer">
+                            <!-- Overlay link to make whole card clickable -->
+                            <a href="{{ route('products.show', $product->slug) }}" class="absolute inset-0 z-0" aria-label="View Details for {{ $product->name }}"></a>
+
+                            <div class="relative z-0">
                                 <div class="aspect-video overflow-hidden bg-slate-100 dark:bg-slate-950 relative">
                                     @if($product->image_url)
                                         <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
@@ -68,22 +71,17 @@
                                     </p>
                                 </div>
                             </div>
-                            <div class="px-6 pb-6">
-                                <div class="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
-                                    <div class="flex items-center gap-3">
-                                        <a class="text-xs font-bold text-primary hover:underline flex items-center gap-1" href="{{ route('products.show', $product->slug) }}">
-                                            Details
+                            
+                            @if($product->demo_url)
+                                <div class="px-6 pb-6 relative z-10">
+                                    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                                        <a class="text-xs font-semibold text-slate-500 hover:text-primary transition-colors flex items-center gap-0.5" href="{{ $product->demo_url }}" target="_blank">
+                                            Demo
                                             <span class="material-symbols-outlined text-[14px]">open_in_new</span>
                                         </a>
-                                        @if($product->demo_url)
-                                            <a class="text-xs font-semibold text-slate-500 hover:text-primary transition-colors flex items-center gap-0.5" href="{{ $product->demo_url }}" target="_blank">
-                                                Demo
-                                            </a>
-                                        @endif
                                     </div>
-                                    <a href="{{ $product->buy_url ?? '#' }}" target="_blank" class="bg-primary text-white px-3.5 py-1.5 rounded-lg text-xs font-bold hover:opacity-90 transition-all shadow-sm">Buy on Envato</a>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     @empty
                         <div class="col-span-2 text-center text-slate-500 py-12">
