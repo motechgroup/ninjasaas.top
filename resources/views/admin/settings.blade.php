@@ -230,7 +230,14 @@
                         <div>
                             <label for="mail_from_address" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Mail From Address</label>
                             <input type="text" id="mail_from_address" name="mail_from_address" value="{{ \App\Models\Setting::get('mail_from_address', 'hello@saasninja.top') }}"
-                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-850 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                        </div>
+                        <div>
+                            <label for="mail_verify_ssl" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">SSL Certificate Verification</label>
+                            <select id="mail_verify_ssl" name="mail_verify_ssl" class="block w-full rounded-lg border-slate-200 dark:border-slate-850 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                <option value="true" {{ \App\Models\Setting::get('mail_verify_ssl', 'true') === 'true' ? 'selected' : '' }}>Verify SSL Certificate (Recommended for Production)</option>
+                                <option value="false" {{ \App\Models\Setting::get('mail_verify_ssl', 'true') === 'false' ? 'selected' : '' }}>Disable SSL Verification (Bypass OpenSSL CA errors)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
