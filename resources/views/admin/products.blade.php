@@ -21,6 +21,7 @@
         productDocsUrl: '',
         productActive: '1',
         productImageUrl: '',
+        productChannels: {},
 
         openCreate() {
             this.isEdit = false;
@@ -38,6 +39,13 @@
             this.productDocsUrl = '';
             this.productActive = '1';
             this.productImageUrl = '';
+            
+            // Initialize default channel values
+            this.productChannels = {};
+            @foreach($channels as $chan)
+                this.productChannels[{{ $chan->id }}] = { enabled: false, purchase_url: '', price: '', priority: 0, external_product_id: '' };
+            @endforeach
+
             this.modalOpen = true;
         },
 
@@ -57,6 +65,25 @@
             this.productDocsUrl = p.docs_url || '';
             this.productActive = p.is_active ? '1' : '0';
             this.productImageUrl = p.image_url || '';
+
+            // Reset and load channel values from pivot data
+            this.productChannels = {};
+            @foreach($channels as $chan)
+                this.productChannels[{{ $chan->id }}] = { enabled: false, purchase_url: '', price: '', priority: 0, external_product_id: '' };
+            @endforeach
+            
+            if (p.sales_channels) {
+                p.sales_channels.forEach(ch => {
+                    this.productChannels[ch.id] = {
+                        enabled: ch.pivot.status === 'active',
+                        purchase_url: ch.pivot.purchase_url || '',
+                        price: ch.pivot.price || '',
+                        priority: ch.pivot.priority || 0,
+                        external_product_id: ch.pivot.external_product_id || '',
+                    };
+                });
+            }
+
             this.modalOpen = true;
         },
 
@@ -269,6 +296,60 @@
                             <label for="docs_url" class="block text-xs text-slate-500 mb-1">Docs Path Redirect</label>
                             <input type="text" id="docs_url" name="docs_url" x-model="productDocsUrl" placeholder="docs/product-slug"
                                    class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                        </div>
+                    </div>
+
+                    <!-- Marketplace & Sales Channels Settings -->
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                        <h4 class="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Marketplace & Sales Channels</h4>
+                        
+                        <div class="space-y-3">
+                            @foreach ($channels as $chan)
+                                <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3" x-data="{ enabled: false }" x-init="$watch('productChannels[{{ $chan->id }}]?.enabled', value => enabled = !!value)">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" name="channels[{{ $chan->id }}][enabled]" value="1"
+                                                   id="channel_enabled_{{ $chan->id }}"
+                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].enabled"
+                                                   class="rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary">
+                                            <label for="channel_enabled_{{ $chan->id }}" class="text-sm font-semibold text-slate-850 dark:text-slate-200 cursor-pointer">
+                                                Enable on {{ $chan->name }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-show="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].enabled" style="display: none;">
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Purchase URL</label>
+                                            <input type="url" name="channels[{{ $chan->id }}][purchase_url]" 
+                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].purchase_url"
+                                                   placeholder="https://..."
+                                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Price ($)</label>
+                                            <input type="number" step="0.01" min="0" name="channels[{{ $chan->id }}][price]" 
+                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].price"
+                                                   placeholder="59.00"
+                                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">External Product ID (Optional)</label>
+                                            <input type="text" name="channels[{{ $chan->id }}][external_product_id]" 
+                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].external_product_id"
+                                                   placeholder="e.g. CodeCanyon Item ID"
+                                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Priority Order</label>
+                                            <input type="number" name="channels[{{ $chan->id }}][priority]" 
+                                                   x-model="productChannels[{{ $chan->id }}] && productChannels[{{ $chan->id }}].priority"
+                                                   placeholder="0"
+                                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-1.5 px-2.5">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
 

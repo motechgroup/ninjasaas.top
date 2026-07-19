@@ -110,4 +110,70 @@ class MultiChannelLicensingTest extends TestCase
             'error' => 'This license key has been deactivated.'
         ]);
     }
+
+    public function test_product_creation_and_updating_with_channels()
+    {
+        $admin = User::first();
+        $admin->assignRole('Super Admin');
+
+        $channel = SalesChannel::first();
+        $category = \App\Models\ProductCategory::first();
+
+        $response = $this->actingAs($admin)->post('/admin/products', [
+            'product_category_id' => $category->id,
+            'name' => 'New Awesome SaaS Product',
+            'slug' => 'new-awesome-saas-product',
+            'short_description' => 'A short description.',
+            'description' => 'A detailed description.',
+            'version' => '1.0.0',
+            'is_active' => true,
+            'channels' => [
+                $channel->id => [
+                    'enabled' => '1',
+                    'purchase_url' => 'https://codecanyon.net/item/new-awesome/112233',
+                    'price' => '49.00',
+                    'priority' => '5',
+                    'external_product_id' => '112233',
+                ]
+            ]
+        ]);
+
+        $response->assertStatus(302);
+        
+        $product = Product::where('slug', 'new-awesome-saas-product')->first();
+        $this->assertNotNull($product);
+        
+        $this->assertDatabaseHas('product_sales_channels', [
+            'product_id' => $product->id,
+            'sales_channel_id' => $channel->id,
+            'price' => 49.00,
+            'purchase_url' => 'https://codecanyon.net/item/new-awesome/112233',
+        ]);
+
+        $response = $this->actingAs($admin)->patch('/admin/products/' . $product->id, [
+            'product_category_id' => $category->id,
+            'name' => 'Updated SaaS Product',
+            'slug' => 'new-awesome-saas-product',
+            'short_description' => 'A short description.',
+            'description' => 'A detailed description.',
+            'version' => '1.0.1',
+            'is_active' => true,
+            'channels' => [
+                $channel->id => [
+                    'enabled' => '1',
+                    'purchase_url' => 'https://codecanyon.net/item/new-awesome/112233',
+                    'price' => '79.00',
+                    'priority' => '10',
+                    'external_product_id' => '112233',
+                ]
+            ]
+        ]);
+
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('product_sales_channels', [
+            'product_id' => $product->id,
+            'sales_channel_id' => $channel->id,
+            'price' => 79.00,
+        ]);
+    }
 }

@@ -8,6 +8,7 @@ use App\Models\SupportTicket;
 use App\Models\ServiceRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\SalesChannel;
 use App\Models\Setting;
 use App\Models\BlogPost;
 use App\Models\DocumentationArticle;
@@ -168,9 +169,10 @@ class AdminController extends Controller
 
     public function products()
     {
-        $products = Product::with(['category'])->get();
+        $products = Product::with(['category', 'salesChannels'])->get();
         $categories = ProductCategory::all();
-        return view('admin.products', compact('products', 'categories'));
+        $channels = SalesChannel::where('is_active', true)->get();
+        return view('admin.products', compact('products', 'categories', 'channels'));
     }
 
     public function storeProduct(Request $request)
@@ -198,9 +200,25 @@ class AdminController extends Controller
             $data['image_url'] = '/storage/' . $path;
         }
 
-        Product::create($data);
+        $product = Product::create($data);
 
-        return redirect()->back()->with('success', 'Product added to catalog successfully.');
+        // Sync sales channels / marketplaces
+        $channelsData = $request->input('channels', []);
+        $syncData = [];
+        foreach ($channelsData as $channelId => $channelParams) {
+            if (!empty($channelParams['enabled'])) {
+                $syncData[$channelId] = [
+                    'purchase_url' => $channelParams['purchase_url'] ?? null,
+                    'price' => $channelParams['price'] ?? null,
+                    'priority' => $channelParams['priority'] ?? 0,
+                    'status' => 'active',
+                    'external_product_id' => $channelParams['external_product_id'] ?? null,
+                ];
+            }
+        }
+        $product->salesChannels()->sync($syncData);
+
+        return redirect()->back()->with('success', 'Product added to catalog and channels mapped successfully.');
     }
 
     public function updateProduct(Request $request, Product $product)
@@ -230,7 +248,23 @@ class AdminController extends Controller
 
         $product->update($data);
 
-        return redirect()->back()->with('success', 'Product updated successfully.');
+        // Sync sales channels / marketplaces
+        $channelsData = $request->input('channels', []);
+        $syncData = [];
+        foreach ($channelsData as $channelId => $channelParams) {
+            if (!empty($channelParams['enabled'])) {
+                $syncData[$channelId] = [
+                    'purchase_url' => $channelParams['purchase_url'] ?? null,
+                    'price' => $channelParams['price'] ?? null,
+                    'priority' => $channelParams['priority'] ?? 0,
+                    'status' => 'active',
+                    'external_product_id' => $channelParams['external_product_id'] ?? null,
+                ];
+            }
+        }
+        $product->salesChannels()->sync($syncData);
+
+        return redirect()->back()->with('success', 'Product specifications and channel mappings updated successfully.');
     }
 
     public function destroyProduct(Product $product)
