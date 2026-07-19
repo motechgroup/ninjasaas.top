@@ -241,20 +241,12 @@
                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary"></textarea>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Product Image File -->
-                        <div>
-                            <label for="image" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Upload Local Image</label>
-                            <input type="file" id="image" name="image" accept="image/*"
-                                   class="block w-full rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-955 text-slate-900 dark:text-white text-xs py-1.5 px-3">
-                        </div>
-
-                        <!-- Product Image URL -->
-                        <div>
-                            <label for="image_url" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Or Paste Image URL</label>
-                            <input type="text" id="image_url" name="image_url" x-model="productImageUrl" placeholder="https://..."
-                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-808 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
-                        </div>
+                    <!-- Product Image (Local Upload Only) -->
+                    <div>
+                        <label for="image" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Product Feature Image (Local Upload)</label>
+                        <input type="file" id="image" name="image" accept="image/*"
+                               class="block w-full rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-xs py-2.5 px-3 focus:ring-primary focus:border-primary">
+                        <p class="text-[10px] text-slate-400 mt-1">Select a PNG, JPG, or WEBP image file to display on the homepage cards (Max 2MB).</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
