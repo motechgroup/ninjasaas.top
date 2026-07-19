@@ -319,7 +319,7 @@
                                     </div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-show="productChannels[{{ $chan->id }}].enabled" style="display: none;">
-                                        <div>
+                                        <div x-show="'{{ $chan->slug }}' !== 'saasninja'">
                                             <label class="block text-[11px] font-bold text-slate-600 dark:text-slate-400 uppercase mb-1">Purchase URL</label>
                                             <input type="url" name="channels[{{ $chan->id }}][purchase_url]" 
                                                    x-model="productChannels[{{ $chan->id }}].purchase_url"
