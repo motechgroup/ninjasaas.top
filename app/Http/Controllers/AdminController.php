@@ -187,9 +187,18 @@ class AdminController extends Controller
             'version' => 'required|string|max:50',
             'envato_item_id' => 'nullable|string|max:100',
             'is_active' => 'required|boolean',
+            'image' => 'nullable|image|max:2048',
+            'image_url' => 'nullable|string|max:1000',
         ]);
 
-        Product::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+
+        Product::create($data);
 
         return redirect()->back()->with('success', 'Product added to catalog successfully.');
     }
@@ -208,9 +217,18 @@ class AdminController extends Controller
             'version' => 'required|string|max:50',
             'envato_item_id' => 'nullable|string|max:100',
             'is_active' => 'required|boolean',
+            'image' => 'nullable|image|max:2048',
+            'image_url' => 'nullable|string|max:1000',
         ]);
 
-        $product->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+
+        $product->update($data);
 
         return redirect()->back()->with('success', 'Product updated successfully.');
     }

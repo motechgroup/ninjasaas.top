@@ -20,6 +20,7 @@
         productBuyUrl: '',
         productDocsUrl: '',
         productActive: '1',
+        productImageUrl: '',
 
         openCreate() {
             this.isEdit = false;
@@ -36,6 +37,7 @@
             this.productBuyUrl = '';
             this.productDocsUrl = '';
             this.productActive = '1';
+            this.productImageUrl = '';
             this.modalOpen = true;
         },
 
@@ -54,6 +56,7 @@
             this.productBuyUrl = p.buy_url || '';
             this.productDocsUrl = p.docs_url || '';
             this.productActive = p.is_active ? '1' : '0';
+            this.productImageUrl = p.image_url || '';
             this.modalOpen = true;
         },
 
@@ -96,8 +99,19 @@
                         @forelse ($products as $p)
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-850/40 transition-colors">
                                 <td class="px-6 py-4">
-                                    <div class="font-bold text-slate-900 dark:text-white">{{ $p->name }}</div>
-                                    <div class="text-[11px] text-slate-500 font-mono mt-0.5">{{ $p->slug }}</div>
+                                    <div class="flex items-center gap-3">
+                                        @if($p->image_url)
+                                            <img src="{{ $p->image_url }}" class="w-10 h-10 rounded-lg object-cover border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900" alt="{{ $p->name }}">
+                                        @else
+                                            <div class="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-950 text-slate-400 flex items-center justify-center border border-slate-200 dark:border-slate-800 font-bold text-xs">
+                                                N/A
+                                            </div>
+                                        @endif
+                                        <div>
+                                            <div class="font-bold text-slate-900 dark:text-white">{{ $p->name }}</div>
+                                            <div class="text-[11px] text-slate-500 font-mono mt-0.5">{{ $p->slug }}</div>
+                                        </div>
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 text-slate-500">
                                     {{ $p->category->name }}
@@ -155,7 +169,7 @@
                     </button>
                 </div>
 
-                <form :action="actionUrl" method="POST" class="p-6 space-y-4">
+                <form :action="actionUrl" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
                     @csrf
                     <template x-if="isEdit">
                         <input type="hidden" name="_method" value="PATCH">
@@ -225,6 +239,22 @@
                         <label for="description" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Detailed Description</label>
                         <textarea id="description" name="description" x-model="productDesc" rows="3" required placeholder="Full product specifications and markdown outline details..."
                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Product Image File -->
+                        <div>
+                            <label for="image" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Upload Local Image</label>
+                            <input type="file" id="image" name="image" accept="image/*"
+                                   class="block w-full rounded-lg border border-slate-200 dark:border-slate-800 dark:bg-slate-955 text-slate-900 dark:text-white text-xs py-1.5 px-3">
+                        </div>
+
+                        <!-- Product Image URL -->
+                        <div>
+                            <label for="image_url" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase mb-1">Or Paste Image URL</label>
+                            <input type="text" id="image_url" name="image_url" x-model="productImageUrl" placeholder="https://..."
+                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-808 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

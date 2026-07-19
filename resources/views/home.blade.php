@@ -120,50 +120,54 @@
                         $slug = strtolower($product->slug);
                         if (str_contains($slug, 'law') || str_contains($slug, 'lex')) {
                             $icon = 'gavel';
-                            $colorClass = 'bg-purple-100 text-purple-700 dark:bg-purple-950/40 dark:text-purple-400';
+                            $colorClass = 'bg-purple-50 text-purple-700 dark:bg-purple-950/30 dark:text-purple-400 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/40';
                         } elseif (str_contains($slug, 'wifi') || str_contains($slug, 'isp')) {
                             $icon = 'wifi';
-                            $colorClass = 'bg-teal-100 text-teal-700 dark:bg-teal-950/40 dark:text-teal-400';
+                            $colorClass = 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/40';
                         } elseif (str_contains($slug, 'health') || str_contains($slug, 'medi')) {
                             $icon = 'health_and_safety';
-                            $colorClass = 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400';
+                            $colorClass = 'bg-blue-50 text-blue-700 dark:bg-blue-950/30 dark:text-blue-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40';
                         } elseif (str_contains($slug, 'pos') || str_contains($slug, 'shop')) {
                             $icon = 'shopping_cart';
-                            $colorClass = 'bg-orange-100 text-orange-700 dark:bg-orange-950/40 dark:text-orange-400';
+                            $colorClass = 'bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 group-hover:bg-amber-100 dark:group-hover:bg-amber-900/40';
                         } else {
                             $icon = 'terminal';
-                            $colorClass = 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400';
+                            $colorClass = 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40';
                         }
                     @endphp
-                    <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between h-full group">
-                        <div class="space-y-4">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.25)] hover:border-primary/20 hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden">
+                        <!-- Subtle background glow on hover -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                        
+                        <div class="space-y-4 relative z-10">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-xl {{ $colorClass }} flex items-center justify-center flex-shrink-0">
-                                    <span class="material-symbols-outlined text-[28px]">{{ $icon }}</span>
+                                <div class="w-14 h-14 rounded-2xl {{ $colorClass }} flex items-center justify-center flex-shrink-0 transition-colors duration-300 group-hover:scale-105 transform">
+                                    <span class="material-symbols-outlined text-[30px] transition-transform duration-300 group-hover:rotate-3">{{ $icon }}</span>
                                 </div>
                                 <div>
-                                    <h3 class="font-outfit font-extrabold text-body-lg text-on-surface line-clamp-1">
+                                    <h3 class="font-outfit font-extrabold text-lg text-slate-900 dark:text-white line-clamp-1">
                                         <a href="{{ route('products.show', $product->slug) }}" class="hover:text-primary transition-colors">
                                             {{ $product->name }}
                                         </a>
                                     </h3>
-                                    <p class="text-[11px] text-on-surface-variant truncate">{{ $product->category->name ?? 'Premium Software' }}</p>
+                                    <p class="text-xs text-slate-450 dark:text-slate-500 font-medium tracking-wide uppercase">{{ $product->category->name ?? 'Premium Software' }}</p>
                                 </div>
                             </div>
-                            <p class="text-body-sm text-on-surface-variant leading-relaxed line-clamp-3">
+                            <p class="text-sm text-slate-650 dark:text-slate-400 leading-relaxed line-clamp-3">
                                 {{ $product->short_description }}
                             </p>
                         </div>
 
-                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-outline-variant/60">
-                            <a href="{{ $product->demo_url ?? '#' }}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
-                                Live Demo <span class="material-symbols-outlined text-[12px]">open_in_new</span>
+                        <div class="flex items-center justify-between pt-4 mt-6 border-t border-slate-100 dark:border-slate-800/80 relative z-10">
+                            <a href="{{ $product->demo_url ?? '#' }}" target="_blank" class="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-0.5 group/link">
+                                Live Demo 
+                                <span class="material-symbols-outlined text-[14px] transform group-hover/link:translate-x-0.5 transition-transform">arrow_outward</span>
                             </a>
-                            <a href="{{ $product->docs_url ?: route('docs.index') }}" class="text-xs text-on-surface-variant hover:text-primary transition-colors">
+                            <a href="{{ $product->docs_url ?: route('docs.index') }}" class="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-350 transition-colors">
                                 Documentation
                             </a>
-                            <a href="{{ $product->buy_url ?? '#' }}" target="_blank" class="px-3 py-1.5 bg-primary text-on-primary font-label-md text-[11px] rounded-lg hover:opacity-95 transition-opacity">
-                                Buy on Envato
+                            <a href="{{ $product->buy_url ?? '#' }}" target="_blank" class="px-3.5 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-xs rounded-xl hover:bg-primary dark:hover:bg-primary hover:text-white dark:hover:text-white shadow-sm transition-all">
+                                Buy Item
                             </a>
                         </div>
                     </div>
