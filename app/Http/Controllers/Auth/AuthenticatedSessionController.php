@@ -30,7 +30,9 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        if (!$user->google_id) {
+        $isAdmin = method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['Super Admin', 'Support Staff', 'Content Manager']);
+
+        if (!$user->google_id && !$isAdmin) {
             $code = sprintf('%06d', mt_rand(100000, 999999));
             $user->update([
                 'two_factor_code' => $code,

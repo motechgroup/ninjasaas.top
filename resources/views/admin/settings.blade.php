@@ -78,11 +78,54 @@
                             </select>
                         </div>
                         <div>
+                            <label for="enable_google_login" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Google OAuth Login</label>
+                            <select id="enable_google_login" name="enable_google_login" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                <option value="true" {{ \App\Models\Setting::get('enable_google_login', 'true') === 'true' ? 'selected' : '' }}>Enabled (Show Google OAuth Buttons)</option>
+                                <option value="false" {{ \App\Models\Setting::get('enable_google_login', 'true') === 'false' ? 'selected' : '' }}>Disabled (Hide Google OAuth Buttons)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="enable_envato_login" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Envato Market OAuth Login</label>
+                            <select id="enable_envato_login" name="enable_envato_login" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                <option value="true" {{ \App\Models\Setting::get('enable_envato_login', 'true') === 'true' ? 'selected' : '' }}>Enabled (Show Envato OAuth Buttons)</option>
+                                <option value="false" {{ \App\Models\Setting::get('enable_envato_login', 'true') === 'false' ? 'selected' : '' }}>Disabled (Hide Envato OAuth Buttons)</option>
+                            </select>
+                        </div>
+                        <div>
                             <label for="envato_sandbox_mode" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Envato Sandbox Simulation Mode</label>
                             <select id="envato_sandbox_mode" name="envato_sandbox_mode" class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
                                 <option value="true" {{ \App\Models\Setting::get('envato_sandbox_mode', 'true') === 'true' ? 'selected' : '' }}>Active (Allow Mock Verification for Testing)</option>
                                 <option value="false" {{ \App\Models\Setting::get('envato_sandbox_mode', 'true') === 'false' ? 'selected' : '' }}>Inactive (Production API Verification Only)</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <!-- Envato OAuth & Personal Token Setup -->
+                    <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-4">
+                        <h4 class="font-outfit font-bold text-xs uppercase tracking-wider text-slate-900 dark:text-white">Envato API & OAuth App Credentials</h4>
+                        <p class="text-xs text-slate-500">Register your OAuth App on <a href="https://build.envato.com" target="_blank" class="text-primary underline font-bold">build.envato.com</a>. Set Redirect URI to: <code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded font-mono text-primary">{{ url('/auth/envato/callback') }}</code></p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div>
+                                <label for="envato_client_id" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Envato Client ID</label>
+                                <input type="text" id="envato_client_id" name="envato_client_id" value="{{ \App\Models\Setting::get('envato_client_id') }}" placeholder="saasninja-app-client-id"
+                                       class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label for="envato_client_secret" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Envato Client Secret</label>
+                                <input type="password" id="envato_client_secret" name="envato_client_secret" value="{{ \App\Models\Setting::get('envato_client_secret') }}" placeholder="••••••••••••••••"
+                                       class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label for="envato_redirect_uri" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Envato OAuth Redirect URI</label>
+                                <input type="text" id="envato_redirect_uri" name="envato_redirect_uri" value="{{ \App\Models\Setting::get('envato_redirect_uri', url('/auth/envato/callback')) }}" placeholder="http://..."
+                                       class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            </div>
+                            <div>
+                                <label for="envato_personal_token" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Envato Personal API Token</label>
+                                <input type="password" id="envato_personal_token" name="envato_personal_token" value="{{ \App\Models\Setting::get('envato_personal_token') }}" placeholder="Author Token for Verification"
+                                       class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                            </div>
                         </div>
                     </div>
                 </div>

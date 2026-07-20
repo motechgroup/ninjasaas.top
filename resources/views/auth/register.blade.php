@@ -1,5 +1,7 @@
 <x-guest-layout>
-    <div class="mb-6">
+    @if (\App\Models\Setting::get('enable_google_login', 'true') === 'true' || \App\Models\Setting::get('enable_envato_login', 'true') === 'true')
+    <div class="mb-6 space-y-3">
+        @if (\App\Models\Setting::get('enable_google_login', 'true') === 'true')
         <a href="{{ route('auth.google') }}" class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-700 dark:text-slate-200 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm">
             <svg class="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.4 9 5 12 5z"/>
@@ -9,11 +11,21 @@
             </svg>
             <span>Sign up with Google</span>
         </a>
-        <div class="relative flex items-center justify-center my-4">
+        @endif
+
+        @if (\App\Models\Setting::get('enable_envato_login', 'true') === 'true')
+        <a href="{{ route('auth.envato') }}" class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#82B440] hover:bg-[#72a035] text-white rounded-xl text-sm font-semibold transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+            <span>Sign up with Envato</span>
+        </a>
+        @endif
+
+        <div class="relative flex items-center justify-center pt-2">
             <div class="border-t border-slate-200 dark:border-slate-800 w-full"></div>
             <span class="bg-white dark:bg-slate-900 px-3 text-xs text-slate-400 font-semibold uppercase absolute">or email</span>
         </div>
     </div>
+    @endif
 
     <form method="POST" action="{{ route('register') }}">
         @csrf

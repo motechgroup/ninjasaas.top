@@ -20,6 +20,12 @@ Route::middleware('guest')->group(function () {
     Route::get('auth/google/callback', [SocialController::class, 'handleGoogleCallback'])
         ->name('auth.google.callback');
 
+    Route::get('auth/envato', [SocialController::class, 'redirectToEnvato'])
+        ->name('auth.envato');
+
+    Route::get('auth/envato/callback', [SocialController::class, 'handleEnvatoCallback'])
+        ->name('auth.envato.callback');
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 

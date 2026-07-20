@@ -161,4 +161,72 @@ class SecurityAndAuthTest extends TestCase
 
         $response->assertRedirect(route('verification.notice'));
     }
+
+    public function test_admin_user_bypasses_2fa_prompt(): void
+    {
+        $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => 'Super Admin']);
+        $user = User::factory()->create([
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password123'),
+            'email_verified_at' => now(),
+            'google_id' => null,
+        ]);
+        $user->assignRole($role);
+
+        $response = $this->post('/login', [
+            'email' => 'admin@example.com',
+            'password' => 'password123',
+        ]);
+
+        $response->assertRedirect(route('dashboard', absolute: false));
+        $this->assertTrue(session('2fa_passed'));
+    }
+
+    public function test_disabling_google_login_hides_button_and_blocks_route(): void
+    {
+        \App\Models\Setting::set('enable_google_login', 'false');
+
+        $response = $this->get('/login');
+        $response->assertDontSee('Continue with Google');
+
+        $response = $this->get('/auth/google');
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_envato_oauth_sandbox_login_flow(): void
+    {
+        \App\Models\Setting::set('enable_envato_login', 'true');
+        \App\Models\Setting::set('envato_sandbox_mode', 'true');
+
+        $response = $this->get('/auth/envato');
+        $response->assertRedirect();
+
+        $callbackResponse = $this->get('/auth/envato/callback?code=mock_envato_auth_code');
+        $callbackResponse->assertRedirect(route('dashboard'));
+        $this->assertAuthenticated();
+        $this->assertTrue(session('2fa_passed'));
+    }
+
+    public function test_disabling_envato_login_hides_button(): void
+    {
+        \App\Models\Setting::set('enable_envato_login', 'false');
+
+        $response = $this->get('/login');
+        $response->assertDontSee('Continue with Envato');
+
+        $response = $this->get('/auth/envato');
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_envato_oauth_implicit_flow_redirects_with_token_response_type_when_secret_empty(): void
+    {
+        \App\Models\Setting::set('enable_envato_login', 'true');
+        \App\Models\Setting::set('envato_client_id', 'saasninja-login-j6vkyufo');
+        \App\Models\Setting::set('envato_client_secret', '');
+        \App\Models\Setting::set('envato_sandbox_mode', 'false');
+
+        $response = $this->get('/auth/envato');
+        $response->assertRedirect();
+        $this->assertStringContainsString('response_type=token', $response->headers->get('Location'));
+    }
 }

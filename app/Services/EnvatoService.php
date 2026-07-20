@@ -15,10 +15,13 @@ class EnvatoService
 
     public function __construct()
     {
-        $this->token = config('envato.personal_token', '');
-        $this->clientId = config('envato.client_id', '');
-        $this->clientSecret = config('envato.client_secret', '');
-        $this->redirectUri = config('envato.redirect_uri', '');
+        $this->token = \App\Models\Setting::get('envato_personal_token', config('envato.personal_token', ''));
+        $this->clientId = \App\Models\Setting::get('envato_client_id', config('envato.client_id', ''));
+        $this->clientSecret = \App\Models\Setting::get('envato_client_secret', config('envato.client_secret', ''));
+        $this->redirectUri = \App\Models\Setting::get('envato_redirect_uri', config('envato.redirect_uri', url('/auth/envato/callback')));
+        if (empty($this->redirectUri)) {
+            $this->redirectUri = url('/auth/envato/callback');
+        }
     }
 
     /**
@@ -81,8 +84,11 @@ class EnvatoService
             return '#';
         }
 
+        // If clientSecret is empty, use Envato Implicit Grant Flow (response_type=token)
+        $responseType = empty($this->clientSecret) ? 'token' : 'code';
+
         $queries = http_build_query([
-            'response_type' => 'code',
+            'response_type' => $responseType,
             'client_id' => $this->clientId,
             'redirect_uri' => $this->redirectUri,
             'state' => $state,

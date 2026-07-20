@@ -15,7 +15,11 @@ class TwoFactorController extends Controller
      */
     public function show()
     {
-        if (session('2fa_passed')) {
+        $user = Auth::user();
+        $isAdmin = $user && method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['Super Admin', 'Support Staff', 'Content Manager']);
+
+        if (session('2fa_passed') || ($user && ($user->google_id || $isAdmin))) {
+            session(['2fa_passed' => true]);
             return redirect()->route('dashboard');
         }
 
