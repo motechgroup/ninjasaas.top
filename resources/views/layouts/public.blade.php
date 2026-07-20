@@ -71,7 +71,6 @@
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('products.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('products.index') }}">Products</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('services.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('services.index') }}">Services</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('blog.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('blog.index') }}">Blog</a>
-                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('contact') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('contact') }}">Contact Us</a>
                 </nav>
             </div>
 
