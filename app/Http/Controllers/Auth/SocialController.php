@@ -77,7 +77,11 @@ class SocialController extends Controller
 
         $oauthUrl = $envatoService->getOAuthUrl();
 
-        if ($oauthUrl === '#' || \App\Models\Setting::get('envato_sandbox_mode', 'true') === 'true') {
+        if ($oauthUrl === '#') {
+            return redirect()->route('login')->withErrors(['email' => 'Envato Client ID is not configured in Admin Settings. Please enter your Client ID in Admin Settings -> Global Settings.']);
+        }
+
+        if (\App\Models\Setting::get('envato_sandbox_mode', 'false') === 'true') {
             return redirect()->route('auth.envato.callback', ['code' => 'mock_envato_auth_code']);
         }
 
