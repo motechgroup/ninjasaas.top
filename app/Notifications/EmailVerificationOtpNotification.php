@@ -37,14 +37,19 @@ class EmailVerificationOtpNotification extends Notification
     {
         $appName = \App\Models\Setting::get('company_name', 'SaaSNinja');
 
+        $html = \App\Services\EmailBrandingService::renderHtmlEmail(
+            title: "{$this->otp} is your {$appName} Verification Code",
+            greeting: "Hello {$notifiable->name},",
+            paragraphs: [
+                "Thank you for registering with {$appName}.",
+                "Please enter the following 6-digit verification code to complete your account registration:"
+            ],
+            highlightBox: $this->otp,
+            subtext: "This code will expire in 15 minutes. If you did not create an account, no further action is required."
+        );
+
         return (new MailMessage)
             ->subject("{$this->otp} is your {$appName} Email Verification Code")
-            ->greeting("Hello {$notifiable->name},")
-            ->line("Thank you for registering with {$appName}.")
-            ->line("Your 6-digit email verification code is:")
-            ->line("# {$this->otp}")
-            ->line("Copy and paste this code on the email verification page to complete your account setup.")
-            ->line("This code will expire in 15 minutes.")
-            ->salutation("Best regards,\nThe {$appName} Team");
+            ->view('emails.branded', ['htmlContent' => $html]);
     }
 }

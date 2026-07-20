@@ -112,12 +112,18 @@
         <div class="max-w-7xl mx-auto px-6">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 mb-12">
                 <div class="col-span-2 space-y-3">
-                    <span class="font-outfit font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary text-[24px]">terminal</span>
-                        SaaSNinja
-                    </span>
+                    <a href="{{ route('home') }}" class="inline-block">
+                        @if($footerLogo = \App\Models\Setting::get('site_footer_logo') ?: \App\Models\Setting::get('site_logo'))
+                            <img src="{{ $footerLogo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_footer_logo_height', '36') }}px; width: auto; object-fit: contain;">
+                        @else
+                            <span class="font-outfit font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary text-[24px]">terminal</span>
+                                {{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}
+                            </span>
+                        @endif
+                    </a>
                     <p class="text-xs sm:text-sm text-slate-500 max-w-xs leading-relaxed">
-                        An ambitious, forward-looking software company built on clean architecture, security-first design, and long-term maintainability. Founded in 2028.
+                        An ambitious, forward-looking software company built on clean architecture, security-first design, and long-term maintainability.
                     </p>
                 </div>
                 <div>

@@ -253,7 +253,14 @@ class AdminController extends Controller
             Setting::set('site_favicon', '/storage/' . $path);
         }
 
-        $data = $request->except(['_token', 'templates', 'site_logo_file', 'site_favicon_file']);
+        if ($request->hasFile('site_footer_logo_file')) {
+            $file = $request->file('site_footer_logo_file');
+            $filename = 'site_footer_logo_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('branding', $filename, 'public');
+            Setting::set('site_footer_logo', '/storage/' . $path);
+        }
+
+        $data = $request->except(['_token', 'templates', 'site_logo_file', 'site_favicon_file', 'site_footer_logo_file']);
         
         foreach ($data as $key => $value) {
             Setting::set($key, $value);

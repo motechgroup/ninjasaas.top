@@ -37,17 +37,21 @@ class TwoFactorCodeMail extends Mailable
      */
     public function content(): Content
     {
+        $appName = \App\Models\Setting::get('company_name', 'SaaSNinja');
+
+        $html = \App\Services\EmailBrandingService::renderHtmlEmail(
+            title: "{$this->code} is your {$appName} Security Code",
+            greeting: "Security Verification",
+            paragraphs: [
+                "A login request was initiated for your {$appName} account.",
+                "Use the 6-digit security verification code below to complete your authentication session:"
+            ],
+            highlightBox: $this->code,
+            subtext: "This code will expire in 10 minutes. If you did not request this login, please secure your account password immediately."
+        );
+
         return new Content(
-            htmlString: "
-                <div style='font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; rounded-radius: 12px;'>
-                    <h2 style='color: #004ac6; margin-bottom: 8px;'>SaaSNinja Two-Factor Authentication</h2>
-                    <p style='color: #475569; font-size: 14px;'>Use the following 6-digit security verification code to complete your login session:</p>
-                    <div style='background-color: #f1f5f9; padding: 16px; text-align: center; border-radius: 8px; font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #0f172a; margin: 20px 0;'>
-                        {$this->code}
-                    </div>
-                    <p style='color: #94a3b8; font-size: 12px;'>This code will expire in 10 minutes. If you did not request this code, please secure your account immediately.</p>
-                </div>
-            "
+            htmlString: $html
         );
     }
 }
