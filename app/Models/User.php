@@ -145,4 +145,18 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(BlogPost::class);
     }
+
+    /**
+     * Send 6-digit OTP code notification for email verification.
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $code = (string) rand(100000, 999999);
+        $this->update([
+            'two_factor_code' => $code,
+            'two_factor_expires_at' => now()->addMinutes(15),
+        ]);
+
+        $this->notify(new \App\Notifications\EmailVerificationOtpNotification($code));
+    }
 }

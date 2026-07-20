@@ -55,4 +55,22 @@ class EmailVerificationTest extends TestCase
 
         $this->assertFalse($user->fresh()->hasVerifiedEmail());
     }
+
+    public function test_email_can_be_verified_via_otp(): void
+    {
+        $user = User::factory()->unverified()->create([
+            'two_factor_code' => '123456',
+            'two_factor_expires_at' => now()->addMinutes(15),
+        ]);
+
+        Event::fake();
+
+        $response = $this->actingAs($user)->post('/verify-email', [
+            'otp' => '123456',
+        ]);
+
+        Event::assertDispatched(Verified::class);
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
+        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+    }
 }
