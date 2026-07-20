@@ -90,8 +90,7 @@
                         <button type="submit" class="text-xs text-slate-400 hover:text-red-655 font-semibold">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Log In</a>
-                    <a href="{{ route('register') }}" class="text-sm font-bold text-primary hover:underline transition-colors px-2">Register</a>
+                    <a href="{{ route('login') }}" class="text-sm font-bold text-slate-700 hover:text-primary transition-colors px-2">Log In</a>
                 @endauth
                 
                 <a href="{{ route('contact') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">

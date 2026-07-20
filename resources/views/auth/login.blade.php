@@ -86,10 +86,11 @@
             </x-primary-button>
         </div>
 
-        <div class="mt-6 text-center text-xs text-slate-500">
-            Don't have an account yet?
-            <a href="{{ route('register') }}" class="font-bold text-indigo-600 dark:text-indigo-400 hover:underline ms-1">
-                Create Account / Register
+        <div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 text-center space-y-3">
+            <span class="block text-xs font-semibold text-slate-500 dark:text-slate-400">Don't have an account yet?</span>
+            <a href="{{ route('register') }}" class="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white text-xs font-bold rounded-xl transition-all shadow-sm">
+                <span>Create New Account / Register</span>
+                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
         </div>
     </form>
