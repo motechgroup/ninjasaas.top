@@ -93,6 +93,7 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Log In</a>
+                    <a href="{{ route('register') }}" class="text-sm font-bold text-primary hover:underline transition-colors px-2">Register</a>
                 @endauth
                 
                 <a href="{{ route('portal.tickets') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
