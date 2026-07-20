@@ -51,17 +51,25 @@
 <body class="min-h-screen flex flex-col bg-background text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
 
     <!-- TopNavBar (Shared Component) -->
-    <header class="w-full sticky top-0 z-50 bg-surface-container-lowest border-b border-outline-variant shadow-sm transition-all duration-200 ease-in-out">
-        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-            <div class="flex items-center gap-4">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                    @if($logo = \App\Models\Setting::get('site_logo'))
-                        <img src="{{ $logo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_logo_height', '36') }}px; width: {{ \App\Models\Setting::get('site_logo_width', 'auto') }}; object-fit: contain;">
-                    @else
-                        <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                            <span class="material-symbols-outlined text-white text-[24px] font-bold">code</span>
+    <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-2 sm:gap-4">
+            <div class="flex items-center gap-2 sm:gap-4">
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="md:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Toggle mobile navigation">
+                    <span class="material-symbols-outlined text-[24px]" x-text="mobileMenuOpen ? 'close' : 'menu'">menu</span>
+                </button>
+
+                <!-- Dynamic Site Logo -->
+                <a href="{{ route('home') }}" class="flex items-center gap-2 py-2">
+                    @if($siteLogo = \App\Models\Setting::get('site_logo'))
+                        <div class="flex {{ \App\Models\Setting::get('site_logo_layout', 'vertical') === 'vertical' ? 'flex-col items-center text-center' : 'flex-row items-center gap-2' }}">
+                            <img src="{{ $siteLogo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_logo_height', '40') }}px; width: {{ \App\Models\Setting::get('site_logo_width') ? \App\Models\Setting::get('site_logo_width').'px' : 'auto' }}; object-fit: contain;">
                         </div>
-                        <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-900">{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}</span>
+                    @else
+                        <span class="font-outfit font-extrabold text-xl tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-[28px]">terminal</span>
+                            {{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}
+                        </span>
                     @endif
                 </a>
                 
@@ -74,28 +82,49 @@
                 </nav>
             </div>
 
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 sm:gap-4">
                 <!-- Global Search Form -->
                 <form action="{{ route('search') }}" method="GET" class="relative flex items-center">
-                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Search SaaSNinja..." class="w-36 sm:w-48 lg:w-60 px-3 py-1.5 pr-8 text-xs rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-primary/50 text-slate-800 dark:text-slate-200 transition-all duration-300">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Search..." class="w-24 sm:w-48 lg:w-60 px-3 py-1.5 pr-8 text-xs rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-primary/50 text-slate-800 dark:text-slate-200 transition-all duration-300">
                     <button type="submit" class="absolute right-2.5 text-slate-450 hover:text-primary transition-colors flex items-center">
                         <span class="material-symbols-outlined text-[16px]">search</span>
                     </button>
                 </form>
 
                 @auth
-                    <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Portal Dashboard</a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                    <a href="{{ route('dashboard') }}" class="hidden sm:inline-block text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Portal Dashboard</a>
+                    <form method="POST" action="{{ route('logout') }}" class="hidden sm:inline">
                         @csrf
                         <button type="submit" class="text-xs text-slate-400 hover:text-red-655 font-semibold">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-sm font-bold text-slate-700 hover:text-primary transition-colors px-2">Log In</a>
+                    <a href="{{ route('login') }}" class="hidden sm:inline-block text-sm font-bold text-slate-700 hover:text-primary transition-colors px-2">Log In</a>
                 @endauth
                 
-                <a href="{{ route('contact') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                <a href="{{ route('contact') }}" class="bg-primary text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
                     Get Support
                 </a>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div x-show="mobileMenuOpen" x-cloak x-transition class="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-4 space-y-2 shadow-xl">
+            <a class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('home') ? 'bg-primary/10 text-primary font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900' }}" href="{{ route('home') }}">Home</a>
+            <a class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('about') ? 'bg-primary/10 text-primary font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900' }}" href="{{ route('about') }}">About</a>
+            <a class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('products.*') ? 'bg-primary/10 text-primary font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900' }}" href="{{ route('products.index') }}">Products</a>
+            <a class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('services.*') ? 'bg-primary/10 text-primary font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900' }}" href="{{ route('services.index') }}">Services</a>
+            <a class="block px-3 py-2 rounded-xl text-sm font-semibold {{ request()->routeIs('blog.*') ? 'bg-primary/10 text-primary font-bold' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-900' }}" href="{{ route('blog.index') }}">Blog</a>
+            
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-slate-800 dark:text-slate-100 bg-slate-100 dark:bg-slate-900">Portal Dashboard</a>
+                    <form method="POST" action="{{ route('logout') }}" class="block">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-3 py-2 text-xs font-bold text-red-500">Logout</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-slate-800 dark:text-slate-100 bg-slate-100 dark:bg-slate-900">Log In</a>
+                @endauth
             </div>
         </div>
     </header>
