@@ -40,14 +40,14 @@
 
         <!-- Right Content Panels -->
         <div class="lg:col-span-9 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800/85 rounded-2xl shadow-sm overflow-hidden">
-            <form action="{{ route('admin.settings.update') }}" method="POST" class="p-8 space-y-6">
+            <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
                 @csrf
 
                 <!-- Tab 1: Branding & General -->
                 <div x-show="activeTab === 'branding'" class="space-y-6">
                     <div>
                         <h3 class="font-outfit font-bold text-slate-950 dark:text-white text-base">Branding & General Setup</h3>
-                        <p class="text-xs text-slate-500 mt-1">Configure company identifiers, logos, and public behaviors.</p>
+                        <p class="text-xs text-slate-500 mt-1">Upload company logos, favicons, set logo dimensions, and configure public behaviors.</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -60,15 +60,60 @@
                             <input type="email" id="support_email" name="support_email" value="{{ \App\Models\Setting::get('support_email', 'support@saasninja.top') }}"
                                    class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
                         </div>
-                        <div>
-                            <label for="site_logo" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Logo URL</label>
-                            <input type="text" id="site_logo" name="site_logo" value="{{ \App\Models\Setting::get('site_logo') }}" placeholder="https://..."
-                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+
+                        <!-- Logo File Upload & Dimensions -->
+                        <div class="md:col-span-2 bg-slate-50 dark:bg-slate-950/60 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Site Logo Upload & Dimensions</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Upload Logo Image File</label>
+                                    <input type="file" name="site_logo_file" accept="image/*"
+                                           class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:opacity-90">
+                                    <p class="text-[11px] text-slate-400 mt-1">Recommended: PNG, SVG, or WEBP (Transparent bg)</p>
+                                </div>
+                                <div>
+                                    <label for="site_logo_height" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Logo Height (px)</label>
+                                    <input type="number" id="site_logo_height" name="site_logo_height" value="{{ \App\Models\Setting::get('site_logo_height', '36') }}" min="16" max="120" placeholder="36"
+                                           class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                </div>
+                                <div>
+                                    <label for="site_logo_width" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Logo Width (px or auto)</label>
+                                    <input type="text" id="site_logo_width" name="site_logo_width" value="{{ \App\Models\Setting::get('site_logo_width', 'auto') }}" placeholder="auto"
+                                           class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                </div>
+                            </div>
+
+                            @if(\App\Models\Setting::get('site_logo'))
+                            <div class="pt-2 flex items-center gap-3">
+                                <span class="text-xs font-semibold text-slate-500">Current Logo Preview:</span>
+                                <div class="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 inline-block">
+                                    <img src="{{ \App\Models\Setting::get('site_logo') }}" alt="Site Logo" style="height: {{ \App\Models\Setting::get('site_logo_height', '36') }}px; width: {{ \App\Models\Setting::get('site_logo_width', 'auto') }}; object-fit: contain;">
+                                </div>
+                                <input type="hidden" name="site_logo" value="{{ \App\Models\Setting::get('site_logo') }}">
+                            </div>
+                            @endif
                         </div>
-                        <div>
-                            <label for="site_favicon" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">Favicon URL</label>
-                            <input type="text" id="site_favicon" name="site_favicon" value="{{ \App\Models\Setting::get('site_favicon') }}" placeholder="https://..."
-                                   class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+
+                        <!-- Favicon File Upload -->
+                        <div class="md:col-span-2 bg-slate-50 dark:bg-slate-950/60 p-5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-4">
+                            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">Site Favicon Upload</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Upload Favicon File</label>
+                                    <input type="file" name="site_favicon_file" accept="image/*"
+                                           class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:opacity-90">
+                                    <p class="text-[11px] text-slate-400 mt-1">Recommended: 32x32 px ICO, PNG, or SVG</p>
+                                </div>
+                                @if(\App\Models\Setting::get('site_favicon'))
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs font-semibold text-slate-500">Current Favicon:</span>
+                                    <div class="p-2 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 inline-block">
+                                        <img src="{{ \App\Models\Setting::get('site_favicon') }}" alt="Favicon" class="w-8 h-8 object-contain">
+                                    </div>
+                                    <input type="hidden" name="site_favicon" value="{{ \App\Models\Setting::get('site_favicon') }}">
+                                </div>
+                                @endif
+                            </div>
                         </div>
                         <div>
                             <label for="allow_registrations" class="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">User Registration</label>

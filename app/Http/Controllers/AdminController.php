@@ -239,7 +239,21 @@ class AdminController extends Controller
             }
         }
 
-        $data = $request->except(['_token', 'templates']);
+        if ($request->hasFile('site_logo_file')) {
+            $file = $request->file('site_logo_file');
+            $filename = 'site_logo_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('branding', $filename, 'public');
+            Setting::set('site_logo', '/storage/' . $path);
+        }
+
+        if ($request->hasFile('site_favicon_file')) {
+            $file = $request->file('site_favicon_file');
+            $filename = 'site_favicon_' . time() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('branding', $filename, 'public');
+            Setting::set('site_favicon', '/storage/' . $path);
+        }
+
+        $data = $request->except(['_token', 'templates', 'site_logo_file', 'site_favicon_file']);
         
         foreach ($data as $key => $value) {
             Setting::set($key, $value);

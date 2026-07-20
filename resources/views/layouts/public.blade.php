@@ -55,8 +55,8 @@
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
             <div class="flex items-center gap-4">
                 <a href="{{ route('home') }}" class="flex items-center gap-2 group">
-                    @if(\App\Models\Setting::get('site_logo'))
-                        <img src="{{ \App\Models\Setting::get('site_logo') }}" alt="Logo" class="h-8 w-auto">
+                    @if($logo = \App\Models\Setting::get('site_logo'))
+                        <img src="{{ $logo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_logo_height', '36') }}px; width: {{ \App\Models\Setting::get('site_logo_width', 'auto') }}; object-fit: contain;">
                     @else
                         <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
                             <span class="material-symbols-outlined text-white text-[24px] font-bold">code</span>
