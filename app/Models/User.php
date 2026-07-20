@@ -36,6 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'profile_image',
         'twitter_handle',
         'github_handle',
+        'status',
+        'status_reason',
+        'suspended_until',
     ];
 
     /**
@@ -62,7 +65,43 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
             'envato_token_expires_at' => 'datetime',
             'two_factor_expires_at' => 'datetime',
+            'suspended_until' => 'datetime',
         ];
+    }
+
+    public function isActive(): bool
+    {
+        if ($this->status === 'blocked') {
+            return false;
+        }
+
+        if ($this->status === 'suspended') {
+            if ($this->suspended_until && now()->greaterThan($this->suspended_until)) {
+                $this->update(['status' => 'active', 'status_reason' => null, 'suspended_until' => null]);
+                return true;
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isSuspended(): bool
+    {
+        if ($this->status === 'suspended') {
+            if ($this->suspended_until && now()->greaterThan($this->suspended_until)) {
+                $this->update(['status' => 'active', 'status_reason' => null, 'suspended_until' => null]);
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->status === 'blocked';
     }
 
     /**

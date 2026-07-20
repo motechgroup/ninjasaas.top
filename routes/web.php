@@ -79,6 +79,9 @@ Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Impersonation Exit
+    Route::get('/impersonate/stop', [\App\Http\Controllers\CustomerAdminController::class, 'stopImpersonating'])->name('impersonate.stop');
 });
 
 /*
@@ -101,6 +104,14 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
 
     // Support & Product Management (Super Admin + Support Staff)
     Route::middleware(['role:Super Admin|Support Staff'])->group(function () {
+        // Customer Management
+        Route::get('/customers', [\App\Http\Controllers\CustomerAdminController::class, 'index'])->name('customers.index');
+        Route::get('/customers/{customer}', [\App\Http\Controllers\CustomerAdminController::class, 'show'])->name('customers.show');
+        Route::patch('/customers/{customer}/status', [\App\Http\Controllers\CustomerAdminController::class, 'updateStatus'])->name('customers.status');
+        Route::patch('/customers/{customer}/profile', [\App\Http\Controllers\CustomerAdminController::class, 'updateProfile'])->name('customers.profile');
+        Route::delete('/customers/{customer}', [\App\Http\Controllers\CustomerAdminController::class, 'destroy'])->name('customers.destroy');
+        Route::post('/customers/{customer}/impersonate', [\App\Http\Controllers\CustomerAdminController::class, 'impersonate'])->name('customers.impersonate');
+
         Route::get('/tickets', [AdminController::class, 'tickets'])->name('tickets');
         Route::get('/purchases', [AdminController::class, 'purchases'])->name('purchases');
         Route::get('/products', [AdminController::class, 'products'])->name('products');
