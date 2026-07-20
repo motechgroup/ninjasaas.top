@@ -19,7 +19,7 @@ class EnsureTwoFactorPassed
             // Google login users and Admin roles bypass 2FA prompt
             $isAdmin = method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['Super Admin', 'Support Staff', 'Content Manager']);
 
-            if ($user->google_id || $isAdmin) {
+            if ($user->google_id || $user->envato_username || $isAdmin) {
                 session(['2fa_passed' => true]);
                 return $next($request);
             }

@@ -65,6 +65,23 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+     * Determine if the user has verified their email address.
+     * Google users, Envato users, and Admin roles do not require manual email verification.
+     */
+    public function hasVerifiedEmail(): bool
+    {
+        if ($this->google_id || $this->envato_username) {
+            return true;
+        }
+
+        if (method_exists($this, 'hasAnyRole') && $this->hasAnyRole(['Super Admin', 'Support Staff', 'Content Manager'])) {
+            return true;
+        }
+
+        return ! is_null($this->email_verified_at);
+    }
+
     public function purchases()
     {
         return $this->hasMany(EnvatoPurchase::class);
