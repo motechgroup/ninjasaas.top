@@ -31,8 +31,8 @@ Route::get('/erp-software', [PublicController::class, 'seoCategoryShow'])->defau
 Route::get('/school-management-system', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'school-management-system')->name('seo.category.school');
 Route::get('/property-management-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'property-management-software')->name('seo.category.property');
 
-Route::get('/docs', [PublicController::class, 'docs'])->name('docs.index');
-Route::get('/docs/{product_slug}/{category_slug}/{article_slug}', [PublicController::class, 'docShow'])->name('docs.show');
+Route::get('/docs', [PublicController::class, 'docs'])->middleware('auth')->name('docs.index');
+Route::get('/docs/{product_slug}/{category_slug}/{article_slug}', [PublicController::class, 'docShow'])->middleware('auth')->name('docs.show');
 Route::get('/blog', [PublicController::class, 'blog'])->name('blog.index');
 Route::get('/blog/{slug}', [PublicController::class, 'blogShow'])->name('blog.show');
 Route::get('/blog/category/{slug}', [PublicController::class, 'blogCategory'])->name('blogCategory');

@@ -49,10 +49,19 @@ class PublicController extends Controller
         return view('services.index', compact('services'));
     }
 
-    public function docs()
+    public function docs(Request $request)
     {
+        $user = auth()->user();
+        
+        $purchasedProductIds = collect();
+        if ($user) {
+            $envatoIds = \App\Models\EnvatoPurchase::where('user_id', $user->id)->pluck('product_id')->filter();
+            $licenseIds = \App\Models\LicenseKey::where('user_id', $user->id)->pluck('product_id')->filter();
+            $purchasedProductIds = $envatoIds->merge($licenseIds)->unique();
+        }
+
         $products = Product::where('is_active', true)->with('docCategories.articles')->get();
-        return view('docs.index', compact('products'));
+        return view('docs.index', compact('products', 'purchasedProductIds'));
     }
 
     public function docShow(string $productSlug, string $categorySlug, string $articleSlug)

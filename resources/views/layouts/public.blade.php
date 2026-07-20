@@ -70,9 +70,8 @@
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('about') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('about') }}">About</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('products.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('products.index') }}">Products</a>
                     <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('services.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('services.index') }}">Services</a>
-                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('docs.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('docs.index') }}">Help Guides</a>
-                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('blog.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('blog.index') }}">Tech Blog</a>
-                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('contact') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('contact') }}">Contact</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('blog.*') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('blog.index') }}">Blog</a>
+                    <a class="text-sm font-semibold transition-colors px-3 py-2 rounded-lg {{ request()->routeIs('contact') ? 'text-primary font-bold border-b-2 border-primary' : 'text-slate-600 hover:text-primary' }}" href="{{ route('contact') }}">Contact Us</a>
                 </nav>
             </div>
 
@@ -96,7 +95,7 @@
                     <a href="{{ route('register') }}" class="text-sm font-bold text-primary hover:underline transition-colors px-2">Register</a>
                 @endauth
                 
-                <a href="{{ route('portal.tickets') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
+                <a href="{{ route('contact') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm">
                     Get Support
                 </a>
             </div>
@@ -130,8 +129,8 @@
                     <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Products</h4>
                     <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('products.index') }}">Product Catalog</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">LexCore Engine</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="#">SaaSNinja CRM</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">LexCore Engine</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">SaaSNinja CRM</a></li>
                     </ul>
                 </div>
                 <div>
@@ -139,16 +138,15 @@
                     <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">Server Installation</a></li>
                         <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">Custom Development</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="{{ route('docs.index') }}">API Integrations</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('services.index') }}">API Integrations</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-outfit font-bold text-sm text-slate-900 dark:text-white mb-4">Resources</h4>
                     <ul class="space-y-2 text-xs sm:text-sm text-slate-500">
                         <li><a class="hover:text-primary transition-colors" href="{{ route('about') }}">About Us</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="{{ route('docs.index') }}">Help Guides</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Tech Blog</a></li>
-                        <li><a class="hover:text-primary transition-colors" href="{{ route('contact') }}">Contact Sales</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('blog.index') }}">Blog</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="{{ route('contact') }}">Get Support</a></li>
                     </ul>
                 </div>
                 <div>

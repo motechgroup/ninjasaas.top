@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'SaaSNinja Developer Blog & Resource Center')
+@section('title', 'SaaSNinja Blog & Resource Center')
 
 @section('content')
     <!-- Blog Hero header -->
@@ -8,10 +8,10 @@
         <div class="max-w-7xl mx-auto px-6 text-center">
             <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-950/30 text-indigo-650 dark:text-indigo-400 rounded-full text-xs font-semibold mb-6">
                 <span class="material-symbols-outlined text-[16px] text-primary">terminal</span>
-                Technical Publications
+                Publications & Updates
             </div>
-            <h1 class="font-outfit font-extrabold text-4xl sm:text-5xl text-slate-900 dark:text-white mb-4 tracking-tight">SaaSNinja Engineering Blog</h1>
-            <p class="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto">Deep dives into Laravel, DevOps, API automation, server optimizations, and software business insights.</p>
+            <h1 class="font-outfit font-extrabold text-4xl sm:text-5xl text-slate-900 dark:text-white mb-4 tracking-tight">SaaSNinja Blog</h1>
+            <p class="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto">Latest insights, tutorials, architecture, software updates, and engineering news.</p>
         </div>
     </header>
 

@@ -55,7 +55,7 @@
                 @else
                     <ul class="space-y-4">
                         @foreach($recentPurchases as $p)
-                            <li class="flex items-center justify-between p-3 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
+                            <li class="flex items-center justify-between p-3.5 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <span class="block text-sm font-bold text-slate-900 dark:text-white">{{ $p->item->name }}</span>
@@ -63,17 +63,23 @@
                                     </div>
                                     <span class="block text-xs text-slate-400 font-mono mt-0.5">Code: {{ $p->purchase_code }}</span>
                                 </div>
-                                <div class="text-right">
-                                    @if($p->hasActiveSupport())
-                                        <x-badge color="green">Support Active</x-badge>
-                                    @else
-                                        <x-badge color="red">Support Expired</x-badge>
-                                    @endif
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('docs.index') }}" class="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors">
+                                        <span class="material-symbols-outlined text-[14px]">description</span>
+                                        Docs
+                                    </a>
+                                    <div>
+                                        @if($p->hasActiveSupport())
+                                            <x-badge color="green">Support Active</x-badge>
+                                        @else
+                                            <x-badge color="red">Support Expired</x-badge>
+                                        @endif
+                                    </div>
                                 </div>
                             </li>
                         @endforeach
                         @foreach($recentLicenses as $l)
-                            <li class="flex items-center justify-between p-3 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
+                            <li class="flex items-center justify-between p-3.5 border border-slate-100 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-950/20">
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <span class="block text-sm font-bold text-slate-900 dark:text-white">{{ $l->product->name }}</span>
@@ -81,12 +87,18 @@
                                     </div>
                                     <span class="block text-xs text-slate-400 font-mono mt-0.5">Key: {{ $l->license_key }}</span>
                                 </div>
-                                <div class="text-right">
-                                    @if($l->hasActiveSupport())
-                                        <x-badge color="green">Support Active</x-badge>
-                                    @else
-                                        <x-badge color="red">Support Expired</x-badge>
-                                    @endif
+                                <div class="flex items-center gap-3">
+                                    <a href="{{ route('docs.index') }}" class="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors">
+                                        <span class="material-symbols-outlined text-[14px]">description</span>
+                                        Docs
+                                    </a>
+                                    <div>
+                                        @if($l->hasActiveSupport())
+                                            <x-badge color="green">Support Active</x-badge>
+                                        @else
+                                            <x-badge color="red">Support Expired</x-badge>
+                                        @endif
+                                    </div>
                                 </div>
                             </li>
                         @endforeach
@@ -123,5 +135,25 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Software Documentation Access Panel -->
+    <div class="mt-8 bg-gradient-to-r from-indigo-900 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-md relative overflow-hidden">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 relative z-10">
+            <div class="space-y-2 max-w-xl">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold border border-indigo-500/30">
+                    <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                    Licensed Software Guides
+                </div>
+                <h3 class="font-outfit font-extrabold text-xl sm:text-2xl text-white">Software Documentation & Setup Manuals</h3>
+                <p class="text-xs sm:text-sm text-indigo-200 leading-relaxed">
+                    Access step-by-step installation guides, API references, configuration parameters, and setup tutorials for software products linked to your account.
+                </p>
+            </div>
+            <a href="{{ route('docs.index') }}" class="px-5 py-3 bg-white text-indigo-950 font-bold text-xs rounded-xl shadow-lg hover:bg-indigo-50 transition-all flex items-center gap-2 flex-shrink-0">
+                <span class="material-symbols-outlined text-[18px]">library_books</span>
+                Access Software Docs
+            </a>
+        </div>
     </div>
 </x-app-layout>
