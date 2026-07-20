@@ -167,3 +167,7 @@ select:focus {
 .dark select {
   border-color: #475569 !important; /* slate-600 */
 }
+
+[x-cloak] {
+  display: none !important;
+}

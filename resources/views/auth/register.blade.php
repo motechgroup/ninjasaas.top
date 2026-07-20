@@ -14,33 +14,10 @@
         @endif
 
         @if (\App\Models\Setting::get('enable_envato_login', 'true') === 'true')
-        <div x-data="{ showEnvatoConfirm: false }">
-            <button type="button" @click="showEnvatoConfirm = true" style="background-color: #82B440; color: #ffffff !important;" class="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md hover:opacity-90">
-                <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
-                <span>Sign up with Envato</span>
-            </button>
-
-            <!-- Envato Confirmation Dialog -->
-            <div x-show="showEnvatoConfirm" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-                <div @click.away="showEnvatoConfirm = false" class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 border border-slate-200/80 dark:border-slate-800 shadow-2xl text-center space-y-4">
-                    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto shadow-lg" style="background-color: #82B440; color: #ffffff;">
-                        <span class="material-symbols-outlined text-3xl">shopping_bag</span>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white font-outfit">Authenticate with Envato</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">You will be securely redirected to Envato Market to confirm your account signup. Email verification is automatically bypassed.</p>
-                    </div>
-                    <div class="flex flex-col gap-2 pt-2">
-                        <a href="{{ route('auth.envato') }}" style="background-color: #82B440; color: #ffffff !important;" class="w-full py-2.5 rounded-xl text-sm font-bold shadow-md hover:opacity-90 transition-opacity">
-                            Proceed to Envato Signup
-                        </a>
-                        <button type="button" @click="showEnvatoConfirm = false" class="w-full py-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <a href="{{ route('auth.envato') }}" style="background-color: #82B440; color: #ffffff !important;" class="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md hover:opacity-90">
+            <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+            <span>Sign up with Envato</span>
+        </a>
         @endif
 
         <div class="relative flex items-center justify-center pt-2">
