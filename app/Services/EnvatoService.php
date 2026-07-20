@@ -158,11 +158,22 @@ class EnvatoService
 
                 $account = $detailResponse->successful() ? $detailResponse->json('account') : [];
 
+                $email = $account['email'] ?? null;
+                if (!$email) {
+                    $emailResponse = Http::withToken($accessToken)
+                        ->get("https://api.envato.com/v1/market/private/user/email.json");
+                    if ($emailResponse->successful()) {
+                        $email = $emailResponse->json('email');
+                    }
+                }
+
+                $avatar = $account['image'] ?? ($account['avatar'] ?? null);
+
                 return [
                     'success' => true,
                     'username' => $username,
-                    'email' => $account['email'] ?? null,
-                    'avatar' => $account['image'] ?? null,
+                    'email' => $email,
+                    'avatar' => $avatar,
                 ];
             }
 
