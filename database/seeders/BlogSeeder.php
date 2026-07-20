@@ -81,11 +81,12 @@ class BlogSeeder extends Seeder
         // 4. Create Blog Posts
         
         // Post 1: Laravel Eloquent Optimization (Featured)
-        $post1 = BlogPost::create([
+        $post1 = BlogPost::updateOrCreate([
+            'slug' => 'optimizing-laravel-eloquent-queries-for-enterprise-saas-architectures',
+        ], [
             'user_id' => $authorId,
             'title' => 'Optimizing Laravel Eloquent Queries for Enterprise SaaS Architectures',
             'subtitle' => 'Unlocking massive performance boosts by avoiding the N+1 problem, using query scopes, and caching database indexes.',
-            'slug' => 'optimizing-laravel-eloquent-queries-for-enterprise-saas-architectures',
             'summary' => 'Eloquent is an incredibly powerful ORM, but unoptimized models can easily bottleneck your web applications. Learn how to diagnose slow queries, load relational datasets efficiently, and configure indexing.',
             'content' => "## The Silent SaaS Killer: N+1 Query Problem
 
@@ -151,11 +152,12 @@ class Representative extends Model {
         $post1->tags()->sync([$tags[0]->id, $tags[1]->id, $tags[4]->id]); // Laravel, PHP, MySQL
 
         // Post 2: DevOps and Hetzner/Ubuntu Hosting
-        $post2 = BlogPost::create([
+        $post2 = BlogPost::updateOrCreate([
+            'slug' => 'setting-up-a-high-availability-vps-stack-on-hetzner-cloud-and-nginx',
+        ], [
             'user_id' => $secondAuthorId,
             'title' => 'Setting Up a High-Availability VPS Stack on Hetzner Cloud and Nginx',
             'subtitle' => 'A step-by-step developer manual for configuring Ubuntu 24.04 servers, generating SSL keys, and tuning Nginx for reverse proxies.',
-            'slug' => 'setting-up-a-high-availability-vps-stack-on-hetzner-cloud-and-nginx',
             'summary' => 'Shared hosting holds your SaaS backend back. In this tutorial, we will configure an Ubuntu VPS on Hetzner, configure secure Nginx reverse proxy stacks, and auto-deploy Let’s Encrypt certificates.',
             'content' => "## Initial Server Setup on Ubuntu 24.04
 
@@ -215,11 +217,12 @@ server {
         $post2->tags()->sync([$tags[5]->id, $tags[6]->id, $tags[7]->id]); // DevOps, Linux, Hetzner
 
         // Post 3: Business Automation POS systems
-        $post3 = BlogPost::create([
+        $post3 = BlogPost::updateOrCreate([
+            'slug' => 'designing-database-schemas-for-multi-tenant-pos-and-retail-software',
+        ], [
             'user_id' => $authorId,
             'title' => 'Designing Database Schemas for Multi-Tenant POS and Retail Software',
             'subtitle' => 'Centralizing inventory logs, handling decimal precision for currencies, and ensuring atomic sales transactions.',
-            'slug' => 'designing-database-schemas-for-multi-tenant-pos-and-retail-software',
             'summary' => 'Retail POS systems demand extreme consistency and accuracy. We review database designs for inventory tracking, multi-tenancy architectures, and handling transaction race conditions.',
             'content' => "## Multi-Tenant Database Architectures
 
@@ -272,11 +275,12 @@ DB::transaction(function () use (\$sale, \$items) {
         $post3->tags()->sync([$tags[4]->id, $tags[11]->id, $tags[12]->id]); // MySQL, CRM, ERP
 
         // Post 4: Networking security SSL
-        $post4 = BlogPost::create([
+        $post4 = BlogPost::updateOrCreate([
+            'slug' => 'securing-api-gateways-with-cloudflare-ssl-tls-and-rate-limiting',
+        ], [
             'user_id' => $secondAuthorId,
             'title' => 'Securing API Gateways with Cloudflare, SSL/TLS, and Rate Limiting',
             'subtitle' => 'Securing your public endpoints against DDoS attempts, SQL injection, and API brute-force resource draining.',
-            'slug' => 'securing-api-gateways-with-cloudflare-ssl-tls-and-rate-limiting',
             'summary' => 'APIs are prime targets for cyberattacks. We explore setting up Cloudflare proxies, configuring SSL certificate encryption standards, and applying rate limits.',
             'content' => "## Cloudflare Proxy Configuration
 
@@ -317,33 +321,36 @@ server {
         $post4->tags()->sync([$tags[9]->id, $tags[10]->id]); // Security, Networking
 
         // 5. Seed comments
-        BlogComment::create([
+        BlogComment::firstOrCreate([
             'blog_post_id' => $post1->id,
-            'name' => 'Michael Scott',
             'email' => 'michael@dundermifflin.com',
+        ], [
+            'name' => 'Michael Scott',
             'content' => 'Outstanding write-up! Eager loading solved an issue in our corporate client list query that was driving the server CPU crazy.',
             'is_approved' => true,
         ]);
 
-        BlogComment::create([
+        BlogComment::firstOrCreate([
             'blog_post_id' => $post1->id,
-            'name' => 'Dwight Schrute',
             'email' => 'dwight@schrutebeats.com',
+        ], [
+            'name' => 'Dwight Schrute',
             'content' => 'Correct. I always use index on my company foreign keys. It is more efficient than looking through folders.',
             'is_approved' => true,
         ]);
 
-        BlogComment::create([
+        BlogComment::firstOrCreate([
             'blog_post_id' => $post2->id,
-            'name' => 'Pam Beesly',
             'email' => 'pam@dundermifflin.com',
+        ], [
+            'name' => 'Pam Beesly',
             'content' => 'This Nginx config worked perfectly for my art gallery website VPS. Thanks for the documentation.',
             'is_approved' => true,
         ]);
 
         // 6. Seed subscribers
-        NewsletterSubscriber::create(['email' => 'tech-admin@ninjasaas.top', 'is_active' => true]);
-        NewsletterSubscriber::create(['email' => 'code-contributor@saasninja.top', 'is_active' => true]);
-        NewsletterSubscriber::create(['email' => 'laravel-fan@gmail.com', 'is_active' => true]);
+        NewsletterSubscriber::firstOrCreate(['email' => 'tech-admin@ninjasaas.top'], ['is_active' => true]);
+        NewsletterSubscriber::firstOrCreate(['email' => 'code-contributor@saasninja.top'], ['is_active' => true]);
+        NewsletterSubscriber::firstOrCreate(['email' => 'laravel-fan@gmail.com'], ['is_active' => true]);
     }
 }
