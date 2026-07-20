@@ -221,7 +221,7 @@
                             </div>
                             <div>
                                 <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                                    {{ ucfirst($ticket->status) }}
+                                    {{ ucfirst(is_object($ticket->status) ? $ticket->status->value : $ticket->status) }}
                                 </span>
                             </div>
                         </div>
