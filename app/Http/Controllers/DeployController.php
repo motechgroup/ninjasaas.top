@@ -43,21 +43,29 @@ class DeployController extends Controller
                 case 'storage':
                     $target = storage_path('app/public');
                     $link = public_path('storage');
-                    if (file_exists($link)) {
-                        $output .= "Storage link/directory already exists at '{$link}'.\n";
-                    } else {
-                        if (symlink($target, $link)) {
-                            $output .= "Storage symlink created successfully via native PHP.\n";
-                        } else {
-                            $output .= "Failed to create storage symlink.\n";
-                        }
+                    if (!file_exists($link)) {
+                        @symlink($target, $link);
                     }
+                    // Direct recursive copy mirror for environments where symlinks are restricted
+                    $this->copyDirectoryMirror($target, $link);
+                    $this->copyDirectoryMirror($target, public_path('uploads'));
+                    $output .= "Storage link and directory mirroring completed successfully.\n";
                     break;
                 case 'clear':
                     Artisan::call('config:clear');
                     Artisan::call('view:clear');
                     Artisan::call('cache:clear');
-                    $output .= "Caches cleared output:\n" . Artisan::output();
+
+                    // Automatically ensure storage files are mirrored on clear action
+                    $target = storage_path('app/public');
+                    $link = public_path('storage');
+                    if (!file_exists($link)) {
+                        @symlink($target, $link);
+                    }
+                    $this->copyDirectoryMirror($target, $link);
+                    $this->copyDirectoryMirror($target, public_path('uploads'));
+
+                    $output .= "Caches cleared and storage assets mirrored:\n" . Artisan::output();
                     break;
                 case 'tables':
                     $output .= "Listing Database Tables:\n";
@@ -91,5 +99,35 @@ class DeployController extends Controller
         }
 
         return response($output, 200)->header('Content-Type', 'text/plain');
+    }
+
+    /**
+     * Copy directory contents recursively to mirror assets.
+     */
+    private function copyDirectoryMirror($src, $dst): void
+    {
+        if (!file_exists($src)) {
+            return;
+        }
+
+        if (is_link($dst)) {
+            return;
+        }
+
+        if (!file_exists($dst)) {
+            @mkdir($dst, 0755, true);
+        }
+
+        $dir = opendir($src);
+        while (false !== ($file = readdir($dir))) {
+            if ($file !== '.' && $file !== '..') {
+                if (is_dir($src . '/' . $file)) {
+                    $this->copyDirectoryMirror($src . '/' . $file, $dst . '/' . $file);
+                } else {
+                    @copy($src . '/' . $file, $dst . '/' . $file);
+                }
+            }
+        }
+        closedir($dir);
     }
 }

@@ -61,8 +61,8 @@
                         <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
                             <span class="material-symbols-outlined text-white text-[24px] font-bold">code</span>
                         </div>
+                        <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-900">{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}</span>
                     @endif
-                    <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-900">{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}</span>
                 </a>
                 
                 <nav class="hidden md:flex items-center gap-6 ml-8">

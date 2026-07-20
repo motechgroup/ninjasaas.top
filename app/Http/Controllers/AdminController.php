@@ -239,10 +239,24 @@ class AdminController extends Controller
             }
         }
 
+        $publicBrandingDir = public_path('storage/branding');
+        $uploadsBrandingDir = public_path('uploads/branding');
+
+        if (!file_exists($publicBrandingDir)) {
+            @mkdir($publicBrandingDir, 0755, true);
+        }
+        if (!file_exists($uploadsBrandingDir)) {
+            @mkdir($uploadsBrandingDir, 0755, true);
+        }
+
         if ($request->hasFile('site_logo_file')) {
             $file = $request->file('site_logo_file');
             $filename = 'site_logo_' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('branding', $filename, 'public');
+
+            @copy($file->getRealPath(), $publicBrandingDir . '/' . $filename);
+            @copy($file->getRealPath(), $uploadsBrandingDir . '/' . $filename);
+
             Setting::set('site_logo', '/storage/' . $path);
         }
 
@@ -250,6 +264,10 @@ class AdminController extends Controller
             $file = $request->file('site_favicon_file');
             $filename = 'site_favicon_' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('branding', $filename, 'public');
+
+            @copy($file->getRealPath(), $publicBrandingDir . '/' . $filename);
+            @copy($file->getRealPath(), $uploadsBrandingDir . '/' . $filename);
+
             Setting::set('site_favicon', '/storage/' . $path);
         }
 
@@ -257,6 +275,10 @@ class AdminController extends Controller
             $file = $request->file('site_footer_logo_file');
             $filename = 'site_footer_logo_' . time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('branding', $filename, 'public');
+
+            @copy($file->getRealPath(), $publicBrandingDir . '/' . $filename);
+            @copy($file->getRealPath(), $uploadsBrandingDir . '/' . $filename);
+
             Setting::set('site_footer_logo', '/storage/' . $path);
         }
 

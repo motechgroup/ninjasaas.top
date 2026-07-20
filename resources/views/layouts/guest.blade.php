@@ -43,10 +43,10 @@
                     <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform">
                         <span class="material-symbols-outlined text-white text-[28px] font-bold">terminal</span>
                     </div>
+                    <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-950 dark:text-white">
+                        {{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}
+                    </span>
                 @endif
-                <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-950 dark:text-white">
-                    {{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}
-                </span>
             </a>
 
             <!-- Glassmorphism Card Wrapper -->
