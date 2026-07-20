@@ -14,7 +14,7 @@
         @endif
 
         @if (\App\Models\Setting::get('enable_envato_login', 'true') === 'true')
-        <a href="{{ route('auth.envato') }}" class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-[#82B440] hover:bg-[#72a035] text-white rounded-xl text-sm font-semibold transition-all shadow-sm">
+        <a href="{{ route('auth.envato') }}" style="background-color: #82B440; color: #ffffff !important;" class="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md hover:opacity-90">
             <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
             <span>Sign up with Envato</span>
         </a>
