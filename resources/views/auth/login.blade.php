@@ -1,4 +1,18 @@
 <x-guest-layout>
+    <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center mb-3">
+            @if($logo = \App\Models\Setting::get('site_logo'))
+                <img src="{{ $logo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_logo_height', '40') }}px; width: {{ \App\Models\Setting::get('site_logo_width', 'auto') }}; object-fit: contain;">
+            @else
+                <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[24px]">lock</span>
+                </div>
+            @endif
+        </div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white font-outfit">Welcome Back</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Sign in to manage your licenses & subscriptions</p>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

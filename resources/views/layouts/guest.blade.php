@@ -35,15 +35,13 @@
         <div class="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none"></div>
         
         <div class="z-10 flex flex-col items-center">
-            <!-- Brand Logo -->
-            <a href="/" class="flex items-center gap-2 group mb-8">
+            <!-- Vertical Brand Logo -->
+            <a href="/" class="flex flex-col items-center justify-center text-center gap-2 group mb-6">
                 @if($logo = \App\Models\Setting::get('site_logo'))
-                    <img src="{{ $logo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_logo_height', '44') }}px; width: {{ \App\Models\Setting::get('site_logo_width', 'auto') }}; object-fit: contain;">
+                    <img src="{{ $logo }}" alt="{{ \App\Models\Setting::get('company_name', 'SaaSNinja') }}" style="height: {{ \App\Models\Setting::get('site_logo_height', '48') }}px; width: {{ \App\Models\Setting::get('site_logo_width', 'auto') }}; object-fit: contain;" class="group-hover:scale-105 transition-transform">
                 @else
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                        <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-indigo-600 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform">
+                        <span class="material-symbols-outlined text-white text-[28px] font-bold">terminal</span>
                     </div>
                 @endif
                 <span class="font-outfit font-extrabold text-2xl tracking-tight text-slate-950 dark:text-white">

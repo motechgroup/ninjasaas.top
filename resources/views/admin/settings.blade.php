@@ -69,11 +69,19 @@
                                     💡 Recommended: 180px – 250px Width × 36px – 48px Height (PNG, SVG, WEBP)
                                 </span>
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                                 <div>
                                     <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Upload Header Logo File</label>
                                     <input type="file" name="site_logo_file" accept="image/*"
                                            class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-primary file:text-white hover:file:opacity-90">
+                                </div>
+                                <div>
+                                    <label for="site_logo_layout" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Logo Orientation / Layout</label>
+                                    <select id="site_logo_layout" name="site_logo_layout"
+                                            class="block w-full rounded-lg border-slate-200 dark:border-slate-800 dark:bg-slate-950 text-slate-900 dark:text-white text-sm py-2 px-3 focus:ring-primary focus:border-primary">
+                                        <option value="vertical" {{ \App\Models\Setting::get('site_logo_layout', 'vertical') === 'vertical' ? 'selected' : '' }}>Vertical (Stacked - Logo on Top)</option>
+                                        <option value="horizontal" {{ \App\Models\Setting::get('site_logo_layout', 'vertical') === 'horizontal' ? 'selected' : '' }}>Horizontal (Side by Side)</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label for="site_logo_height" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Rendered Height (px)</label>
