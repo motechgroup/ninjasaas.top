@@ -1,8 +1,87 @@
 @extends('layouts.public')
 
-@section('title', $product->name . ' - Product Details')
+@section('title', $product->name . ' - SaaSNinja Software Catalog')
+@section('meta_description', $product->short_description)
+
+@section('schema')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ $product->name }}",
+  "image": [
+    "{{ $product->image_url ?: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600' }}"
+  ],
+  "description": "{{ $product->short_description }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "SaaSNinja"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ request()->url() }}",
+    "priceCurrency": "USD",
+    "price": "{{ $product->salesChannels->first()->pivot->price ?? '49.00' }}",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{ $product->name }}",
+  "operatingSystem": "Linux, Windows, macOS",
+  "applicationCategory": "BusinessApplication",
+  "softwareVersion": "{{ $product->version }}",
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ $product->salesChannels->first()->pivot->price ?? '49.00' }}",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ route('home') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Products",
+      "item": "{{ route('products.index') }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ $product->name }}",
+      "item": "{{ request()->url() }}"
+    }
+  ]
+}
+</script>
+@endsection
 
 @section('content')
+    <!-- Breadcrumbs -->
+    <nav class="bg-slate-100 dark:bg-slate-900 border-b border-slate-200/60 dark:border-slate-800/80 py-3">
+        <div class="max-w-7xl mx-auto px-6">
+            <ol class="flex items-center gap-2 text-xs font-semibold text-slate-550 dark:text-slate-400">
+                <li><a href="{{ route('home') }}" class="hover:text-primary transition-colors">Home</a></li>
+                <li class="text-slate-400">/</li>
+                <li><a href="{{ route('products.index') }}" class="hover:text-primary transition-colors">Products</a></li>
+                <li class="text-slate-400">/</li>
+                <li class="text-slate-800 dark:text-white font-bold">{{ $product->name }}</li>
+            </ol>
+        </div>
+    </nav>
     <!-- Product Header Banner -->
     <div class="py-16 bg-slate-900 text-white relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -211,6 +290,85 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Dynamic Product FAQs Section (Collapsible Accordion) -->
+            <div class="mt-16 pt-12 border-t border-slate-200 dark:border-slate-800">
+                <h3 class="font-outfit font-extrabold text-2xl text-slate-950 dark:text-white mb-6">Frequently Asked Questions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ active: null }">
+                    @php
+                        $faqs = [
+                            [
+                                'q' => 'What is ' . $product->name . '?',
+                                'a' => $product->name . ' is a premium digital solution developed by SaaSNinja. It is designed to solve core workflows, providing clean code, high speed, and secure execution.'
+                            ],
+                            [
+                                'q' => 'How do I install the software?',
+                                'a' => 'Every purchase includes detailed setup files. We also provide professional installation services to configure server blocks and databases.'
+                            ],
+                            [
+                                'q' => 'Is technical support included?',
+                                'a' => 'Yes, we offer customer support coverage for product troubleshooting. You can submit support tickets directly through the SaaSNinja portal.'
+                            ],
+                            [
+                                'q' => 'Does it support custom feature updates?',
+                                'a' => 'Absolutely. Our core developers are available for custom software consulting and tailored development to adapt products to your business.'
+                            ]
+                        ];
+                    @endphp
+                    @foreach($faqs as $idx => $faq)
+                        <div class="bg-slate-50 dark:bg-slate-950/20 border border-slate-200/60 dark:border-slate-850 p-5 rounded-2xl space-y-2">
+                            <h4 class="font-outfit font-bold text-slate-900 dark:text-white text-base flex items-start gap-2">
+                                <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">help_outline</span>
+                                {{ $faq['q'] }}
+                            </h4>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-450 leading-relaxed pl-7">
+                                {{ $faq['a'] }}
+                            </p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Dynamic Related Products Section -->
+            @php
+                $relatedProducts = \App\Models\Product::where('id', '!=', $product->id)->where('is_active', true)->take(4)->get();
+            @endphp
+            @if($relatedProducts->isNotEmpty())
+                <div class="mt-16 pt-12 border-t border-slate-200 dark:border-slate-800">
+                    <h3 class="font-outfit font-extrabold text-2xl text-slate-950 dark:text-white mb-8">Related Software Products</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        @foreach ($relatedProducts as $rel)
+                            <a href="{{ route('products.show', $rel->slug) }}" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-855 rounded-2xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md hover:scale-[1.01] flex flex-col justify-between relative cursor-pointer no-underline text-inherit">
+                                <div>
+                                    <!-- Product Image -->
+                                    <div class="aspect-video overflow-hidden bg-slate-100 dark:bg-slate-950 relative">
+                                        @if($rel->image_url)
+                                            <img src="{{ $rel->image_url }}" alt="{{ $rel->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
+                                        @else
+                                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600" alt="{{ $rel->name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-102">
+                                        @endif
+                                        <div class="absolute top-4 right-4">
+                                            <span class="inline-flex items-center px-2.5 py-1 bg-white/90 dark:bg-slate-900/90 text-[10px] font-bold uppercase tracking-wider rounded-lg shadow-sm border border-slate-100 dark:border-slate-800 text-slate-800 dark:text-slate-200">
+                                                {{ $rel->category->name }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Card Body -->
+                                    <div class="p-6 space-y-3">
+                                        <h4 class="font-outfit font-bold text-base text-slate-900 dark:text-white leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                                            {{ $rel->name }}
+                                        </h4>
+                                        <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                                            {{ $rel->short_description }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>

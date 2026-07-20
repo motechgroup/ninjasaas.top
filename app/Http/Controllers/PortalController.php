@@ -150,4 +150,49 @@ class PortalController extends Controller
 
         return redirect()->route('portal.services')->with('error', 'Stripe checkout session was cancelled. You can retry payment when ready.');
     }
+
+    public function downloadProduct(Request $request, Product $product)
+    {
+        $user = auth()->user();
+
+        $hasEnvatoPurchase = false;
+        if ($product->envato_item_id) {
+            $hasEnvatoPurchase = EnvatoPurchase::where('user_id', $user->id)
+                ->whereHas('item', function ($q) use ($product) {
+                    $q->where('item_id', $product->envato_item_id);
+                })->exists();
+        }
+
+        $hasDirectLicense = \App\Models\License::where('user_id', $user->id)
+            ->where('product_id', $product->id)
+            ->where('is_active', true)
+            ->exists();
+
+        $isAdmin = $user->hasAnyRole(['Super Admin', 'Support Staff']);
+
+        if (!$hasEnvatoPurchase && !$hasDirectLicense && !$isAdmin) {
+            abort(403, 'You do not own an active license or purchase for this product.');
+        }
+
+        $version = $product->versions()->whereNotNull('download_url')->orderByDesc('release_date')->first();
+        if (!$version || !$version->download_url) {
+            abort(404, 'No package release file available for download.');
+        }
+
+        $url = $version->download_url;
+
+        // Legacy compatibility
+        if (str_starts_with($url, '/uploads/products/')) {
+            $publicPath = public_path(ltrim($url, '/'));
+            if (file_exists($publicPath)) {
+                return response()->download($publicPath);
+            }
+        }
+
+        if (\Illuminate\Support\Facades\Storage::disk('local')->exists($url)) {
+            return \Illuminate\Support\Facades\Storage::disk('local')->download($url, $product->slug . '-v' . $version->version . '.zip');
+        }
+
+        abort(404, 'Product package file not found.');
+    }
 }

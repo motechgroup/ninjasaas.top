@@ -351,14 +351,13 @@ class AdminController extends Controller
         if ($request->hasFile('package')) {
             $file = $request->file('package');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/products'), $fileName);
-            $downloadUrl = '/uploads/products/' . $fileName;
+            $storedPath = $file->storeAs('products', $fileName, 'local');
 
             $product->versions()->updateOrCreate(
                 ['version' => $product->version],
                 [
                     'release_date' => now(),
-                    'download_url' => $downloadUrl
+                    'download_url' => $storedPath
                 ]
             );
         }
@@ -413,14 +412,13 @@ class AdminController extends Controller
         if ($request->hasFile('package')) {
             $file = $request->file('package');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/products'), $fileName);
-            $downloadUrl = '/uploads/products/' . $fileName;
+            $storedPath = $file->storeAs('products', $fileName, 'local');
 
             $product->versions()->updateOrCreate(
                 ['version' => $product->version],
                 [
                     'release_date' => now(),
-                    'download_url' => $downloadUrl
+                    'download_url' => $storedPath
                 ]
             );
         }

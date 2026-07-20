@@ -63,7 +63,7 @@ class Product extends Model
     public function getLatestDownloadUrl()
     {
         $version = $this->versions()->whereNotNull('download_url')->orderByDesc('release_date')->first();
-        return $version ? $version->download_url : null;
+        return $version ? route('portal.products.download', $this->slug) : null;
     }
 
     public function getLatestVersionNumber()

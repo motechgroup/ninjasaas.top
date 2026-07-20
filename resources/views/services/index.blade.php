@@ -64,116 +64,116 @@
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Custom Software Development -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">code</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Custom Software Development</h3>
+                <a href="{{ route('services.show', 'custom-software-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">code</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Custom Software Development</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">High-performance custom software engineering tailored to your business needs.</p>
-                </div>
+                </a>
                 
                 <!-- Website Development -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">web</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Website Development</h3>
+                <a href="{{ route('services.show', 'website-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">web</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Website Development</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Stunning, high-conversion responsive corporate websites and landing experiences.</p>
-                </div>
+                </a>
                 
                 <!-- Mobile App Development -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">stay_primary_portrait</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Mobile App Development</h3>
+                <a href="{{ route('services.show', 'mobile-app-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">stay_primary_portrait</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Mobile App Development</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Native and cross-platform mobile apps for iOS and Android environments.</p>
-                </div>
+                </a>
                 
                 <!-- UI/UX Design -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">palette</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">UI/UX Design</h3>
+                <a href="{{ route('services.show', 'custom-software-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">palette</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">UI/UX Design</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">User-centric designs, interactive wireframes, and modern branding systems.</p>
-                </div>
+                </a>
 
                 <!-- API Development -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">api</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">API Development</h3>
+                <a href="{{ route('services.show', 'api-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">api</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">API Development</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Secure, document-first REST and GraphQL API gateways and microservices.</p>
-                </div>
+                </a>
 
                 <!-- System Integration -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">hub</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">System Integration</h3>
+                <a href="{{ route('services.show', 'system-integration') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">hub</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">System Integration</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Connecting disparate platforms, payment gateways, and CRM/ERP databases.</p>
-                </div>
+                </a>
 
                 <!-- Cloud Deployment -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">cloud</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Cloud Deployment</h3>
+                <a href="{{ route('services.show', 'cloud-deployment') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">cloud</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Cloud Deployment</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Deploying containerized apps to AWS, DigitalOcean, Hetzner, or Google Cloud.</p>
-                </div>
+                </a>
 
                 <!-- Hosting -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">dns</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Hosting</h3>
+                <a href="{{ route('services.show', 'hosting-solutions') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">dns</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Hosting Solutions</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">High-availability VPS, Dedicated server, or Managed Shared hosting configurations.</p>
-                </div>
+                </a>
 
                 <!-- Maintenance -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">build</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Maintenance</h3>
+                <a href="{{ route('services.show', 'software-maintenance') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">build</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Software Maintenance</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Regular package upgrades, server monitoring, bug fixes, and security patches.</p>
-                </div>
+                </a>
 
                 <!-- Technical Support -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">support_agent</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Technical Support</h3>
+                <a href="{{ route('services.show', 'software-maintenance') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">support_agent</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Technical Support</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">24/7 dedicated support desk SLA guarantees for enterprise applications.</p>
-                </div>
+                </a>
 
                 <!-- Software Consulting -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">chat</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Software Consulting</h3>
+                <a href="{{ route('services.show', 'software-consulting') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">chat</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Software Consulting</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Aligning your engineering tools and architecture with operational goals.</p>
-                </div>
+                </a>
 
                 <!-- Business Automation -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">smart_toy</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Business Automation</h3>
+                <a href="{{ route('services.show', 'business-automation') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">smart_toy</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Business Automation</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Automating manual workflows, billing, invoicing, and reporting systems.</p>
-                </div>
+                </a>
 
                 <!-- Installation Services -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">download_for_offline</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Installation Services</h3>
+                <a href="{{ route('services.show', 'application-installation') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">download_for_offline</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Installation Services</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Professional installation of Envato templates and SaaS apps on your servers.</p>
-                </div>
+                </a>
 
                 <!-- Customization -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">edit_note</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Customization</h3>
+                <a href="{{ route('services.show', 'custom-feature-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">edit_note</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Customization</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Modifying existing products to match your visual layout and logic rules.</p>
-                </div>
+                </a>
 
                 <!-- Migration -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">move_up</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Migration</h3>
+                <a href="{{ route('services.show', 'custom-software-development') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">move_up</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Migration</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Transitioning database engines, filesystems, and hostings seamlessly.</p>
-                </div>
+                </a>
 
                 <!-- Training -->
-                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow space-y-2">
-                    <span class="material-symbols-outlined text-primary text-4xl">school</span>
-                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Training</h3>
+                <a href="{{ route('services.show', 'software-consulting') }}" class="group bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 space-y-2 block no-underline text-inherit">
+                    <span class="material-symbols-outlined text-primary text-4xl group-hover:scale-105 transition-transform">school</span>
+                    <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">Training</h3>
                     <p class="text-slate-500 text-xs leading-relaxed">Upskilling dev and admin teams to operate SaaSNinja software products.</p>
-                </div>
+                </a>
             </div>
         </div>
     </section>

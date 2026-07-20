@@ -22,7 +22,7 @@
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>{{ route('blog') }}</loc>
+        <loc>{{ route('blog.index') }}</loc>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
@@ -46,6 +46,38 @@
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
+
+    <!-- SEO Services Landing Pages -->
+    @php
+        $sitemapServices = [
+            'custom-software-development', 'business-software-solutions', 'enterprise-software-development',
+            'website-development', 'mobile-app-development', 'cloud-deployment', 'hosting-solutions',
+            'system-integration', 'api-development', 'business-automation', 'software-maintenance', 'software-consulting'
+        ];
+    @endphp
+    @foreach ($sitemapServices as $servSlug)
+        <url>
+            <loc>{{ route('services.show', $servSlug) }}</loc>
+            <changefreq>weekly</changefreq>
+            <priority>0.7</priority>
+        </url>
+    @endforeach
+
+    <!-- SEO Software Category Landing Pages -->
+    @php
+        $seoCategories = [
+            'law-firm-management-software', 'hospital-management-system', 'isp-billing-software',
+            'point-of-sale-software', 'crm-software', 'erp-software', 'school-management-system',
+            'property-management-software'
+        ];
+    @endphp
+    @foreach ($seoCategories as $catSlug)
+        <url>
+            <loc>{{ url($catSlug) }}</loc>
+            <changefreq>weekly</changefreq>
+            <priority>0.9</priority>
+        </url>
+    @endforeach
 
     <!-- Dynamic products -->
     @foreach ($products as $product)

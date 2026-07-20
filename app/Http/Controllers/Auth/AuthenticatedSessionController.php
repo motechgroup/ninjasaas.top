@@ -28,6 +28,27 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::user();
+
+        if (!$user->google_id) {
+            $code = sprintf('%06d', mt_rand(100000, 999999));
+            $user->update([
+                'two_factor_code' => $code,
+                'two_factor_expires_at' => now()->addMinutes(10),
+            ]);
+
+            try {
+                \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\TwoFactorCodeMail($code));
+            } catch (\Exception $e) {
+                // Ignore mail transport errors gracefully
+            }
+
+            session(['2fa_passed' => false]);
+            return redirect()->route('2fa.show');
+        }
+
+        session(['2fa_passed' => true]);
+
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

@@ -8,10 +8,18 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\Auth\TwoFactorController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
+    Route::get('auth/google', [SocialController::class, 'redirectToGoogle'])
+        ->name('auth.google');
+
+    Route::get('auth/google/callback', [SocialController::class, 'handleGoogleCallback'])
+        ->name('auth.google.callback');
+
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
@@ -36,6 +44,17 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('auth/2fa', [TwoFactorController::class, 'show'])
+        ->name('2fa.show');
+
+    Route::post('auth/2fa', [TwoFactorController::class, 'verify'])
+        ->middleware('throttle:6,1')
+        ->name('2fa.verify');
+
+    Route::post('auth/2fa/resend', [TwoFactorController::class, 'resend'])
+        ->middleware('throttle:3,1')
+        ->name('2fa.resend');
+
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
 

@@ -7,8 +7,26 @@
 
     <title>@yield('title', \App\Models\Setting::get('seo_title', 'SaaSNinja - Premium Software & Envato Customer Portal'))</title>
     <meta name="description" content="@yield('meta_description', \App\Models\Setting::get('seo_description', 'SaaSNinja develops premium applications sold exclusively through Envato Market. Access documentation, get customer support, and request customization.'))">
-    <meta name="keywords" content="{{ \App\Models\Setting::get('seo_keywords', 'laravel, saas, envato, support') }}">
+    <meta name="keywords" content="@yield('meta_keywords', \App\Models\Setting::get('seo_keywords', 'laravel, saas, envato, support'))">
+    <link rel="canonical" href="@yield('canonical_url', request()->url())">
     <link rel="icon" type="image/x-icon" href="{{ \App\Models\Setting::get('site_favicon', '/favicon.ico') }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:title" content="@yield('title', \App\Models\Setting::get('seo_title', 'SaaSNinja'))">
+    <meta property="og:description" content="@yield('meta_description', \App\Models\Setting::get('seo_description', 'SaaSNinja develops premium applications.'))">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-default.png'))">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request()->url() }}">
+    <meta property="twitter:title" content="@yield('title', \App\Models\Setting::get('seo_title', 'SaaSNinja'))">
+    <meta property="twitter:description" content="@yield('meta_description', \App\Models\Setting::get('seo_description', 'SaaSNinja develops premium applications.'))">
+    <meta property="twitter:image" content="@yield('og_image', asset('images/og-default.png'))">
+
+    <!-- Structured Data -->
+    @yield('schema')
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,10 +77,13 @@
             </div>
 
             <div class="flex items-center gap-6">
-                <!-- Search Button -->
-                <button class="flex items-center text-slate-500 hover:text-primary transition-colors">
-                    <span class="material-symbols-outlined text-[24px]">search</span>
-                </button>
+                <!-- Global Search Form -->
+                <form action="{{ route('search') }}" method="GET" class="relative flex items-center">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Search SaaSNinja..." class="w-36 sm:w-48 lg:w-60 px-3 py-1.5 pr-8 text-xs rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:outline-none focus:border-primary/50 text-slate-800 dark:text-slate-200 transition-all duration-300">
+                    <button type="submit" class="absolute right-2.5 text-slate-450 hover:text-primary transition-colors flex items-center">
+                        <span class="material-symbols-outlined text-[16px]">search</span>
+                    </button>
+                </form>
 
                 @auth
                     <a href="{{ route('dashboard') }}" class="text-sm font-semibold text-slate-600 hover:text-primary transition-colors px-2">Portal Dashboard</a>

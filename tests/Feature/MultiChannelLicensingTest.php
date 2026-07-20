@@ -179,14 +179,14 @@ class MultiChannelLicensingTest extends TestCase
 
     public function test_product_checkout_pages_and_process()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['email_verified_at' => now()]);
         $product = Product::first();
 
-        $response = $this->actingAs($user)->get('/checkout/' . $product->slug);
+        $response = $this->actingAs($user)->withSession(['2fa_passed' => true])->get('/checkout/' . $product->slug);
         $response->assertStatus(200);
         $response->assertSee($product->name);
 
-        $response = $this->actingAs($user)->post('/checkout/' . $product->slug, [
+        $response = $this->actingAs($user)->withSession(['2fa_passed' => true])->post('/checkout/' . $product->slug, [
             'card_name' => $user->name,
             'card_number' => '4111222233334444',
             'card_expiry' => '12/28',

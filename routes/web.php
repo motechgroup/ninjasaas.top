@@ -18,6 +18,19 @@ Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/products', [PublicController::class, 'products'])->name('products.index');
 Route::get('/products/{slug}', [PublicController::class, 'productShow'])->name('products.show');
 Route::get('/services', [PublicController::class, 'services'])->name('services.index');
+Route::get('/services/{slug}', [PublicController::class, 'serviceShow'])->name('services.show');
+Route::get('/search', [PublicController::class, 'search'])->name('search');
+
+// Root-level SEO Software Categories
+Route::get('/law-firm-management-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'law-firm-management-software')->name('seo.category.law');
+Route::get('/hospital-management-system', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'hospital-management-system')->name('seo.category.hospital');
+Route::get('/isp-billing-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'isp-billing-software')->name('seo.category.isp');
+Route::get('/point-of-sale-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'point-of-sale-software')->name('seo.category.pos');
+Route::get('/crm-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'crm-software')->name('seo.category.crm');
+Route::get('/erp-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'erp-software')->name('seo.category.erp');
+Route::get('/school-management-system', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'school-management-system')->name('seo.category.school');
+Route::get('/property-management-software', [PublicController::class, 'seoCategoryShow'])->defaults('slug', 'property-management-software')->name('seo.category.property');
+
 Route::get('/docs', [PublicController::class, 'docs'])->name('docs.index');
 Route::get('/docs/{product_slug}/{category_slug}/{article_slug}', [PublicController::class, 'docShow'])->name('docs.show');
 Route::get('/blog', [PublicController::class, 'blog'])->name('blog.index');
@@ -25,11 +38,11 @@ Route::get('/blog/{slug}', [PublicController::class, 'blogShow'])->name('blog.sh
 Route::get('/blog/category/{slug}', [PublicController::class, 'blogCategory'])->name('blogCategory');
 Route::get('/blog/tag/{slug}', [PublicController::class, 'blogTag'])->name('blogTag');
 Route::get('/blog/author/{id}', [PublicController::class, 'blogAuthor'])->name('blog.author');
-Route::post('/blog/comment/{post}', [PublicController::class, 'storeComment'])->name('blog.comment.store');
-Route::post('/newsletter/subscribe', [PublicController::class, 'subscribeNewsletter'])->name('newsletter.subscribe');
+Route::post('/blog/comment/{post}', [PublicController::class, 'storeComment'])->middleware('throttle:5,1')->name('blog.comment.store');
+Route::post('/newsletter/subscribe', [PublicController::class, 'subscribeNewsletter'])->middleware('throttle:5,1')->name('newsletter.subscribe');
 Route::get('/about', [PublicController::class, 'about'])->name('about');
 Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
-Route::post('/contact', [PublicController::class, 'contactSubmit'])->name('contact.submit');
+Route::post('/contact', [PublicController::class, 'contactSubmit'])->middleware('throttle:5,1')->name('contact.submit');
 Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
 Route::get('/refunds', [PublicController::class, 'refunds'])->name('refunds');
@@ -41,16 +54,21 @@ Route::get('/feed', [PublicController::class, 'rssFeed'])->name('rss.feed');
 | Customer Portal Routes (Authenticated Users)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified', '2fa'])->group(function () {
     Route::get('/dashboard', [PortalController::class, 'dashboard'])->name('dashboard');
     
     Route::get('/portal/purchases', [PortalController::class, 'purchases'])->name('portal.purchases');
     Route::get('/portal/tickets', [PortalController::class, 'tickets'])->name('portal.tickets');
     Route::get('/portal/services', [PortalController::class, 'services'])->name('portal.services');
-    Route::post('/portal/services', [PortalController::class, 'submitServiceRequest'])->name('portal.services.submit');
+    Route::post('/portal/services', [PortalController::class, 'submitServiceRequest'])->middleware('throttle:10,1')->name('portal.services.submit');
     Route::post('/portal/services/{serviceRequest}/pay', [PortalController::class, 'payServiceRequest'])->name('portal.services.pay');
     Route::get('/portal/services/{serviceRequest}/payment-success', [PortalController::class, 'paymentSuccess'])->name('portal.services.payment-success');
     Route::get('/portal/services/{serviceRequest}/payment-cancel', [PortalController::class, 'paymentCancel'])->name('portal.services.payment-cancel');
+
+    // Secure Product Package Downloads
+    Route::get('/portal/products/{product:slug}/download', [PortalController::class, 'downloadProduct'])
+        ->middleware('throttle:10,1')
+        ->name('portal.products.download');
 
     // Direct Product Checkout Routes
     Route::get('/checkout/{product:slug}', [\App\Http\Controllers\CheckoutController::class, 'show'])->name('checkout.show');

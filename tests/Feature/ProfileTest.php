@@ -16,6 +16,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['2fa_passed' => true])
             ->get('/profile');
 
         $response->assertOk();
@@ -27,6 +28,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['2fa_passed' => true])
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => 'test@example.com',
@@ -49,6 +51,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['2fa_passed' => true])
             ->patch('/profile', [
                 'name' => 'Test User',
                 'email' => $user->email,
@@ -67,6 +70,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['2fa_passed' => true])
             ->delete('/profile', [
                 'password' => 'password',
             ]);
@@ -85,6 +89,7 @@ class ProfileTest extends TestCase
 
         $response = $this
             ->actingAs($user)
+            ->withSession(['2fa_passed' => true])
             ->from('/profile')
             ->delete('/profile', [
                 'password' => 'wrong-password',
