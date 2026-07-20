@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SaaSNinja Portal') }}</title>
+    <title>{{ isset($header) ? trim(strip_tags($header)) . ' - ' : (isset($title) ? trim(strip_tags($title)) . ' - ' : '') }}{{ \App\Models\Setting::get('site_title', config('app.name', 'SaaSNinja')) }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
