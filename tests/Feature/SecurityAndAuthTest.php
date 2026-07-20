@@ -29,6 +29,9 @@ class SecurityAndAuthTest extends TestCase
         $response->assertHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         $response->assertHeader('Content-Security-Policy');
         $response->assertHeader('Permissions-Policy');
+        $response->assertHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+        $response->assertHeader('Cross-Origin-Resource-Policy', 'same-origin');
+        $response->assertHeader('Cross-Origin-Embedder-Policy', 'unsafe-none');
     }
 
     public function test_api_license_verification_rate_limiting(): void
