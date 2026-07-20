@@ -10,10 +10,11 @@
     <!-- Navigation Tabs -->
     <div class="flex border-b border-slate-200 dark:border-slate-800 gap-6">
         <button @click="tab = 'statistics'" :class="tab === 'statistics' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Statistics</button>
+        <button @click="tab = 'licenses'" :class="tab === 'licenses' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Direct Licenses</button>
+        <button @click="tab = 'envato'" :class="tab === 'envato' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Envato Purchases</button>
         <button @click="tab = 'channels'" :class="tab === 'channels' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Sales Channels</button>
         <button @click="tab = 'distribution'" :class="tab === 'distribution' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Product Distribution</button>
         <button @click="tab = 'generator'" :class="tab === 'generator' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Key Generator</button>
-        <button @click="tab = 'licenses'" :class="tab === 'licenses' ? 'border-indigo-600 text-indigo-600 font-bold border-b-2 pb-3.5 text-sm transition-all' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white pb-3.5 text-sm transition-all'">Active Licenses</button>
     </div>
 
     <!-- Tab 1: Statistics -->
@@ -251,10 +252,10 @@
         </form>
     </div>
 
-    <!-- Tab 5: Active Licenses -->
+    <!-- Tab 5: Direct Licenses -->
     <div x-show="tab === 'licenses'" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden" style="display: none;">
         <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
-            <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Direct Licenses Registry</h3>
+            <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Direct Licenses Registry & Active Domains</h3>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -263,6 +264,7 @@
                         <th class="px-6 py-3">Client</th>
                         <th class="px-6 py-3">Product</th>
                         <th class="px-6 py-3">License Key</th>
+                        <th class="px-6 py-3">Installed / Active Domain</th>
                         <th class="px-6 py-3">Provider</th>
                         <th class="px-6 py-3">Support Expiry</th>
                         <th class="px-6 py-3">Status</th>
@@ -272,7 +274,7 @@
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
                     @if($licenses->isEmpty())
                         <tr>
-                            <td colspan="7" class="px-6 py-8 text-center text-slate-500">No direct licenses created yet.</td>
+                            <td colspan="8" class="px-6 py-8 text-center text-slate-500">No direct licenses created yet.</td>
                         </tr>
                     @else
                         @foreach ($licenses as $lic)
@@ -284,6 +286,18 @@
                                 <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">{{ $lic->product->name }}</td>
                                 <td class="px-6 py-4">
                                     <code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{{ $lic->license_key }}</code>
+                                </td>
+                                <td class="px-6 py-4 text-xs font-mono text-indigo-600 dark:text-indigo-400">
+                                    @php
+                                        $domains = $lic->activations->pluck('domain')->filter()->unique();
+                                    @endphp
+                                    @if($domains->isNotEmpty())
+                                        @foreach($domains as $d)
+                                            <span class="inline-block bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900/60 rounded px-2 py-0.5 font-bold my-0.5">🌐 {{ $d }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-slate-400 font-sans italic">Not activated on domain yet</span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-400">
@@ -300,7 +314,7 @@
                                     <form action="{{ route('admin.licensing.toggle', $lic->id) }}" method="POST" class="inline-block">
                                         @csrf
                                         <button type="submit" class="text-xs font-bold {{ $lic->is_active ? 'text-red-600 hover:text-red-500' : 'text-green-600 hover:text-green-500' }}">
-                                            {{ $lic->is_active ? 'Revoke' : 'Activate' }}
+                                            {{ $lic->is_active ? 'Revoke License' : 'Activate License' }}
                                         </button>
                                     </form>
                                 </td>
@@ -313,6 +327,81 @@
         @if($licenses->hasPages())
             <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800">
                 {{ $licenses->links() }}
+            </div>
+        @endif
+    </div>
+
+    <!-- Tab 6: Envato Purchases -->
+    <div x-show="tab === 'envato'" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden" style="display: none;">
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+            <h3 class="font-outfit font-bold text-base text-slate-900 dark:text-white">Envato Purchases & Active Verification Domains</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-950 text-xs font-semibold text-slate-500 uppercase border-b border-slate-200 dark:border-slate-800">
+                        <th class="px-6 py-3">Client / Buyer</th>
+                        <th class="px-6 py-3">Item / Product</th>
+                        <th class="px-6 py-3">Envato Purchase Code</th>
+                        <th class="px-6 py-3">Installed / Verified Domain</th>
+                        <th class="px-6 py-3">Support Expiry</th>
+                        <th class="px-6 py-3">Status</th>
+                        <th class="px-6 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    @if($envatoPurchases->isEmpty())
+                        <tr>
+                            <td colspan="7" class="px-6 py-8 text-center text-slate-500">No Envato purchases registered yet.</td>
+                        </tr>
+                    @else
+                        @foreach ($envatoPurchases as $p)
+                            <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-850/45 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-slate-900 dark:text-white">{{ $p->user ? $p->user->name : 'Unlinked Buyer' }}</div>
+                                    <div class="text-xs text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">@ {{ $p->envato_username ?: 'N/A' }}</div>
+                                </td>
+                                <td class="px-6 py-4 font-semibold text-slate-900 dark:text-white">
+                                    {{ $p->item ? $p->item->name : ($p->product ? $p->product->name : 'Envato Marketplace Item') }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded text-primary">{{ $p->purchase_code }}</code>
+                                </td>
+                                <td class="px-6 py-4 text-xs font-mono text-emerald-600 dark:text-emerald-400">
+                                    @php
+                                        $envatoDomains = $p->verifications->where('is_valid', true)->pluck('domain')->filter()->unique();
+                                    @endphp
+                                    @if($envatoDomains->isNotEmpty())
+                                        @foreach($envatoDomains as $ed)
+                                            <span class="inline-block bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 rounded px-2 py-0.5 font-bold my-0.5">🌐 {{ $ed }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-slate-400 font-sans italic">Not verified on domain yet</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 text-xs font-semibold {{ $p->hasActiveSupport() ? 'text-green-600' : 'text-red-500' }}">
+                                    {{ $p->support_expiry ? $p->support_expiry->format('Y-m-d') : 'No expiry' }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <x-badge color="{{ $p->is_active ? 'green' : 'red' }}">{{ $p->is_active ? 'Active' : 'Revoked' }}</x-badge>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <form action="{{ route('admin.licensing.envato.toggle', $p->id) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        <button type="submit" class="text-xs font-bold {{ $p->is_active ? 'text-red-600 hover:text-red-500' : 'text-green-600 hover:text-green-500' }}">
+                                            {{ $p->is_active ? 'Revoke Purchase' : 'Activate Purchase' }}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
+        </div>
+        @if($envatoPurchases->hasPages())
+            <div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800">
+                {{ $envatoPurchases->links() }}
             </div>
         @endif
     </div>

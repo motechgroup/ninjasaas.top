@@ -64,7 +64,9 @@ class CustomerAdminController extends Controller
         $customer->load([
             'roles',
             'purchases.product',
+            'purchases.verifications',
             'licenses.product',
+            'licenses.activations',
             'tickets' => fn($q) => $q->orderBy('created_at', 'desc'),
             'serviceRequests' => fn($q) => $q->orderBy('created_at', 'desc'),
         ]);

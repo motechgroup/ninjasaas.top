@@ -186,26 +186,82 @@
 
         <!-- Customer Activity & Relational Records -->
         <div class="lg:col-span-2 space-y-6">
-            <!-- Product Licenses Owned -->
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-4">
-                <h3 class="text-base font-bold text-slate-900 dark:text-white font-outfit">Active Licenses & Purchases ({{ $customer->licenses->count() }})</h3>
-                <div class="divide-y divide-slate-100 dark:divide-slate-800">
-                    @forelse($customer->licenses as $lic)
-                        <div class="py-3 flex items-center justify-between">
-                            <div>
-                                <p class="font-bold text-slate-900 dark:text-white text-sm">{{ $lic->product ? $lic->product->name : 'General Software License' }}</p>
-                                <p class="text-xs font-mono text-primary mt-0.5">Key: {{ $lic->license_key }}</p>
-                                <p class="text-[11px] text-slate-500">Domain: {{ $lic->domain_name ?: 'Unbound' }} • Sales Channel: {{ ucfirst($lic->sales_channel) }}</p>
+            <!-- Product Licenses & Envato Purchases Owned -->
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-6">
+                <div>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white font-outfit">Direct Product Licenses ({{ $customer->licenses->count() }})</h3>
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800 mt-2">
+                        @forelse($customer->licenses as $lic)
+                            <div class="py-3 flex items-center justify-between gap-4">
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm">{{ $lic->product ? $lic->product->name : 'General Software License' }}</p>
+                                    <p class="text-xs font-mono text-primary mt-0.5">Key: {{ $lic->license_key }}</p>
+                                    @php
+                                        $licDomains = $lic->activations->pluck('domain')->filter()->unique();
+                                    @endphp
+                                    <div class="text-[11px] text-slate-500 mt-1">
+                                        Active Domains: 
+                                        @if($licDomains->isNotEmpty())
+                                            <span class="font-mono font-bold text-indigo-600 dark:text-indigo-400">{{ $licDomains->implode(', ') }}</span>
+                                        @else
+                                            <span class="italic">Not activated on domain yet</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $lic->is_active ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-rose-100 text-rose-700' }}">
+                                        {{ $lic->is_active ? 'Active' : 'Revoked' }}
+                                    </span>
+                                    <form action="{{ route('admin.licensing.toggle', $lic->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" class="text-xs font-bold px-2.5 py-1 rounded-lg {{ $lic->is_active ? 'bg-rose-50 text-rose-600 hover:bg-rose-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' }}">
+                                            {{ $lic->is_active ? 'Revoke' : 'Activate' }}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                            <div>
-                                <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $lic->is_active ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-rose-100 text-rose-700' }}">
-                                    {{ $lic->is_active ? 'Active' : 'Revoked' }}
-                                </span>
+                        @empty
+                            <p class="text-xs text-slate-500 py-2">No direct product licenses assigned to this customer.</p>
+                        @endforelse
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white font-outfit">Envato Purchases & Licenses ({{ $customer->purchases->count() }})</h3>
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800 mt-2">
+                        @forelse($customer->purchases as $p)
+                            <div class="py-3 flex items-center justify-between gap-4">
+                                <div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm">{{ $p->item ? $p->item->name : ($p->product ? $p->product->name : 'Envato Market Product') }}</p>
+                                    <p class="text-xs font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">Code: {{ $p->purchase_code }}</p>
+                                    @php
+                                        $pDomains = $p->verifications->where('is_valid', true)->pluck('domain')->filter()->unique();
+                                    @endphp
+                                    <div class="text-[11px] text-slate-500 mt-1">
+                                        Installed Domain: 
+                                        @if($pDomains->isNotEmpty())
+                                            <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">{{ $pDomains->implode(', ') }}</span>
+                                        @else
+                                            <span class="italic">Not verified on domain yet</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <span class="px-2.5 py-1 rounded-full text-xs font-bold {{ $p->is_active ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-rose-100 text-rose-700' }}">
+                                        {{ $p->is_active ? 'Active' : 'Revoked' }}
+                                    </span>
+                                    <form action="{{ route('admin.licensing.envato.toggle', $p->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="submit" class="text-xs font-bold px-2.5 py-1 rounded-lg {{ $p->is_active ? 'bg-rose-50 text-rose-600 hover:bg-rose-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100' }}">
+                                            {{ $p->is_active ? 'Revoke' : 'Activate' }}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    @empty
-                        <p class="text-xs text-slate-500 py-2">No product licenses owned by this customer.</p>
-                    @endforelse
+                        @empty
+                            <p class="text-xs text-slate-500 py-2">No Envato purchases linked to this customer.</p>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 

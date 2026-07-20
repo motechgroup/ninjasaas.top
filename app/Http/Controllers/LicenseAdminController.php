@@ -22,7 +22,8 @@ class LicenseAdminController extends Controller
         
         $channels = SalesChannel::withCount('products')->get();
         $providers = LicenseProvider::withCount('licenses')->get();
-        $licenses = License::with(['user', 'product', 'provider'])->latest()->paginate(15);
+        $licenses = License::with(['user', 'product', 'provider', 'activations'])->latest()->paginate(15);
+        $envatoPurchases = EnvatoPurchase::with(['user', 'verifications', 'item', 'product'])->latest()->paginate(15);
 
         // Fetch distribution list
         $distributions = ProductSalesChannel::with(['product', 'channel'])->get();
@@ -30,11 +31,12 @@ class LicenseAdminController extends Controller
         // Calculate statistics
         $stats = [
             'total_envato' => EnvatoPurchase::count(),
+            'active_envato' => EnvatoPurchase::where('is_active', true)->count(),
             'total_direct' => License::count(),
             'active_direct' => License::where('is_active', true)->count(),
         ];
 
-        return view('admin.licensing.index', compact('products', 'users', 'channels', 'providers', 'licenses', 'distributions', 'stats'));
+        return view('admin.licensing.index', compact('products', 'users', 'channels', 'providers', 'licenses', 'envatoPurchases', 'distributions', 'stats'));
     }
 
     public function storeChannel(Request $request)
@@ -131,5 +133,15 @@ class LicenseAdminController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'License status updated successfully.');
+    }
+
+    public function toggleEnvatoPurchase(EnvatoPurchase $purchase)
+    {
+        $purchase->update([
+            'is_active' => !$purchase->is_active
+        ]);
+
+        $status = $purchase->is_active ? 'Activated' : 'Revoked';
+        return redirect()->back()->with('success', "Envato purchase license {$purchase->purchase_code} is now {$status}.");
     }
 }

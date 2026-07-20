@@ -128,6 +128,7 @@ Route::middleware(['auth', 'role:Super Admin|Support Staff|Content Manager'])->p
         Route::post('/licensing/assign', [\App\Http\Controllers\LicenseAdminController::class, 'assignProductChannel'])->name('licensing.assign');
         Route::post('/licensing/generate', [\App\Http\Controllers\LicenseAdminController::class, 'generateLicenseKey'])->name('licensing.generate');
         Route::post('/licensing/{license}/toggle', [\App\Http\Controllers\LicenseAdminController::class, 'toggleLicense'])->name('licensing.toggle');
+        Route::post('/licensing/envato/{purchase}/toggle', [\App\Http\Controllers\LicenseAdminController::class, 'toggleEnvatoPurchase'])->name('licensing.envato.toggle');
     });
 
     // CMS Management (Super Admin + Content Manager)
