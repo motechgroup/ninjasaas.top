@@ -36,6 +36,11 @@ class EnvatoPurchase extends Model
         return $this->belongsTo(EnvatoItem::class, 'envato_item_id');
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'envato_item_id', 'envato_item_id');
+    }
+
     public function verifications()
     {
         return $this->hasMany(LicenseVerification::class);
