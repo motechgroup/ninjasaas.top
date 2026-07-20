@@ -196,12 +196,26 @@ class SecurityAndAuthTest extends TestCase
     public function test_envato_oauth_sandbox_login_flow(): void
     {
         \App\Models\Setting::set('enable_envato_login', 'true');
-        \App\Models\Setting::set('envato_sandbox_mode', 'true');
+        \App\Models\Setting::set('envato_client_id', 'saasninja-login-j6vkyufo');
+
+        $envatoServiceMock = $this->createMock(\App\Services\EnvatoService::class);
+        $envatoServiceMock->method('getOAuthUrl')->willReturn('https://api.envato.com/authorization');
+        $envatoServiceMock->method('exchangeCodeForToken')->willReturn([
+            'success' => true,
+            'access_token' => 'test_envato_access_token',
+        ]);
+        $envatoServiceMock->method('getUserProfile')->willReturn([
+            'success' => true,
+            'username' => 'test_envato_buyer',
+            'email' => 'buyer@envato.user',
+            'avatar' => null,
+        ]);
+        $this->app->instance(\App\Services\EnvatoService::class, $envatoServiceMock);
 
         $response = $this->get('/auth/envato');
-        $response->assertRedirect();
+        $response->assertRedirect('https://api.envato.com/authorization');
 
-        $callbackResponse = $this->get('/auth/envato/callback?code=mock_envato_auth_code');
+        $callbackResponse = $this->get('/auth/envato/callback?code=real_envato_code');
         $callbackResponse->assertRedirect(route('dashboard'));
         $this->assertAuthenticated();
         $this->assertTrue(session('2fa_passed'));

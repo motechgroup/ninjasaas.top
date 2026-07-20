@@ -81,10 +81,6 @@ class SocialController extends Controller
             return redirect()->route('login')->withErrors(['email' => 'Envato Client ID is not configured in Admin Settings. Please enter your Client ID in Admin Settings -> Global Settings.']);
         }
 
-        if (\App\Models\Setting::get('envato_sandbox_mode', 'false') === 'true') {
-            return redirect()->route('auth.envato.callback', ['code' => 'mock_envato_auth_code']);
-        }
-
         return redirect()->away($oauthUrl);
     }
 
@@ -132,11 +128,7 @@ class SocialController extends Controller
             $username = $profileRes['username'];
             $email = $profileRes['email'] ?: ($username . '@envato.user');
             $avatar = $profileRes['avatar'];
-        } elseif ($code === 'mock_envato_auth_code' || (\App\Models\Setting::get('envato_sandbox_mode', 'true') === 'true' && empty(\App\Models\Setting::get('envato_client_id')))) {
-            $username = 'envato_customer_' . Str::random(5);
-            $email = $username . '@envato.user';
-            $avatar = null;
-        } else {
+        } elseif ($code) {
             $tokenRes = $envatoService->exchangeCodeForToken($code);
             if (!$tokenRes['success']) {
                 return redirect()->route('login')->withErrors(['email' => $tokenRes['error']]);
@@ -150,6 +142,8 @@ class SocialController extends Controller
             $username = $profileRes['username'];
             $email = $profileRes['email'] ?: ($username . '@envato.user');
             $avatar = $profileRes['avatar'];
+        } else {
+            return redirect()->route('login')->withErrors(['email' => 'Envato authentication canceled or missing authorization code.']);
         }
 
         $user = User::where('envato_username', $username)
